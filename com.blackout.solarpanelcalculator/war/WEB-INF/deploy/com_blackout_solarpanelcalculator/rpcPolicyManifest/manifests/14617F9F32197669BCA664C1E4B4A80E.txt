@@ -1,0 +1,2 @@
+serviceClass: com.blackout.solarpanelcalculator.client.CalculationService
+path: 18F4517480C10582FF23D0970EF497C1.gwt.rpc

@@ -1,0 +1,2 @@
+# Module com_blackout_solarpanelcalculator
+# RPC service class, partial path of RPC policy file
