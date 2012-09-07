@@ -58,7 +58,7 @@ public class SolarPanelTest {
 		 solarPanel = new SolarPanel(systemSize,invalidSunlight,roof,orientation);
 	 }
 	 @Test(expected = SolarPanelException.class)
-	 public void InvalidAngel() throws SolarPanelException {
+	 public void InvalidAngle() throws SolarPanelException {
 		 solarPanel = new SolarPanel(systemSize,sunlight,invalidroof,orientation);
 	 }
 	 @Test(expected = SolarPanelException.class)

@@ -1,14 +1,18 @@
 /**
-  * @author Sen
+  * @author Sen, Court
   */
 package com.blackout.solarpanelcalculator.client;
 import java.text.DecimalFormat;
+import java.util.Arrays; // Used for "contains" for verifying orientations and angles.
 
 
 
 
 
 public class SolarPanel {
+	public static final String[] okOrientations = {"North", "North east/west", "Due east/west" };
+	public static final String[] okAngles = { "Flat", "Normal", "Steep" };
+	
 	/*Roof angle efficiencies*/
 	public static final double flat = 0.81;
 	public static final double normal = 0.893;
@@ -39,19 +43,21 @@ public class SolarPanel {
 		 throw new SolarPanelException("Invalid sunlight hours");
 	 if (systemSize <= 0)
 		 throw new SolarPanelException("Invalid system size");
-	 if(roofAngle !="Flat"&&roofAngle!="Normal"&&roofAngle!="Steep")
+	 if(!Arrays.asList(okAngles).contains(roofAngle))
 		 throw new SolarPanelException("Invalid roofAngle selection");
-	 if(orientation !="North"&&orientation != "North east/west"&&orientation != "Due east/west")
+	 if (!Arrays.asList(okOrientations).contains(orientation)) 
 		 throw new SolarPanelException("Invalid orientation selection");
-	 
 	 this.sunlight = sunlight;
 	 this.systemSize = systemSize;
 	 this.roofAngle = roofAngle;
 	 this.orientation = orientation;
 	}
-	
+	/* Nothing specified so use defaults */
 	public SolarPanel() {
-		
+		sunlight = 5;
+		systemSize = 5;
+		roofAngle = okAngles[0];
+		orientation = okOrientations[0];
 	}
 
 	

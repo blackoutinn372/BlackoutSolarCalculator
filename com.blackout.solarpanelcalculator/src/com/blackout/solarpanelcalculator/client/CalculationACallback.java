@@ -2,7 +2,7 @@ package com.blackout.solarpanelcalculator.client;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
+//import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 
 public class CalculationACallback implements AsyncCallback<Integer>{
