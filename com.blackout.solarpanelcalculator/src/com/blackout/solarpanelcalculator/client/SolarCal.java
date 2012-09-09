@@ -18,6 +18,7 @@ public class SolarCal{
 	
 	public SolarCal() {
 		// TODO Auto-generated constructor stub
+		seasonRate = 1;
 	}
 
 	/* Removed the solar panel to lessen the amount of dependencies - Court */

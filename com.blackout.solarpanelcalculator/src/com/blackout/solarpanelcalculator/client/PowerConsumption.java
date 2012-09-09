@@ -9,6 +9,7 @@ package com.blackout.solarpanelcalculator.client;
 import java.text.DecimalFormat;
 
 public class PowerConsumption {
+	static final String[] usageAmounts = {"Heavy", "Medium", "Light"};
 	static final double costperKwh = 0.23;//in dollars
 	static final double heavyUsagePerDay = 28;//in kwhs
 	static final double mediumUsagePerDay = 19;//in kwhs
@@ -36,13 +37,13 @@ public class PowerConsumption {
 	}
 //	output results
 	public String toString(){
-		return "Your household consumes " +getDailyPowerConsumption()+" kws and cost you "+ getDailyPowerCost()+" dollars per day";
+		return "Your household consumes " +getDailyPowerConsumption()+" kws and cost you "+ getDailyPowerCost()+" dollars per day.";
 	}
 
 	private double getUsagePerDay() {
 		if(usageType=="Heavy")
 			return heavyUsagePerDay;
-		if(usageType=="medium")
+		if(usageType=="Medium")
 			return mediumUsagePerDay;
 		else return lightUsagePerDay;
 		}
