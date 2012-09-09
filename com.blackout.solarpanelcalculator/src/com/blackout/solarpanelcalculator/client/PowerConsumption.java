@@ -36,7 +36,7 @@ public class PowerConsumption {
 	}
 //	output results
 	public String toString(){
-		return "Your household consumes " +getDailyPowerConsumption()+" kws and cost you "+ getDailyPowerCost()+" dollars per day";
+		return "\nYour household consumes " +getDailyPowerConsumption()+" kws and cost you "+ getDailyPowerCost()+" dollars per day";
 	}
 
 	private double getUsagePerDay() {

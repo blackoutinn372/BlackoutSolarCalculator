@@ -32,27 +32,27 @@ public class SolarCalTest {
 
 	@Test
 	public void testDayAverage() throws SolarCalException{
-		assertEquals(Double.compare(sc.dayAverage(sp.getPowerGeneration()), 1), 0);
+		assertEquals(Double.compare(sc.dayAverage(sp.getDailyPowerGeneration()), 1), 0);
 	}
 	
 	@Test
 	public void testWeekAverage() throws SolarCalException{
-		assertEquals(Double.compare( sc.weeklyGenertaion(sp.getPowerGeneration()), 1), 0);
+		assertEquals(Double.compare( sc.weeklyGenertaion(sp.getDailyPowerGeneration()), 1), 0);
 	}
 	
 	@Test
 	public void testMonthAverage() throws SolarCalException{
-		assertEquals(Double.compare(sc.monthlyGenertaion(sp.getPowerGeneration()), 1), 0);
+		assertEquals(Double.compare(sc.monthlyGenertaion(sp.getDailyPowerGeneration()), 1), 0);
 	}
 	
 	@Test
 	public void testSeasonAverage() throws SolarCalException{
-		assertEquals(Double.compare(sc.seasonalGeneration(sp.getPowerGeneration()), 1), 0);
+		assertEquals(Double.compare(sc.seasonalGeneration(sp.getDailyPowerGeneration()), 1), 0);
 	}
 	
 	@Test
 	public void testYearAverage() throws SolarCalException{
-		assertEquals(Double.compare(sc.yearlyGenertaion(sp.getPowerGeneration()), 1), 0);
+		assertEquals(Double.compare(sc.yearlyGenertaion(sp.getDailyPowerGeneration()), 1), 0);
 	}
 	
 	@Test(expected = SolarCalException.class)
