@@ -1,6 +1,7 @@
 package tests;
 
 import static org.junit.Assert.*;
+
 import com.blackout.solarpanelcalculator.client.SolarPanel;
 import com.blackout.solarpanelcalculator.client.SolarPanelException;
 
@@ -8,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class SolarPanelTest {
+	private static final double DELTA = 1e-15;
 	 /*Scenario one */
 	 double systemSize = 4.0; // in kw
 	 double sunlight = 5.5; // in hours per day
@@ -27,23 +29,60 @@ public class SolarPanelTest {
 	 String invalidOrientation = "NorthEast";
 	 
 	 SolarPanel solarPanel; 
+	 SolarPanel solarPanel2;
+	 SolarPanel solarPanel3;
+	 
 	 
 	 @Before
 	 public void SolarPanel()throws SolarPanelException{
 		 solarPanel = new SolarPanel(systemSize,sunlight,roof,orientation);
+		 solarPanel3 = new SolarPanel();//use default values
+		 solarPanel2 = new SolarPanel(systemSize2,sunlight2,roof2,orientation2);
 	 }
 	 /*Test scenario one's power output*/
 	@Test
 	 public void SolarGeneration(){
-		 assertEquals(Double.compare(solarPanel.getPowerGeneration(), 17.92),0);
+		 assertEquals(solarPanel.getDailyPowerGeneration(), 17.92,DELTA);
 	 }
-	 /*Test exception is thrown for invalid data*/
+	//test  generation in June
+	@Test
+	public void SolarGenerationJune(){
+		assertEquals(solarPanel3.getMonthlyPowerGeneration("June"), 195.0,DELTA);
+	}
+//	test generation in July
+	@Test
+	public void SolarGenerationJuly(){
+		assertEquals(solarPanel3.getMonthlyPowerGeneration("July"),232.5,DELTA);
+	}
+//	test generation in August
+	@Test
+	public void SolarGenerationAugust(){
+		assertEquals(solarPanel3.getMonthlyPowerGeneration("August"),325.5,DELTA);
+	}
+//	test generation in Winter
+	@Test
+	public void SolarGenerationWinter(){
+		assertEquals(solarPanel3.getWinterPowerGeneration(),753,DELTA);
+	}
+	 /*Test another set of data for daily generation*/
 	@Test
 	public void SolarGeneration2() throws SolarPanelException{
-		solarPanel = new SolarPanel(systemSize2,sunlight2,roof2,orientation2);
-		assertEquals(Double.compare(solarPanel.getPowerGeneration(), 13.88),0);
+//		solarPanel = new SolarPanel(systemSize2,sunlight2,roof2,orientation2);
+		assertEquals(solarPanel2.getDailyPowerGeneration(), 13.88,DELTA);
 	}
-	 /*Test scenario two's power output*/
+	@Test
+	public void SolarGeneration2Yearly() throws SolarPanelException{
+		assertEquals(solarPanel2.GetYearPowerGeneration(),5066.2,DELTA);
+	}
+	@Test
+	public void SolarGeneration2Weekly() throws SolarPanelException{
+		assertEquals(solarPanel2.getWeeklyPowerGeneration(),97.16,DELTA);
+	}
+	@Test
+	public void SolarGeneration2Seasonly() throws SolarPanelException{
+		assertEquals(solarPanel2.getSummerPowerGeneration(),2616,DELTA);
+	}
+	 /*Test invalid data*/
 	 @Test(expected = SolarPanelException.class)
 	 public void SolarPanelInvalid()throws SolarPanelException{
 		 solarPanel = new SolarPanel(invalidSize,invalidSunlight,invalidroof,invalidOrientation);

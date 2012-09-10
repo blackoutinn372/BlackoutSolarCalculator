@@ -50,6 +50,11 @@ public class CalculationClient implements EntryPoint {
 	private boolean estimateConsumptionSelected = false;//estimateConsumption boolean initial false, not shown
 	private Button btnResultsfrmserver;
 	private TextBox serverTextBox;
+	private RadioButton rdbtnDaily;
+	private RadioButton rdbtnWeekly;
+	private RadioButton rdbtnMonthly;
+	private RadioButton rdbtnSeasonly;
+	private RadioButton rdbtnYearly;
 
 	public void onModuleLoad() {
 //		ToolDesigner auto generated codes		
@@ -191,11 +196,11 @@ public class CalculationClient implements EntryPoint {
 			}
 		});
 		
-		rootPanel.add(chckbxClickToEstimate, 45, 364);		
+		rootPanel.add(chckbxClickToEstimate, 50, 423);		
 		lblHowManyPeople = new Label("How many people in your household?");
 		lblHowManyPeople.setStyleName("gwt-Label-household");
 		lblHowManyPeople.setVisible( estimateConsumptionSelected);
-		rootPanel.add(lblHowManyPeople, 78, 401);
+		rootPanel.add(lblHowManyPeople, 78, 459);
 		
 //		validate householdsizeBox user input
 		householdSizeBox = new IntegerBox();
@@ -218,25 +223,25 @@ public class CalculationClient implements EntryPoint {
 //		end of validate
 		
 		householdSizeBox.setVisible( estimateConsumptionSelected);
-		rootPanel.add(householdSizeBox, 521, 401);
+		rootPanel.add(householdSizeBox, 521, 459);
 		
 		rdbtnHeavyUser = new RadioButton("new name", "heavy");
 		rdbtnHeavyUser.setVisible( estimateConsumptionSelected);
 		rdbtnHeavyUser.setStyleName("gwt-radiobutton");
-		rootPanel.add(rdbtnHeavyUser, 510, 433);
+		rootPanel.add(rdbtnHeavyUser, 505, 481);
 		
 		rdbtnMediumUser = new RadioButton("new name", "medium");
 		rdbtnMediumUser.setValue(true);
 		rdbtnMediumUser.setVisible( estimateConsumptionSelected);
-		rootPanel.add(rdbtnMediumUser, 567, 433);
+		rootPanel.add(rdbtnMediumUser, 563, 481);
 		
 		rdbtnLightUser = new RadioButton("new name", "light");
 		rdbtnLightUser.setVisible( estimateConsumptionSelected);
-		rootPanel.add(rdbtnLightUser, 638, 433);
+		rootPanel.add(rdbtnLightUser, 640, 481);
 		
 		lblChooseYourUsage = new Label("Choose your usage type");
 		lblChooseYourUsage.setVisible(estimateConsumptionSelected);
-		rootPanel.add(lblChooseYourUsage, 78, 424);
+		rootPanel.add(lblChooseYourUsage, 88, 484);
 		
 		sunlightErrorLabel = new Label("Please enter valid sunlight hours");
 		sunlightErrorLabel.setVisible(false);
@@ -251,7 +256,7 @@ public class CalculationClient implements EntryPoint {
 		noOfPeopleErrorLabel = new Label("Please enter valid number of people");
 		noOfPeopleErrorLabel.setVisible(false);
 		noOfPeopleErrorLabel.setStyleName("gwt-Label-error");
-		rootPanel.add(noOfPeopleErrorLabel, 521, 424);	
+		rootPanel.add(noOfPeopleErrorLabel, 521, 472);	
 		
 		Button btnReset = new Button("Reset");
 		btnReset.addClickHandler(new ClickHandler() {
@@ -262,6 +267,7 @@ public class CalculationClient implements EntryPoint {
 		rootPanel.add(btnReset, 615, 25);
 		
 		btnResultsfrmserver = new Button("Serverbtn");
+		btnResultsfrmserver.setVisible(false);
 		btnResultsfrmserver.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				getResultsFromServer();
@@ -271,8 +277,28 @@ public class CalculationClient implements EntryPoint {
 		btnResultsfrmserver.setSize("80px", "30px");
 		
 		serverTextBox = new TextBox();
+		serverTextBox.setVisible(false);
 		rootPanel.add(serverTextBox, 326, 73);
 		serverTextBox.setSize("57px", "31px");
+		
+		Label lblShowPowerGeneration = new Label("Show Power generation details ?");
+		rootPanel.add(lblShowPowerGeneration, 10, 356);
+		
+		rdbtnDaily = new RadioButton("new name", "Daily");
+		rootPanel.add(rdbtnDaily, 10, 378);
+		
+		rdbtnWeekly = new RadioButton("new name", "Weekly");
+		rootPanel.add(rdbtnWeekly, 89, 378);
+		
+		rdbtnMonthly = new RadioButton("new name", "Monthly");
+		rootPanel.add(rdbtnMonthly, 181, 378);
+		
+		rdbtnSeasonly = new RadioButton("new name", "Seasonly");
+		rootPanel.add(rdbtnSeasonly, 280, 378);
+		
+		rdbtnYearly = new RadioButton("new name", "Yearly");
+		rootPanel.add(rdbtnYearly, 392, 378);
+		rdbtnYearly.setSize("76px", "15px");
 	
 //		auto generated codes ends
 		
@@ -370,9 +396,18 @@ public class CalculationClient implements EntryPoint {
 		
 		SolarPanel solarpanel = new SolarPanel(sunlightHoursBox.getValue(), systemSizeBox.getValue(),
 				angle,direction);
-//		generated power in kws 
-		return solarpanel.toString();
+		
+		if(rdbtnDaily.getValue()==true)
+//		generated power in kws daily
+		return solarpanel.toStringDaily();
+		else if(rdbtnWeekly.getValue()==true)
+			return solarpanel.toStringWeekly();
+		else if(rdbtnMonthly.getValue()==true)
+			return solarpanel.toStringMonthly();
+		else if(rdbtnSeasonly.getValue()==true)
+			return solarpanel.toStringSeasonly();
+		else 
+			return solarpanel.toStringYearly();
 		
 	}
-	
 }

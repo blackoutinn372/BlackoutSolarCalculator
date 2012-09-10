@@ -61,18 +61,84 @@ public class SolarPanel {
 	}
 
 	
-
-	public double getPowerGeneration(){
+//daily
+	public double getDailyPowerGeneration(){
 		double powerGeneration = systemSize * sunlight * inverter *roofAngleEfficiency()*orientationEfficiency();
 		
 		return Double.valueOf(twoDForm.format(powerGeneration));
 	}
+//	weekly
+	public double getWeeklyPowerGeneration(){
+		double weeklyGeneration = getDailyPowerGeneration() * 7;
+		
+		return Double.valueOf(twoDForm.format(weeklyGeneration));
+	}
 	
-//	output results
-	public String toString(){
-		return "Your system can generate " +getPowerGeneration() +" kws per day";
+//	monthly
+	public double getMonthlyPowerGeneration(String month){
+		double monthGeneration = Month.valueOf(month).GetMonthGeneration()*this.systemSize;
+		return Double.valueOf(twoDForm.format(monthGeneration));
+	}
+	
+//	four seasons
+	public double getSummerPowerGeneration(){
+		double summerGeneration = Month.GetSummerGeneration() * this.systemSize;
+		return Double.valueOf(twoDForm.format(summerGeneration));
+	}
+	public double getAutumnPowerGeneration(){
+		double autumnGeneration = Month.GetAutumnGeneration() * this.systemSize;
+		return Double.valueOf(twoDForm.format(autumnGeneration));
+	}
+	public double getWinterPowerGeneration(){
+		double winterGeneration = Month.GetWinterGeneration() * this.systemSize;
+		return Double.valueOf(twoDForm.format(winterGeneration));
+	}
+	public double getSpringPowerGeneration(){
+		double springGeneration = Month.GetSpringGeneration() * this.systemSize;
+		return Double.valueOf(twoDForm.format(springGeneration));
+	}
+	
+//	yearly
+	public double GetYearPowerGeneration(){
+		double yearGeneration = getDailyPowerGeneration() * 365;
+		return Double.valueOf(twoDForm.format(yearGeneration));
+	}
+//	output results daily
+	public String toStringDaily(){
+		return "Your system can generate " +getDailyPowerGeneration() +" kws per day";
 		
 	}
+//	weekly
+	public String toStringWeekly(){
+		return "Your system can generate "+getWeeklyPowerGeneration()+" kws in a week";
+	}
+//	monthly
+	public String toStringMonthly(){
+		return "Your system can generate\n"+ getMonthlyPowerGeneration("January") +" kws in January\n"
+											+ getMonthlyPowerGeneration("February")+" kws in February\n"
+											+ getMonthlyPowerGeneration("March")+" kws in March\n"
+											+ getMonthlyPowerGeneration("April")+" kws in April\n"
+											+ getMonthlyPowerGeneration("May")+" kws in May\n"
+											+ getMonthlyPowerGeneration("June")+" kws in June\n"
+											+ getMonthlyPowerGeneration("July")+" kws in July\n"
+											+ getMonthlyPowerGeneration("August")+ " kws in August\n"
+											+ getMonthlyPowerGeneration("September")+" kws in September\n"
+											+ getMonthlyPowerGeneration("October")+" kws in October\n"
+											+ getMonthlyPowerGeneration("November")+" kws in November\n"
+											+ getMonthlyPowerGeneration("December")+" kws in December\n";
+	}
+//	seasonly
+	public String toStringSeasonly(){
+		return "Your system can generate\n"+getSummerPowerGeneration() +" kws in Summer\n"
+											+getAutumnPowerGeneration()+" kws in Autumn\n"
+											+getWinterPowerGeneration()+" kws in Winter\n"
+											+getSpringPowerGeneration()+" kws in Spring\n";
+	}
+//	yearly
+	public String toStringYearly(){
+		return "Your system can generate\n "+GetYearPowerGeneration() +" kws in a year";
+	}
+	
 	
 	private double roofAngleEfficiency(){
 		if(roofAngle =="Flat")

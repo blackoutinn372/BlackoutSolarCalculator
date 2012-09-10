@@ -3,6 +3,7 @@
   */
 package com.blackout.solarpanelcalculator.client;
 
+@SuppressWarnings("serial")
 public class SolarPanelException extends Throwable {
 
 	public SolarPanelException(){
