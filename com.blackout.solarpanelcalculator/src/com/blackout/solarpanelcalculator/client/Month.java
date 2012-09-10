@@ -1,6 +1,6 @@
 package com.blackout.solarpanelcalculator.client;
 
-import java.text.DecimalFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 /**
  * based on 1kw system daily output in Melbourne
  * @author Sen
@@ -14,26 +14,30 @@ public enum Month {
 	
 	private final double generation;
 	private final int daysInMonth;
-	DecimalFormat twoDForm = new DecimalFormat("#.##");
+	
 	
 	Month(double generation,int daysInMonth){
 		this.generation = generation;
 		this.daysInMonth = daysInMonth;
 	}
-	public double GetMonthGeneration(){
-		return Double.valueOf(twoDForm.format(generation * daysInMonth)) ;
+	public Double GetMonthGeneration(){
+		return TwoDecimals((generation * daysInMonth)) ;
 	}
 	public static double GetSummerGeneration(){
-		return December.GetMonthGeneration()+January.GetMonthGeneration()+February.GetMonthGeneration();
+		return TwoDecimals(December.GetMonthGeneration()+January.GetMonthGeneration()+February.GetMonthGeneration());
 	}
 	public static double GetAutumnGeneration(){
-		return March.GetMonthGeneration()+April.GetMonthGeneration()+May.GetMonthGeneration();
+		return TwoDecimals(March.GetMonthGeneration()+April.GetMonthGeneration()+May.GetMonthGeneration());
 	}
 	public static double GetWinterGeneration(){
-		return June.GetMonthGeneration() + July.GetMonthGeneration() +August.GetMonthGeneration();
+		return TwoDecimals(June.GetMonthGeneration() + July.GetMonthGeneration() +August.GetMonthGeneration());
 	}
 	public static double GetSpringGeneration(){
-		return September.GetMonthGeneration() + October.GetMonthGeneration() + November.GetMonthGeneration();
+		return TwoDecimals(September.GetMonthGeneration() + October.GetMonthGeneration() + November.GetMonthGeneration());
 	}
-
+//	make numbers to two decimals places
+	public static double TwoDecimals(double number){
+		String formated = NumberFormat.getFormat("0.00").format(number);
+		return NumberFormat.getDecimalFormat().parse(formated);
+	}
 }

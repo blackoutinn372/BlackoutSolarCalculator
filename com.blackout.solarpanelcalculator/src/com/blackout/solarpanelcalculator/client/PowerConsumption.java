@@ -6,7 +6,6 @@
   */
 package com.blackout.solarpanelcalculator.client;
 
-import java.text.DecimalFormat;
 
 public class PowerConsumption {
 	static final String[] usageAmounts = {"Heavy", "Medium", "Light"};
@@ -15,7 +14,6 @@ public class PowerConsumption {
 	static final double mediumUsagePerDay = 19;//in kwhs
 	static final double lightUsagePerDay = 10;//in kwhs
 	
-	DecimalFormat twoDForm = new DecimalFormat("#.##");
 	
 	private int householdSize;
 	private String usageType;// either heavy, medium , or light
@@ -28,12 +26,12 @@ public class PowerConsumption {
 	
 	public double getDailyPowerConsumption(){
 		double dailyConsumption = householdSize * getUsagePerDay();
-		return Double.valueOf(twoDForm.format(dailyConsumption));
+		return Month.TwoDecimals(dailyConsumption);
 	}
 	
 	public double getDailyPowerCost(){
 		double dailyPowerCost = getDailyPowerConsumption() * costperKwh;
-		return Double.valueOf(twoDForm.format(dailyPowerCost));
+		return Month.TwoDecimals(dailyPowerCost);
 	}
 //	output results
 	public String toString(){

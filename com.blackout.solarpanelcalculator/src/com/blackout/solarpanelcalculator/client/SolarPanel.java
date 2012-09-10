@@ -2,9 +2,7 @@
   * @author Sen, Court
   */
 package com.blackout.solarpanelcalculator.client;
-import java.text.DecimalFormat;
 import java.util.Arrays; // Used for "contains" for verifying orientations and angles.
-
 
 
 
@@ -30,7 +28,6 @@ public class SolarPanel {
 	
 	public static final double panelAgeLoss = 0.007;//solarpanels lose 0.70 efficiency per year,not used here, for near future 
 	
-	DecimalFormat twoDForm = new DecimalFormat("#.##");
 	
 	private double sunlight;//in hours
 	private double systemSize ;// in kw
@@ -64,53 +61,53 @@ public class SolarPanel {
 //daily
 	public double getDailyPowerGeneration(){
 		double powerGeneration = systemSize * sunlight * inverter *roofAngleEfficiency()*orientationEfficiency();
+		return Month.TwoDecimals(powerGeneration);
 		
-		return Double.valueOf(twoDForm.format(powerGeneration));
 	}
 //	weekly
 	public double getWeeklyPowerGeneration(){
 		double weeklyGeneration = getDailyPowerGeneration() * 7;
 		
-		return Double.valueOf(twoDForm.format(weeklyGeneration));
+		return Month.TwoDecimals(weeklyGeneration);
 	}
 	
 //	monthly
 	public double getMonthlyPowerGeneration(String month){
 		double monthGeneration = Month.valueOf(month).GetMonthGeneration()*this.systemSize;
-		return Double.valueOf(twoDForm.format(monthGeneration));
+		return Month.TwoDecimals(monthGeneration);
 	}
 	
 //	four seasons
 	public double getSummerPowerGeneration(){
 		double summerGeneration = Month.GetSummerGeneration() * this.systemSize;
-		return Double.valueOf(twoDForm.format(summerGeneration));
+		return  Month.TwoDecimals(summerGeneration);
 	}
 	public double getAutumnPowerGeneration(){
 		double autumnGeneration = Month.GetAutumnGeneration() * this.systemSize;
-		return Double.valueOf(twoDForm.format(autumnGeneration));
+		return  Month.TwoDecimals(autumnGeneration);
 	}
 	public double getWinterPowerGeneration(){
 		double winterGeneration = Month.GetWinterGeneration() * this.systemSize;
-		return Double.valueOf(twoDForm.format(winterGeneration));
+		return  Month.TwoDecimals(winterGeneration);
 	}
 	public double getSpringPowerGeneration(){
 		double springGeneration = Month.GetSpringGeneration() * this.systemSize;
-		return Double.valueOf(twoDForm.format(springGeneration));
+		return  Month.TwoDecimals(springGeneration);
 	}
 	
 //	yearly
 	public double GetYearPowerGeneration(){
 		double yearGeneration = getDailyPowerGeneration() * 365;
-		return Double.valueOf(twoDForm.format(yearGeneration));
+		return Month.TwoDecimals(yearGeneration);
 	}
 //	output results daily
 	public String toStringDaily(){
-		return "Your system can generate " +getDailyPowerGeneration() +" kws per day";
+		return "Your system can generate " +Month.TwoDecimals(getDailyPowerGeneration()) +" kws per day";
 		
 	}
 //	weekly
 	public String toStringWeekly(){
-		return "Your system can generate "+getWeeklyPowerGeneration()+" kws in a week";
+		return "Your system can generate "+Month.TwoDecimals(getWeeklyPowerGeneration())+" kws in a week";
 	}
 //	monthly
 	public String toStringMonthly(){
