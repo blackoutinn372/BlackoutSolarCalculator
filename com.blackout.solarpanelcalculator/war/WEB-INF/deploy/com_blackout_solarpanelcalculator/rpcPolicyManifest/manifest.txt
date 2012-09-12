@@ -1,3 +1,2 @@
 # Module com_blackout_solarpanelcalculator
 # RPC service class, partial path of RPC policy file
-com.blackout.solarpanelcalculator.client.CalculationService, 18F4517480C10582FF23D0970EF497C1.gwt.rpc
