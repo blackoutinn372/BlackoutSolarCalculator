@@ -53,6 +53,7 @@ public class SolarPanel {
 	}
 	public SolarPanel (double sunlight,double systemSize,String roofAngle,String orientation, double age) throws SolarPanelException{
 		this(sunlight,systemSize,roofAngle,orientation);
+		if (age < 0) throw new SolarPanelException("Invalid Age");
 		this.age = age;
 	}
 	/* Nothing specified so use defaults */
