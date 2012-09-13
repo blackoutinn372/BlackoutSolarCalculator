@@ -33,6 +33,7 @@ public class SolarPanel {
 	private double systemSize ;// in kw
 	private String roofAngle;// flat,normal,or Steep
 	private String orientation;//north,north east/west, or  east/west
+	private double age; // in years
 	
 	public SolarPanel (double sunlight,double systemSize,String roofAngle,String orientation) throws SolarPanelException{
 		
@@ -48,21 +49,31 @@ public class SolarPanel {
 	 this.systemSize = systemSize;
 	 this.roofAngle = roofAngle;
 	 this.orientation = orientation;
+	 this.age = 0;
+	}
+	public SolarPanel (double sunlight,double systemSize,String roofAngle,String orientation, double age) throws SolarPanelException{
+		this(sunlight,systemSize,roofAngle,orientation);
+		this.age = age;
 	}
 	/* Nothing specified so use defaults */
 	public SolarPanel() {
-		sunlight = 5;
-		systemSize = 5;
+		sunlight = 6;
+		systemSize = 2;
 		roofAngle = okAngles[0];
 		orientation = okOrientations[0];
+		age = 0;
 	}
 
+	/* Panel loses durability and efficiency over time. */
+	private double efficiencyDecay() {
+		return age * panelAgeLoss;
+	}
 	
-//daily
+	//daily
 	public double getDailyPowerGeneration(){
-		double powerGeneration = systemSize * sunlight * inverter *roofAngleEfficiency()*orientationEfficiency();
+		double powerGeneration = systemSize * sunlight * inverter * 
+				roofAngleEfficiency() * orientationEfficiency() * efficiencyDecay();
 		return Month.TwoDecimals(powerGeneration);
-		
 	}
 //	weekly
 	public double getWeeklyPowerGeneration(){
@@ -111,18 +122,20 @@ public class SolarPanel {
 	}
 //	monthly
 	public String toStringMonthly(){
-		return "Your system can generate\n"+ getMonthlyPowerGeneration("January") +" kws in January\n"
-											+ getMonthlyPowerGeneration("February")+" kws in February\n"
-											+ getMonthlyPowerGeneration("March")+" kws in March\n"
-											+ getMonthlyPowerGeneration("April")+" kws in April\n"
-											+ getMonthlyPowerGeneration("May")+" kws in May\n"
-											+ getMonthlyPowerGeneration("June")+" kws in June\n"
-											+ getMonthlyPowerGeneration("July")+" kws in July\n"
-											+ getMonthlyPowerGeneration("August")+ " kws in August\n"
-											+ getMonthlyPowerGeneration("September")+" kws in September\n"
-											+ getMonthlyPowerGeneration("October")+" kws in October\n"
-											+ getMonthlyPowerGeneration("November")+" kws in November\n"
-											+ getMonthlyPowerGeneration("December")+" kws in December\n";
+		String eol = "\r\n";
+		return "Your system can generate" + eol
+				                            + getMonthlyPowerGeneration("January") +" kws in January" + eol
+											+ getMonthlyPowerGeneration("February")+" kws in February" + eol
+											+ getMonthlyPowerGeneration("March")+" kws in March" + eol
+											+ getMonthlyPowerGeneration("April")+" kws in April" + eol
+											+ getMonthlyPowerGeneration("May")+" kws in May" + eol
+											+ getMonthlyPowerGeneration("June")+" kws in June" + eol
+											+ getMonthlyPowerGeneration("July")+" kws in July" + eol
+											+ getMonthlyPowerGeneration("August")+ " kws in August" + eol
+											+ getMonthlyPowerGeneration("September")+" kws in September" + eol
+											+ getMonthlyPowerGeneration("October")+" kws in October" + eol
+											+ getMonthlyPowerGeneration("November")+" kws in November" + eol
+											+ getMonthlyPowerGeneration("December")+" kws in December" + eol;
 	}
 //	seasonly
 	public String toStringSeasonly(){

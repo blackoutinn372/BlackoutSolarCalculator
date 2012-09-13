@@ -135,6 +135,7 @@ public class CalculationClient implements EntryPoint {
 //				if any boxe has null value, or any listbox is not selected, pop up a error message
 				if( sunlightHoursBox.getValue()==null||systemSizeBox.getValue()==null||(estimateConsumptionSelected==true)&&(householdSizeBox.getValue()==null)
 						||stateCombo.getSelectedIndex()==0||angleCombo.getSelectedIndex()==0||directionCombo.getSelectedIndex()==0){
+					/* Window.Alerts don't work on the google app version. */
 					Window.alert("Please enter required fields");
 				return;
 				}				
@@ -345,6 +346,8 @@ public class CalculationClient implements EntryPoint {
 	}
 
 	protected void createDialogBox(String results) {
+		
+		
 		/*popup dialog box to show results*/
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setText("Results based on your details\n");
