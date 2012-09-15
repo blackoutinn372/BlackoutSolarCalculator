@@ -1,6 +1,8 @@
 package com.blackout.solarpanelcalculator.client;
 
 import com.google.gwt.i18n.client.NumberFormat;
+
+
 /**
  * based on 1kw system daily output in Melbourne
  * @author Sen
