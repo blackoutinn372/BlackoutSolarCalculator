@@ -4,11 +4,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 
-public class PayBackPerYearCallback implements AsyncCallback<Double>{
+public class PayBackYearCallback implements AsyncCallback<Double>{
 
 	private Label lblResults;
 	
-	public PayBackPerYearCallback(Label lblResults) {
+	public PayBackYearCallback(Label lblResults) {
 		this.lblResults = lblResults;
 	}
 	

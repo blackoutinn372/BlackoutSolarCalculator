@@ -20,7 +20,7 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 		return CalculationFormulas.getDailySavingsFormula(dailyGeneration, exportPercent, replacePercent, feedInTarrif, powerCost);
 	}
 
-	public double doPayBackPerYear(double systemCost, int lifeSpan,
+	public double doPayBackYear(double systemCost, int lifeSpan,
 			double dailySavings) {
 		// TODO Auto-generated method stub
 		return CalculationFormulas.getPayBackYear(systemCost, lifeSpan, dailySavings);

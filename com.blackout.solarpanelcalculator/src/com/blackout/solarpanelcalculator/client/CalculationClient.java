@@ -1,28 +1,17 @@
 
 package com.blackout.solarpanelcalculator.client;
 
-import java.text.ParseException;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.IntegerBox;
-import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
+
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -48,17 +37,17 @@ public class CalculationClient implements EntryPoint {
 	private Button btnDailySavings = new Button();
 	private Label lblDailySavings = new Label();
 	
-	//PayBackPerYear
+	//PayBackYear
 	private DoubleBox txtSystemCost = new DoubleBox();
 	private IntegerBox txtLifeSpan = new IntegerBox();
 	private DoubleBox txtDailySavings = new DoubleBox();
-	private Button btnPayBackPerYear = new Button();
-	private Label lblPayBackPerYear = new Label();
+	private Button btnPayBackYear = new Button();
+	private Label lblPayBackYear = new Label();
 	
 	public void onModuleLoad() {
 		loadDailySolarGenerationControls();
 		loadDailySavingsControls();
-		loadPayBackPerYearControls();
+		loadPayBackYearControls();
 	}
 	
 	private void loadDailySolarGenerationControls() {
@@ -78,15 +67,15 @@ public class CalculationClient implements EntryPoint {
 			}
 		});
 		
-		RootPanel.get().add(txtSystemSize);
-		RootPanel.get().add(txtRoofEfficiency);
-		RootPanel.get().add(txtInverterEfficiency);
-		RootPanel.get().add(txtWiringEfficiency);
-		RootPanel.get().add(txtWhatYear);
-		RootPanel.get().add(txtAgingEfficiencyLoss);
-		RootPanel.get().add(txtSolarIrradiance);
-		RootPanel.get().add(btnDailySolarGeneration);
-		RootPanel.get().add(lblDailySolarGeneration);
+		RootPanel.get("tdSystemSize").add(txtSystemSize);
+		RootPanel.get("tdRoofEfficiency").add(txtRoofEfficiency);
+		RootPanel.get("tdInverterEfficiency").add(txtInverterEfficiency);
+		RootPanel.get("tdWiringEfficiency").add(txtWiringEfficiency);
+		RootPanel.get("tdWhatYear").add(txtWhatYear);
+		RootPanel.get("tdAgingEfficiencyLoss").add(txtAgingEfficiencyLoss);
+		RootPanel.get("tdSolarIrradiance").add(txtSolarIrradiance);
+		RootPanel.get("tdDailySolarGenerationCalculate").add(btnDailySolarGeneration);
+		RootPanel.get("tdDailySolarGenerationResult").add(lblDailySolarGeneration);
 	}
 	
 	private void loadDailySavingsControls() {
@@ -104,33 +93,33 @@ public class CalculationClient implements EntryPoint {
 			}
 		});
 		
-		RootPanel.get().add(txtDailyGeneration);
-		RootPanel.get().add(txtExportPercent);
-		RootPanel.get().add(txtReplacePercent);
-		RootPanel.get().add(txtFeedInTariff);
-		RootPanel.get().add(txtPowerCost);
-		RootPanel.get().add(btnDailySavings);
-		RootPanel.get().add(lblDailySavings);
+		RootPanel.get("tdDailyGeneration").add(txtDailyGeneration);
+		RootPanel.get("tdExportPercent").add(txtExportPercent);
+		RootPanel.get("tdReplacePercent").add(txtReplacePercent);
+		RootPanel.get("tdFeedInTariff").add(txtFeedInTariff);
+		RootPanel.get("tdPowerCost").add(txtPowerCost);
+		RootPanel.get("tdDailySavingsCalculate").add(btnDailySavings);
+		RootPanel.get("tdDailySavingsResult").add(lblDailySavings);
 	}
 
-	private void loadPayBackPerYearControls() {
+	private void loadPayBackYearControls() {
 		txtSystemCost.setText("0");
 		txtLifeSpan.setText("0");
 		txtDailySavings.setText("0");
-		btnPayBackPerYear.setText("Calculate");
-		lblPayBackPerYear.setText("Answer Box");
+		btnPayBackYear.setText("Calculate");
+		lblPayBackYear.setText("Answer Box");
 		
-		btnPayBackPerYear.addClickHandler(new ClickHandler() {
+		btnPayBackYear.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				getPayBackPerYearFromServer();
+				getPayBackYearFromServer();
 			}
 		});
 		
-		RootPanel.get().add(txtSystemCost);
-		RootPanel.get().add(txtLifeSpan);
-		RootPanel.get().add(txtDailySavings);
-		RootPanel.get().add(btnPayBackPerYear);
-		RootPanel.get().add(lblPayBackPerYear);
+		RootPanel.get("tdSystemCost").add(txtSystemCost);
+		RootPanel.get("tdLifeSpan").add(txtLifeSpan);
+		RootPanel.get("tdDailySavings").add(txtDailySavings);
+		RootPanel.get("tdPayBackYearCalculate").add(btnPayBackYear);
+		RootPanel.get("tdPayBackYearResult").add(lblPayBackYear);
 	}
 	
 	protected void getDailySolarGenerationFromServer() {
@@ -151,13 +140,13 @@ public class CalculationClient implements EntryPoint {
         service.doDailySavings(txtDailyGeneration.getValue(), txtExportPercent.getValue(), txtReplacePercent.getValue(), txtFeedInTariff.getValue(), txtPowerCost.getValue(), callback);
 	}
 	
-	protected void getPayBackPerYearFromServer() {
+	protected void getPayBackYearFromServer() {
 		CalculationServiceAsync service = (CalculationServiceAsync) GWT.create(CalculationService.class);
         ServiceDefTarget serviceDef = (ServiceDefTarget) service;
         serviceDef.setServiceEntryPoint(GWT.getModuleBaseURL()
             + "calculationService");
-        PayBackPerYearCallback callback = new PayBackPerYearCallback(lblPayBackPerYear);
-        service.doPayBackPerYear(txtSystemCost.getValue(), txtLifeSpan.getValue(), txtDailySavings.getValue(), callback);
+        PayBackYearCallback callback = new PayBackYearCallback(lblPayBackYear);
+        service.doPayBackYear(txtSystemCost.getValue(), txtLifeSpan.getValue(), txtDailySavings.getValue(), callback);
 	}
 	
 }
