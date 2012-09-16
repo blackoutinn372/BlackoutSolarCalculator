@@ -19,7 +19,7 @@ public class CalculationFormulas{
 	public static final double defaultFeedInFee = 0.44; // in dollars per kwh
 	public static final double defaultExportPercent = 0.76;
 	public static final double defaultReplacePercent = 0.24;
-	public static final int defaultLifeSpan = 25;
+	public static final double defaultLifeSpan = 25;
 	/**
 	 * calculate daily solar generation
 	 * @param systemSize
@@ -93,7 +93,7 @@ public class CalculationFormulas{
  * @param dailySavings
  * @return paybackyear if not exceeding panel life Span, return -1 otherwise
  */
- public static int getPayBackYear(double systemCost, int lifeSpan, double dailySavings  ){
+ public static int getPayBackYear(double systemCost, double lifeSpan, double dailySavings  ){
 //	 use default year if input not valid
 	 if (chkInput(lifeSpan))
 		 lifeSpan = defaultLifeSpan;
