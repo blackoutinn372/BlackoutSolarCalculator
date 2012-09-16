@@ -1,10 +1,13 @@
 package com.blackout.solarpanelcalculator.client;
 
-import com.google.gwt.i18n.client.NumberFormat;
+
 
 
 /**
- * based on 1kw system daily output in Melbourne
+ * This Month enum type represents 12 months with two values 
+ * 1st value is 1kw system daily output 
+ * 2nd value is no. of days in the month
+ * (output values based in Melbourne)
  * @author Sen
  *
  */
@@ -38,8 +41,8 @@ public enum Month {
 		return TwoDecimals(September.GetMonthGeneration() + October.GetMonthGeneration() + November.GetMonthGeneration());
 	}
 //	make numbers to two decimals places
-	public static double TwoDecimals(double number){
-		String formated = NumberFormat.getFormat("0.00").format(number);
-		return NumberFormat.getDecimalFormat().parse(formated);
+	private static double TwoDecimals(double number){
+		
+		return Math.round(number*100.00)/100.00;
 	}
 }

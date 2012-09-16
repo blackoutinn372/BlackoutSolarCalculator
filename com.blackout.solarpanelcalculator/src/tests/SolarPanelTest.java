@@ -1,9 +1,8 @@
 package tests;
 
 import static org.junit.Assert.*;
-
 import com.blackout.solarpanelcalculator.client.SolarPanel;
-import com.blackout.solarpanelcalculator.client.SolarPanelException;
+import com.blackout.solarpanelcalculator.client.SolarException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +36,7 @@ public class SolarPanelTest {
 	 
 	 
 	 @Before
-	 public void SolarPanel()throws SolarPanelException{
+	 public void SolarPanel()throws SolarException{
 		 solarPanel = new SolarPanel(systemSize,sunlight,roof,orientation);
 		 solarPanel3 = new SolarPanel();//use default values
 		 solarPanel2 = new SolarPanel(systemSize2,sunlight2,roof2,orientation2);
@@ -50,73 +49,73 @@ public class SolarPanelTest {
 	//test  generation in June
 	@Test
 	public void SolarGenerationJune(){
-		assertEquals(solarPanel3.getMonthlyPowerGeneration("June"), 195.0,DELTA);
+		assertEquals(solarPanel3.getMonthlyPowerGeneration("June"), 78.0,DELTA);
 	}
 //	test generation in July
 	@Test
 	public void SolarGenerationJuly(){
-		assertEquals(solarPanel3.getMonthlyPowerGeneration("July"),232.5,DELTA);
+		assertEquals(solarPanel3.getMonthlyPowerGeneration("July"),93.0,DELTA);
 	}
 //	test generation in August
 	@Test
 	public void SolarGenerationAugust(){
-		assertEquals(solarPanel3.getMonthlyPowerGeneration("August"),325.5,DELTA);
+		assertEquals(solarPanel3.getMonthlyPowerGeneration("August"),130.2,DELTA);
 	}
 //	test generation in Winter
 	@Test
 	public void SolarGenerationWinter(){
-		assertEquals(solarPanel3.getWinterPowerGeneration(),753,DELTA);
+		assertEquals(solarPanel3.getWinterPowerGeneration(),301.2,DELTA);
 	}
 	 /*Test another set of data for daily generation*/
 	@Test
-	public void SolarGeneration2() throws SolarPanelException{
+	public void SolarGeneration2() throws SolarException{
 //		solarPanel = new SolarPanel(systemSize2,sunlight2,roof2,orientation2);
 		assertEquals(solarPanel2.getDailyPowerGeneration(), 13.88,DELTA);
 	}
 	@Test
-	public void SolarGeneration2Yearly() throws SolarPanelException{
+	public void SolarGeneration2Yearly() throws SolarException{
 		assertEquals(solarPanel2.GetYearPowerGeneration(),5066.2,DELTA);
 	}
 	@Test
-	public void SolarGeneration2Weekly() throws SolarPanelException{
+	public void SolarGeneration2Weekly() throws SolarException{
 		assertEquals(solarPanel2.getWeeklyPowerGeneration(),97.16,DELTA);
 	}
 	@Test
-	public void SolarGeneration2Seasonly() throws SolarPanelException{
+	public void SolarGeneration2Seasonly() throws SolarException{
 		assertEquals(solarPanel2.getSummerPowerGeneration(),2616,DELTA);
 	}
 	 /*Test invalid data*/
-	 @Test(expected = SolarPanelException.class)
-	 public void SolarPanelInvalid()throws SolarPanelException{
+	 @Test(expected = SolarException.class)
+	 public void SolarPanelInvalid()throws SolarException{
 		 solarPanel = new SolarPanel(invalidSize,invalidSunlight,invalidroof,invalidOrientation);
 	 }
 	 /* Testing individual failures */
-	 @Test(expected = SolarPanelException.class)
-	 public void InvalidSize() throws SolarPanelException {
+	 @Test(expected = SolarException.class)
+	 public void InvalidSize() throws SolarException {
 		 solarPanel = new SolarPanel(invalidSize,sunlight,roof,orientation);
 	 }
-	 @Test(expected = SolarPanelException.class)
-	 public void InvalidLight() throws SolarPanelException {
+	 @Test(expected = SolarException.class)
+	 public void InvalidLight() throws SolarException {
 		 solarPanel = new SolarPanel(systemSize,invalidSunlight,roof,orientation);
 	 }
-	 @Test(expected = SolarPanelException.class)
-	 public void InvalidAngle() throws SolarPanelException {
+	 @Test(expected = SolarException.class)
+	 public void InvalidAngle() throws SolarException {
 		 solarPanel = new SolarPanel(systemSize,sunlight,invalidroof,orientation);
 	 }
-	 @Test(expected = SolarPanelException.class)
-	 public void InvalidOrientation() throws SolarPanelException {
+	 @Test(expected = SolarException.class)
+	 public void InvalidOrientation() throws SolarException {
 		 solarPanel = new SolarPanel(systemSize,sunlight,roof,invalidOrientation);
 	 }
 	 @Test
-	 public void CanUseAge() throws SolarPanelException {
+	 public void CanUseAge() throws SolarException {
 		solarPanel = new SolarPanel(systemSize,sunlight,roof,orientation,brandNew);
 	 }
 	 @Test
-	 public void CanUseAgeAgain() throws SolarPanelException {
+	 public void CanUseAgeAgain() throws SolarException {
 		solarPanel = new SolarPanel(systemSize,sunlight,roof,orientation,fewYearsOld);
 	 }
-	 @Test(expected = SolarPanelException.class)
-	 public void InvalidAge() throws SolarPanelException {
+	 @Test(expected = SolarException.class)
+	 public void InvalidAge() throws SolarException {
 		solarPanel = new SolarPanel(systemSize,sunlight,roof,invalidOrientation,invalidAge); 
 	 }
 }

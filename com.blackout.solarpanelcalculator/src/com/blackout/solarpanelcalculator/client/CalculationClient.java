@@ -135,14 +135,16 @@ public class CalculationClient implements EntryPoint {
 //				if any boxe has null value, or any listbox is not selected, pop up a error message
 				if( sunlightHoursBox.getValue()==null||systemSizeBox.getValue()==null||(estimateConsumptionSelected==true)&&(householdSizeBox.getValue()==null)
 						||stateCombo.getSelectedIndex()==0||angleCombo.getSelectedIndex()==0||directionCombo.getSelectedIndex()==0){
-					/* Window.Alerts don't work on the google app version. */
 					Window.alert("Please enter required fields");
 				return;
 				}				
 				try {
 					final String results = solarPanelResults() +EstimateResults();
 					createDialogBox(results);
-				} catch (SolarPanelException e) {
+				} catch (SolarException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (PowerConsumptionException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -226,17 +228,17 @@ public class CalculationClient implements EntryPoint {
 		householdSizeBox.setVisible( estimateConsumptionSelected);
 		rootPanel.add(householdSizeBox, 521, 459);
 		
-		rdbtnHeavyUser = new RadioButton("new name", "heavy");
+		rdbtnHeavyUser = new RadioButton("new name", "Heavy");
 		rdbtnHeavyUser.setVisible( estimateConsumptionSelected);
 		rdbtnHeavyUser.setStyleName("gwt-radiobutton");
 		rootPanel.add(rdbtnHeavyUser, 505, 481);
 		
-		rdbtnMediumUser = new RadioButton("new name", "medium");
+		rdbtnMediumUser = new RadioButton("new name", "Medium");
 		rdbtnMediumUser.setValue(true);
 		rdbtnMediumUser.setVisible( estimateConsumptionSelected);
 		rootPanel.add(rdbtnMediumUser, 563, 481);
 		
-		rdbtnLightUser = new RadioButton("new name", "light");
+		rdbtnLightUser = new RadioButton("new name", "Light");
 		rdbtnLightUser.setVisible( estimateConsumptionSelected);
 		rootPanel.add(rdbtnLightUser, 640, 481);
 		
@@ -327,7 +329,7 @@ public class CalculationClient implements EntryPoint {
 		noOfPeopleErrorLabel.setVisible(false);
 	}
 	
-	protected String EstimateResults() {
+	protected String EstimateResults() throws PowerConsumptionException {
 		if(estimateConsumptionSelected){
 		final int householdSize = householdSizeBox.getValue();
 		final String usageType;
@@ -346,8 +348,6 @@ public class CalculationClient implements EntryPoint {
 	}
 
 	protected void createDialogBox(String results) {
-		
-		
 		/*popup dialog box to show results*/
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setText("Results based on your details\n");
@@ -375,7 +375,7 @@ public class CalculationClient implements EntryPoint {
  * I don't know why I cannot use selected texts and use them parse into solarPanel constructor
  * so i used multiple if statements, need refactoring
  */
-	protected String solarPanelResults() throws SolarPanelException {
+	protected String solarPanelResults() throws SolarException {
 //get selected index from Listbox
 		final int angleSelectedIndex = angleCombo.getSelectedIndex();
 		final int directionSelectedIndex = directionCombo.getSelectedIndex();		

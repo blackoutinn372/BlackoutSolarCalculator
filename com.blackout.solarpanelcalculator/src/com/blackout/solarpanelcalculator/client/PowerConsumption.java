@@ -6,9 +6,11 @@
   */
 package com.blackout.solarpanelcalculator.client;
 
+import java.util.Arrays;
+
 
 public class PowerConsumption {
-	static final String[] usageAmounts = {"Heavy", "Medium", "Light"};
+	static final String[] okayUsageType = {"Heavy", "Medium", "Light"};
 	static final double costperKwh = 0.23;//in dollars
 	static final double heavyUsagePerDay = 28;//in kwhs
 	static final double mediumUsagePerDay = 19;//in kwhs
@@ -17,8 +19,11 @@ public class PowerConsumption {
 	
 	private int householdSize;
 	private String usageType;// either heavy, medium , or light
-	public PowerConsumption(int householdSize, String usageType) {
-		super();
+	public PowerConsumption(Integer householdSize, String usageType) throws PowerConsumptionException {
+		if(!Arrays.asList(okayUsageType).contains(usageType))
+			throw new PowerConsumptionException("invalid usage type");
+		if(householdSize <1 || !(householdSize instanceof Integer))
+			throw new PowerConsumptionException("invalid householdSize");
 		this.householdSize = householdSize;
 		this.usageType = usageType;
 	}
@@ -26,12 +31,12 @@ public class PowerConsumption {
 	
 	public double getDailyPowerConsumption(){
 		double dailyConsumption = householdSize * getUsagePerDay();
-		return Month.TwoDecimals(dailyConsumption);
+		return TwoDecimals(dailyConsumption);
 	}
 	
 	public double getDailyPowerCost(){
 		double dailyPowerCost = getDailyPowerConsumption() * costperKwh;
-		return Month.TwoDecimals(dailyPowerCost);
+		return TwoDecimals(dailyPowerCost);
 	}
 //	output results
 	public String toString(){
@@ -45,5 +50,10 @@ public class PowerConsumption {
 			return mediumUsagePerDay;
 		else return lightUsagePerDay;
 		}
+//	make numbers to two decimals places
+	private  double TwoDecimals(double number){
+		
+		return Math.round(number*100.00)/100.00;
+	}
 	}
 

@@ -9,6 +9,7 @@ import com.blackout.solarpanelcalculator.client.PowerConsumption;
 import com.blackout.solarpanelcalculator.client.PowerConsumptionException;
 
 public class PowerConsumptionTest {
+	private static final double DELTA = 1e-15;
 	/*Scenario 1 */
 	 int householdsize = 4;
 	 String usageType = "Heavy";
@@ -19,7 +20,7 @@ public class PowerConsumptionTest {
 	 
 	 /*Scenario 3*/
 	 int householdsize3 = 5;
-	 String usageType3 = "medium";
+	 String usageType3 = "Medium";
 	
 	 /*invalid Scenario*/
 	 int invalidHouseholdsize = 0;
@@ -33,7 +34,7 @@ public class PowerConsumptionTest {
 	static final String medUsage = "Medium";
 	static final String lowUsage = "Light";
 	
-	PowerConsumption pc;
+	PowerConsumption powerConsumption;
 	
 	/*
 	@After
@@ -42,103 +43,99 @@ public class PowerConsumptionTest {
 	}*/
 	@Before
 	 public void PowerConsumption() throws PowerConsumptionException{
-		pc = new PowerConsumption(householdsize, usageType);
+		powerConsumption = new PowerConsumption(householdsize, usageType);
 	}
 	
 	
 	/* Can create a powerConsumption object */
 	@Test
-	public void testPowerConsumption() {
-		pc = new PowerConsumption(loneMan, lowUsage);
+	public void testPowerConsumption() throws PowerConsumptionException {
+		powerConsumption = new PowerConsumption(loneMan, lowUsage);
 	}
 	
 	/* Gets the power usage of a single member */
 	@Test
-	public void getPowerOfSingle() {
-		pc = new PowerConsumption(loneMan, lowUsage);
-		double consumption = pc.getDailyPowerConsumption();
-		assertTrue(consumption == 10.0);
+	public void getPowerOfSingle() throws PowerConsumptionException {
+		powerConsumption = new PowerConsumption(loneMan, lowUsage);
+		double consumption = powerConsumption.getDailyPowerConsumption();
+		assertEquals(consumption,10.0,DELTA);
 	}
 	
 	/* Gets the power usage of a couple */
 	@Test
-	public void getPowerOfCouple() {
-		pc = new PowerConsumption(couple, lowUsage);
-		double consumption = pc.getDailyPowerConsumption();
-		assertTrue(consumption == 20.0);
+	public void getPowerOfCouple() throws PowerConsumptionException {
+		powerConsumption = new PowerConsumption(couple, lowUsage);
+		double consumption = powerConsumption.getDailyPowerConsumption();
+		assertEquals(consumption,20.0,DELTA);
 	}
 	
 	/* Gets the power usage of a typical family */
 	@Test
-	public void getPowerOfFamily() {
-		pc = new PowerConsumption(family, lowUsage);
-		double consumption = pc.getDailyPowerConsumption();
-		assertTrue(consumption == 50.0);
+	public void getPowerOfFamily() throws PowerConsumptionException {
+		powerConsumption = new PowerConsumption(family, lowUsage);
+		double consumption = powerConsumption.getDailyPowerConsumption();
+		assertEquals(consumption,50.0,DELTA);
 	}
 	
 	/* Gets the cost of a single man's power usage */
 	@Test
-	public void getDailyPowerCost() {
-		pc = new PowerConsumption(loneMan, lowUsage);
-		double costs = pc.getDailyPowerCost();
+	public void getDailyPowerCost() throws PowerConsumptionException {
+		powerConsumption = new PowerConsumption(loneMan, lowUsage);
+		double costs = powerConsumption.getDailyPowerCost();
 		assertTrue(Double.compare(costs, 2.3) == 0);
-	}
-	
-	/* Should create a proper string */
-	@Test
-	public void testToString() {
-		fail("Not yet implemented");
+		assertEquals(costs,2.3,DELTA);
 	}
 	
 	/* Gives an invalid amount of family members */
 	@Test(expected = PowerConsumptionException.class)
-	public void inValidFamily() {
-		pc = new PowerConsumption(-1, lowUsage);
+	public void inValidFamily() throws PowerConsumptionException {
+		powerConsumption = new PowerConsumption(-1, lowUsage);
 		
 	}
 	
 	/* Gives an invalid amount of family members */
 	@Test(expected = PowerConsumptionException.class)
-	public void noFamily() {
-		pc = new PowerConsumption(0, lowUsage);
+	public void noFamily() throws PowerConsumptionException {
+		powerConsumption = new PowerConsumption(0, lowUsage);
 		
 	}
 	
 	/* Gives an unusual power consumption amount */
 	@Test(expected = PowerConsumptionException.class)
-	public void invalidUsage() {
-		pc = new PowerConsumption(loneMan, "Too much");
+	public void invalidUsage() throws PowerConsumptionException {
+		powerConsumption = new PowerConsumption(loneMan, "Too much");
 		
 	}
 	
 	/* Gives no actual usage */
 	@Test(expected = PowerConsumptionException.class)
-	public void noUsage() {
-		pc = new PowerConsumption(loneMan, "");
+	public void noUsage() throws PowerConsumptionException {
+		powerConsumption = new PowerConsumption(loneMan, "");
 	}
 	 
 	/*Test scenario 1 consumption output*/
 	@Test
     public void PowerConsumed(){
-	    assertEquals(Double.compare(pc.getDailyPowerConsumption(), 112.0), 0);
+	    
+	    assertEquals(powerConsumption.getDailyPowerConsumption(),112.0,DELTA);
     }
 	
 	/*Test scenario 2 consumption output*/
 	@Test
     public void PowerConsumed2() throws PowerConsumptionException{
-		pc = new PowerConsumption(householdsize2, usageType2);
-	    assertEquals(Double.compare(pc.getDailyPowerConsumption(), 30.0), 0);
+		powerConsumption = new PowerConsumption(householdsize2, usageType2);
+	    assertEquals(powerConsumption.getDailyPowerConsumption(),30.0,DELTA);
     }
 	
 	/*Test scenario 3 consumption output*/
 	@Test
     public void PowerConsumed3() throws PowerConsumptionException{
-		pc = new PowerConsumption(householdsize3, usageType3);
-		assertEquals(Double.compare(pc.getDailyPowerConsumption(), 95.0), 0);
+		powerConsumption = new PowerConsumption(householdsize3, usageType3);
+		assertEquals( powerConsumption.getDailyPowerConsumption(),95.0, DELTA);
     }
 	// invalid householdsize
-	@Test
+	@Test(expected = PowerConsumptionException.class)
     public void invalidHouseholdSize() throws PowerConsumptionException{
-		pc = new PowerConsumption(invalidHouseholdsize, usageType);
+		powerConsumption = new PowerConsumption(invalidHouseholdsize, usageType);
     }
 }

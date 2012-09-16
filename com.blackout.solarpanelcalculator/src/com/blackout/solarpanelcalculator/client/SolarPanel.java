@@ -7,6 +7,8 @@ import java.util.Arrays; // Used for "contains" for verifying orientations and a
 
 
 
+
+
 public class SolarPanel {
 	public static final String[] okOrientations = {"North", "North east/west", "Due east/west" };
 	public static final String[] okAngles = { "Flat", "Normal", "Steep" };
@@ -33,27 +35,27 @@ public class SolarPanel {
 	private double systemSize ;// in kw
 	private String roofAngle;// flat,normal,or Steep
 	private String orientation;//north,north east/west, or  east/west
-	private double age; // in years
+	private double age; // in years not used 
 	
-	public SolarPanel (double sunlight,double systemSize,String roofAngle,String orientation) throws SolarPanelException{
+	public SolarPanel (double sunlight,double systemSize,String roofAngle,String orientation) throws SolarException{
 		
 	 if (sunlight <=0)
-		 throw new SolarPanelException("Invalid sunlight hours");
+		 throw new SolarException("Invalid sunlight hours");
 	 if (systemSize <= 0)
-		 throw new SolarPanelException("Invalid system size");
+		 throw new SolarException("Invalid system size");
 	 if(!Arrays.asList(okAngles).contains(roofAngle))
-		 throw new SolarPanelException("Invalid roofAngle selection");
+		 throw new SolarException("Invalid roofAngle selection");
 	 if (!Arrays.asList(okOrientations).contains(orientation)) 
-		 throw new SolarPanelException("Invalid orientation selection");
+		 throw new SolarException("Invalid orientation selection");
 	 this.sunlight = sunlight;
 	 this.systemSize = systemSize;
 	 this.roofAngle = roofAngle;
 	 this.orientation = orientation;
 	 this.age = 0;
 	}
-	public SolarPanel (double sunlight,double systemSize,String roofAngle,String orientation, double age) throws SolarPanelException{
+	public SolarPanel (double sunlight,double systemSize,String roofAngle,String orientation, double age) throws SolarException{
 		this(sunlight,systemSize,roofAngle,orientation);
-		if (age < 0) throw new SolarPanelException("Invalid Age");
+		if (age < 0) throw new SolarException("Invalid Age");
 		this.age = age;
 	}
 	/* Nothing specified so use defaults */
@@ -64,62 +66,58 @@ public class SolarPanel {
 		orientation = okOrientations[0];
 		age = 0;
 	}
-
-	/* Panel loses durability and efficiency over time. */
-	private double efficiencyDecay() {
-		return age * panelAgeLoss;
-	}
 	
 	//daily
 	public double getDailyPowerGeneration(){
 		double powerGeneration = systemSize * sunlight * inverter * 
-				roofAngleEfficiency() * orientationEfficiency() * efficiencyDecay();
-		return Month.TwoDecimals(powerGeneration);
+				roofAngleEfficiency() * orientationEfficiency();
+		return TwoDecimals(powerGeneration);
+		
 	}
 //	weekly
 	public double getWeeklyPowerGeneration(){
 		double weeklyGeneration = getDailyPowerGeneration() * 7;
 		
-		return Month.TwoDecimals(weeklyGeneration);
+		return TwoDecimals(weeklyGeneration);
 	}
 	
 //	monthly
 	public double getMonthlyPowerGeneration(String month){
 		double monthGeneration = Month.valueOf(month).GetMonthGeneration()*this.systemSize;
-		return Month.TwoDecimals(monthGeneration);
+		return TwoDecimals(monthGeneration);
 	}
 	
 //	four seasons
 	public double getSummerPowerGeneration(){
 		double summerGeneration = Month.GetSummerGeneration() * this.systemSize;
-		return  Month.TwoDecimals(summerGeneration);
+		return  TwoDecimals(summerGeneration);
 	}
 	public double getAutumnPowerGeneration(){
 		double autumnGeneration = Month.GetAutumnGeneration() * this.systemSize;
-		return  Month.TwoDecimals(autumnGeneration);
+		return  TwoDecimals(autumnGeneration);
 	}
 	public double getWinterPowerGeneration(){
 		double winterGeneration = Month.GetWinterGeneration() * this.systemSize;
-		return  Month.TwoDecimals(winterGeneration);
+		return  TwoDecimals(winterGeneration);
 	}
 	public double getSpringPowerGeneration(){
 		double springGeneration = Month.GetSpringGeneration() * this.systemSize;
-		return  Month.TwoDecimals(springGeneration);
+		return  TwoDecimals(springGeneration);
 	}
 	
 //	yearly
 	public double GetYearPowerGeneration(){
 		double yearGeneration = getDailyPowerGeneration() * 365;
-		return Month.TwoDecimals(yearGeneration);
+		return TwoDecimals(yearGeneration);
 	}
 //	output results daily
 	public String toStringDaily(){
-		return "Your system can generate " +Month.TwoDecimals(getDailyPowerGeneration()) +" kws per day";
+		return "Your system can generate " +TwoDecimals(getDailyPowerGeneration()) +" kws per day";
 		
 	}
 //	weekly
 	public String toStringWeekly(){
-		return "Your system can generate "+Month.TwoDecimals(getWeeklyPowerGeneration())+" kws in a week";
+		return "Your system can generate "+TwoDecimals(getWeeklyPowerGeneration())+" kws in a week";
 	}
 //	monthly
 	public String toStringMonthly(){
@@ -165,4 +163,9 @@ public class SolarPanel {
 			return north_east_west;
 		else return east_west;
 	}
+	private double TwoDecimals(double number){
+		
+		return Math.round(number*100.00)/100.00;
+	}
+	
 }

@@ -1,10 +1,14 @@
 package tests;
-
+/**
+ * This test is not used yet.only represents a new formula to 
+ * calculate solar power generation
+ * dailyGeneration = systemSize * roofEfficiency *inverterEfficiency *wiringEfficiency *solarIrradiance
+ * 					
+ */
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.blackout.solarpanelcalculator.Variables.InverterEfficiency;
 import com.blackout.solarpanelcalculator.Variables.RoofEfficiency;
 import com.blackout.solarpanelcalculator.Variables.SolarIrradiance;
@@ -35,8 +39,8 @@ public class SolarGenerationTest {
 		assertEquals(TwoDecimals(dailyGeneration1),expectedDailyPower,DELTA);
 	}
 	
-	private double TwoDecimals(double number){
-		String formated = NumberFormat.getFormat("0.00").format(number);
-		return NumberFormat.getDecimalFormat().parse(formated);
+private double TwoDecimals(double number){
+		
+		return Math.round(number*100.00)/100.00;
 	}
 	 }
