@@ -8,8 +8,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DoubleBox;
-import com.google.gwt.user.client.ui.IntegerBox;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.DoubleBox;
+import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.RootPanel;
 
 
@@ -26,7 +26,7 @@ public class CalculationClient implements EntryPoint {
 	private DoubleBox txtAgingEfficiencyLoss = new DoubleBox();
 	private DoubleBox txtSolarIrradiance = new DoubleBox();
 	private Button btnDailySolarGeneration = new Button();
-	private Label lblDailySolarGeneration = new Label();
+	private DoubleBox lblDailySolarGeneration = new DoubleBox();
 	
 	//DailySavingsControls
 	private DoubleBox txtDailyGeneration = new DoubleBox();
@@ -35,14 +35,14 @@ public class CalculationClient implements EntryPoint {
 	private DoubleBox txtFeedInTariff = new DoubleBox();
 	private DoubleBox txtPowerCost = new DoubleBox();
 	private Button btnDailySavings = new Button();
-	private Label lblDailySavings = new Label();
+	private DoubleBox lblDailySavings = new DoubleBox();
 	
 	//PayBackYear
 	private DoubleBox txtSystemCost = new DoubleBox();
-	private IntegerBox txtLifeSpan = new IntegerBox();
+	private DoubleBox txtLifeSpan = new DoubleBox();
 	private DoubleBox txtDailySavings = new DoubleBox();
 	private Button btnPayBackYear = new Button();
-	private Label lblPayBackYear = new Label();
+	private DoubleBox lblPayBackYear = new DoubleBox();
 	
 	public void onModuleLoad() {
 		loadDailySolarGenerationControls();
@@ -59,7 +59,7 @@ public class CalculationClient implements EntryPoint {
 		txtAgingEfficiencyLoss.setText("0");
 		txtSolarIrradiance.setText("0");
 		btnDailySolarGeneration.setText("Calculate");
-		lblDailySolarGeneration.setText("Answer Box");
+		lblDailySolarGeneration.setText("");
 		
 		btnDailySolarGeneration.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -85,7 +85,7 @@ public class CalculationClient implements EntryPoint {
 		txtFeedInTariff.setText("0");
 		txtPowerCost.setText("0");
 		btnDailySavings.setText("Calculate");
-		lblDailySavings.setText("Answer Box");
+		lblDailySavings.setText("");
 		
 		btnDailySavings.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -107,7 +107,7 @@ public class CalculationClient implements EntryPoint {
 		txtLifeSpan.setText("0");
 		txtDailySavings.setText("0");
 		btnPayBackYear.setText("Calculate");
-		lblPayBackYear.setText("Answer Box");
+		lblPayBackYear.setText("");
 		
 		btnPayBackYear.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
