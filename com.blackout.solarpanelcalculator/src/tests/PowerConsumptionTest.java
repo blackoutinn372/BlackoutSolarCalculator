@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.blackout.solarpanelcalculator.client.PowerConsumption;
 import com.blackout.solarpanelcalculator.client.PowerConsumptionException;
+import com.blackout.solarpanelcalculator.server.PowerConsumption;
 
 public class PowerConsumptionTest {
 	private static final double DELTA = 1e-15;

@@ -29,128 +29,117 @@
 			<div id="page" class="container">
 				<div id="content">
 					<div class="post">
-						<h2 class="title"><a href="#">Daily Solar Generation</a></h2>
 						<div class="entry">
 							<p><img src="images/img07.jpg" width="620" height="200" alt="" /></p>
-							<p>Blah blah blah blurb about this part</p>
+							<h2 class="title">Enter your parameters here:</h2>
 							<table>
 								<tr>
-									<td style="width:60%;">System Size:</td>
-									<td id="tdSystemSize" style="width:40%;"></td>
+									<td style="width:60%;">System Size(kws):</td>
+									<td id="tdSystemSize" ></td>
+									<td style="width:70%;">Export Percentage(%):</td>
+									<td id="tdExportPercent"></td>
 								</tr>
 								<tr>
 									<td>Roof Efficiency:</td>
 									<td id="tdRoofEfficiency"></td>
+									<td style="width:70%;">Replace Percentage (%):</td>
+									<td id="tdReplacePercent"></td>
 								</tr>
 								<tr>
 									<td>Inverter Efficiency:</td>
 									<td id="tdInverterEfficiency"></td>
-								</tr>
-								<tr>
-									<td>Wiring Efficiency:</td>
-									<td id="tdWiringEfficiency"></td>
-								</tr>
-								<tr>
-									<td>What Year?:</td>
-									<td id="tdWhatYear"></td>
-								</tr>
-								<tr>
-									<td>Aging Efficiency Loss:</td>
-									<td id="tdAgingEfficiencyLoss"></td>
-								</tr>
-								<tr>
-									<td>Solar Irradiance</td>
-									<td id="tdSolarIrradiance"></td>
-								</tr>
-								<tr>
-									<td></td>
-									<td id="tdDailySolarGenerationCalculate"></td>
-								</tr>
-								<tr>
-									<td>Your daily generations(kw):</td>
-									<td id="tdDailySolarGenerationResult" colspan="2"></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-					<div class="post">
-						<h2 class="title"><a href="#">Daily Savings</a></h2>
-						<div class="entry">
-							<p><img src="images/img07.jpg" width="620" height="200" alt="" /></p>
-							<p>Blah blurb this part too</p>
-							<table>
-								<tr>
-									<td style="width:60%;">Daily Generation:</td>
-									<td id="tdDailyGeneration" style="width:40%;"></td>
-								</tr>
-								<tr>
-									<td>Export Percentage (%):</td>
-									<td id="tdExportPercent"></td>
-								</tr>
-								<tr>
-									<td>Replace Percentage (%):</td>
-									<td id="tdReplacePercent"></td>
-								</tr>
-								<tr>
 									<td>Feed In Tariff:</td>
 									<td id="tdFeedInTariff"></td>
 								</tr>
 								<tr>
+									<td>Wiring Efficiency:</td>
+									<td id="tdWiringEfficiency"></td>
 									<td>Power Cost:</td>
 									<td id="tdPowerCost"></td>
 								</tr>
 								<tr>
-									<td></td>
-									<td id="tdDailySavingsCalculate"></td>
-								</tr>
-								<tr>
-									<td>Your daily savings(dollars):</td>
-									<td id="tdDailySavingsResult" colspan="2"></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-					<div class="post">
-						<h2 class="title"><a href="#">Pay Back Year</a></h2>
-						<div class="entry">
-							<p><img src="images/img07.jpg" width="620" height="200" alt="" /></p>
-							<p>Put stuff in here as well</p>
-							<table>
-								<tr>
-									<td style="width:60%;">Total system cost:</td>
-									<td id="tdSystemCost" style="width:40%;"></td>
-								</tr>
-								<tr>
+									<td>What Year?:</td>
+									<td id="tdWhatYear"></td>
 									<td>Solar Panel life span:</td>
 									<td id="tdLifeSpan"></td>
 								</tr>
 								<tr>
-									<td>Daily savings:</td>
-									<td id="tdDailySavings"></td>
+									<td>Aging Efficiency Loss:</td>
+									<td id="tdAgingEfficiencyLoss"></td>
+									<td style="width:60%;">Total system cost:</td>
+									<td id="tdSystemCost" style="width:40%;"></td>
+									
+								</tr>
+								<tr>
+									<td>Solar Irradiance</td>
+									<td id="tdSolarIrradiance"></td>
+									<td></td>
+									<td id="tdDailySolarGenerationCalculate"></td>
+								</tr>
+								<tr>									
+								</tr>
+							</table>
+							</br>
+							<h3>Enter your details to estimate power consumption:</h3>
+							</br>
+							<table>
+								<tr>
+									<td>Your household Size:</td>
+									<td id="tdHouseholdSize"></td><!--newid-->
+									<td>Your usage Type:	</td>
+									<td id="tdUsageType"></td><!--newid-->
 								</tr>
 								<tr>
 									<td></td>
-									<td id="tdPayBackYearCalculate"></td>
-								</tr>
-								<tr>
-									<td>Your payback year:</td>
-									<td id="tdPayBackYearResult" colspan="2"></td>
+									<td id="tdCalculatePowerConsumption" colspan="2"></td><!--newid-->
 								</tr>
 							</table>
+							
 						</div>
-					</div>					
+					</div>
+					<div class="post">						
+						<div class="entry">
+							<p><img src="images/img07.jpg" width="620" height="100" alt="" /></p>
+							<h2 class="title">These are your results</h2>
+							<table>
+								<tr>
+									<td>Your daily generations(kws):</td>
+									<td id="tdDailySolarGenerationResult"></td>
+									<td>Your daily savings(dollars):</td>
+									<td id="tdDailySavingsResult"></td>
+								</tr>
+								<tr>
+								<td>Your payback year:</td>
+								<td id="tdPayBackYearResult"></td>
+								<td>Power consumption estimate(kws):</td>
+								<td id="tdPowerEstimateResult"></td><!--newid-->
+								</tr>
+							</table>
+							</br>
+							<h2 class="title">Monthly generation results:</h2>
+							<table>
+							
+								<tr>
+								<!--monthresults-->
+									<td id="idMonthSolarGenerationResults"></td>
+								</tr>
+							</table>
+							</br>
+								
+						</div>
+					</div>				
 					<div style="clear: both;">&nbsp;</div>
 				</div>
 				<div id="sidebar">
 					<div id="box1">
 						<h2>Instructions</h2>
 						<ul class="list-style1">
-							<li class="first">Do Something</li>
-							<li>Do Something</li>
-							<li>Do Something</li>
-							<li>Do Something</li>
-							<li>Do Something</li>
-							<li>Do Something</li>
+							<li class="first"></li>
+							<li>Please enter your details </li>
+						
+							<li>then click calculate button</li>
+							<li>to see results</li>
+							<li></li>
 						</ul>
 					</div>
 				</div>

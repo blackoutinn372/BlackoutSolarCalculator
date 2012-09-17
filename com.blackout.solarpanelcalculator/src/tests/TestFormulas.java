@@ -13,7 +13,7 @@ import com.blackout.solarpanelcalculator.Variables.InverterEfficiency;
 import com.blackout.solarpanelcalculator.Variables.RoofEfficiency;
 import com.blackout.solarpanelcalculator.Variables.SolarIrradiance;
 import com.blackout.solarpanelcalculator.Variables.WiringEfficiency;
-import com.blackout.solarpanelcalculator.client.CalculationFormulas;
+import com.blackout.solarpanelcalculator.server.CalculationFormulas;
 
 public class TestFormulas {
 	private static final double DELTA = 1e-10;
