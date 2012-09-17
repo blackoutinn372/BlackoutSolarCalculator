@@ -2,13 +2,14 @@ package com.blackout.solarpanelcalculator.client;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.Label;
 
 public class DailySolarGenerationCallback implements AsyncCallback<Double>{
 
-	private Label lblResults;
+	private DoubleBox lblResults;
 	
-	public DailySolarGenerationCallback(Label lblResults) {
+	public DailySolarGenerationCallback(DoubleBox lblResults) {
 		this.lblResults = lblResults;
 	}
 	
