@@ -8,7 +8,6 @@ package com.blackout.solarpanelcalculator.server;
 
 import java.util.Arrays;
 
-import com.blackout.solarpanelcalculator.client.PowerConsumptionException;
 
 
 public class PowerConsumption {

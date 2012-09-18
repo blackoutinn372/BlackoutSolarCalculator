@@ -7,12 +7,7 @@ package tests;
  */
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
-import com.blackout.solarpanelcalculator.Variables.InverterEfficiency;
-import com.blackout.solarpanelcalculator.Variables.RoofEfficiency;
-import com.blackout.solarpanelcalculator.Variables.SolarIrradiance;
-import com.blackout.solarpanelcalculator.Variables.WiringEfficiency;
 import com.blackout.solarpanelcalculator.server.CalculationFormulas;
 
 public class TestFormulas {

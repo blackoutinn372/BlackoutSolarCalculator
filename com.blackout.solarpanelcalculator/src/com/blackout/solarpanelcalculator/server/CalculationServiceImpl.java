@@ -2,7 +2,6 @@ package com.blackout.solarpanelcalculator.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.blackout.solarpanelcalculator.client.CalculationService;
-import com.blackout.solarpanelcalculator.client.PowerConsumptionException;
 
 public class CalculationServiceImpl extends RemoteServiceServlet implements CalculationService {
 
