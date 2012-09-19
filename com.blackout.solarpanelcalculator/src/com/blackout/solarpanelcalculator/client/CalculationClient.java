@@ -1,41 +1,66 @@
 package com.blackout.solarpanelcalculator.client;
 
+
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.DoubleBox;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class CalculationClient implements EntryPoint {
 
-	private DoubleBox txtSystemSize = new DoubleBox();
-	private DoubleBox txtRoofEfficiency = new DoubleBox();
-	private DoubleBox txtInverterEfficiency = new DoubleBox();
-	private DoubleBox txtWiringEfficiency = new DoubleBox();
+	
+	ListBox citycomboBox = new ListBox();	
+	ListBox roofDirectioncomboBox = new ListBox();		
+	DoubleBox systemCostBox = new DoubleBox();		
+	DoubleBox doubleBoxSize = new DoubleBox();	
+	DoubleBox roofLossBox = new DoubleBox();	
+    DoubleBox inverterBox = new DoubleBox();    
+    DoubleBox doubleBoxWiring = new DoubleBox();   
+    IntegerBox integerBoxLifeSpan = new IntegerBox();    
+    DoubleBox doubleBoxPowerCost = new DoubleBox();  
+    DoubleBox doubleBoxTarrif = new DoubleBox();    
+    DoubleBox doubleBoxReplacePercent = new DoubleBox();	
+	DoubleBox doubleBoxAgeLoss = new DoubleBox();
+	DoubleBox doubleBoxIrradiance = new DoubleBox();
 	private DoubleBox txtWhatYear = new DoubleBox();
-	private DoubleBox txtAgingEfficiencyLoss = new DoubleBox();
-	private DoubleBox txtSolarIrradiance = new DoubleBox();
+
 	private DoubleBox txtDailySolarGeneration = new DoubleBox();
-	private DoubleBox txtDailyGeneration = new DoubleBox();
-	private DoubleBox txtExportPercent = new DoubleBox();
-	private DoubleBox txtReplacePercent = new DoubleBox();
-	private DoubleBox txtFeedInTariff = new DoubleBox();
-	private DoubleBox txtPowerCost = new DoubleBox();
+
+
 	private Button btnCalculation = new Button();
-	private DoubleBox txtSystemCost = new DoubleBox();
-	private DoubleBox txtLifeSpan = new DoubleBox();
+	
+	
 	private DoubleBox txtDailySavings = new DoubleBox();
+	
+	
+	
 	private DoubleBox txtPayBackYear = new DoubleBox();
     private Label lblMonthResult=new Label();
     private DoubleBox txtPowerEstimate = new DoubleBox();
@@ -47,6 +72,7 @@ public class CalculationClient implements EntryPoint {
 	private CalculationServiceAsync service; 
 	
 	public void onModuleLoad() {
+		 RootPanel.get("tdMainPanel").add(loadAllControlsNew());
 		loadAllUIControls();
 		service= (CalculationServiceAsync) GWT.create(CalculationService.class);
 		ServiceDefTarget serviceDef = (ServiceDefTarget) service;
@@ -55,25 +81,14 @@ public class CalculationClient implements EntryPoint {
 	}
 
 	private void loadAllUIControls() {
-		txtSystemSize.setText("0");
-		txtRoofEfficiency.setText("0");
-		txtInverterEfficiency.setText("0");
-		txtWiringEfficiency.setText("0");
+	
 		txtWhatYear.setText("0");
-		txtAgingEfficiencyLoss.setText("0");
-		txtSolarIrradiance.setText("0");
-		btnCalculation.setText("Calculate");
-		txtDailySolarGeneration.setText("");
+	
 		rdbtnMedium.setValue(true);
 		txtHouseholdSize.setValue(0);
-		txtDailyGeneration.setText("0");
-		txtExportPercent.setText("0");
-		txtReplacePercent.setText("0");
-		txtFeedInTariff.setText("0");
-		txtPowerCost.setText("0");
+		
 		btnCalculation.setText("Calculate");
-		txtSystemCost.setText("0");
-		txtLifeSpan.setText("0");
+		
 		txtDailySavings.setText("0");
 		txtPayBackYear.setText("");
 		btnCalculation.addClickHandler(new ClickHandler() {
@@ -81,29 +96,15 @@ public class CalculationClient implements EntryPoint {
 				doCalculation();
 			}
 		});
-
-		RootPanel.get("tdSystemSize").add(txtSystemSize);
-		RootPanel.get("tdRoofEfficiency").add(txtRoofEfficiency);
-		RootPanel.get("tdInverterEfficiency").add(txtInverterEfficiency);
-		RootPanel.get("tdWiringEfficiency").add(txtWiringEfficiency);
-		RootPanel.get("tdWhatYear").add(txtWhatYear);
-		RootPanel.get("tdAgingEfficiencyLoss").add(txtAgingEfficiencyLoss);
-		RootPanel.get("tdSolarIrradiance").add(txtSolarIrradiance);
 		RootPanel.get("tdDailySolarGenerationCalculate").add(btnCalculation);
 		RootPanel.get("tdDailySolarGenerationResult").add(txtDailySolarGeneration);		
-		RootPanel.get("idMonthSolarGenerationResults").add(lblMonthResult);		
+		RootPanel.get("idMonthSolarGenerationResults").add(lblMonthResult);
 		RootPanel.get("tdDailySavingsResult").add(txtDailySavings);		
 		RootPanel.get("tdPowerEstimateResult").add(txtPowerEstimate);		
 		RootPanel.get("tdHouseholdSize").add(txtHouseholdSize);		
 		RootPanel.get("tdUsageType").add(rdbtnHeavy);
 		RootPanel.get("tdUsageType").add(rdbtnMedium);
 		RootPanel.get("tdUsageType").add(rdbtnLight);
-		RootPanel.get("tdExportPercent").add(txtExportPercent);
-		RootPanel.get("tdReplacePercent").add(txtReplacePercent);
-		RootPanel.get("tdFeedInTariff").add(txtFeedInTariff);
-		RootPanel.get("tdPowerCost").add(txtPowerCost);	
-		RootPanel.get("tdSystemCost").add(txtSystemCost);
-		RootPanel.get("tdLifeSpan").add(txtLifeSpan);		
 		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);
 		
 	}
@@ -111,7 +112,7 @@ public class CalculationClient implements EntryPoint {
 	protected void doCalculation(){		
         
         // calculate the generation for all months
-        service.doSolarGenerationForAllMonths(txtSystemSize.getValue(), txtRoofEfficiency.getValue(), txtInverterEfficiency.getValue(), txtWiringEfficiency.getValue(), txtWhatYear.getValue(), txtAgingEfficiencyLoss.getValue(), new AsyncCallback<String>() {
+        service.doSolarGenerationForAllMonths(doubleBoxSize.getValue()/1000, roofLossBox.getValue()/100, inverterBox.getValue()/100, doubleBoxWiring.getValue()/100, txtWhatYear.getValue(), doubleBoxAgeLoss.getValue()/100, new AsyncCallback<String>() {
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());				
 			}
@@ -122,7 +123,7 @@ public class CalculationClient implements EntryPoint {
 		});
 
         // calculate the daily generation,  
-        service.doDailySolarGeneration(txtSystemSize.getValue(), txtRoofEfficiency.getValue(), txtInverterEfficiency.getValue(), txtWiringEfficiency.getValue(), txtWhatYear.getValue(), txtAgingEfficiencyLoss.getValue(), txtSolarIrradiance.getValue(), new AsyncCallback<Double>() {
+        service.doDailySolarGeneration(doubleBoxSize.getValue()/1000, roofLossBox.getValue()/100, inverterBox.getValue()/100, doubleBoxWiring.getValue()/100, txtWhatYear.getValue(), doubleBoxAgeLoss.getValue()/100, doubleBoxIrradiance.getValue(), new AsyncCallback<Double>() {
 			public void onFailure(Throwable caught) {				
 				Window.alert(caught.getMessage());				
 			}
@@ -155,7 +156,7 @@ public class CalculationClient implements EntryPoint {
 	
 //	Calculate Daily savings
 	private void getDailySaving( double dailyGeneration){
- 		   service.doDailySavings(dailyGeneration, txtExportPercent.getValue(), txtReplacePercent.getValue(), txtFeedInTariff.getValue(), txtPowerCost.getValue(), new AsyncCallback<Double>() {
+ 		   service.doDailySavings(dailyGeneration, doubleBoxReplacePercent.getValue()/100, doubleBoxTarrif.getValue()/100, doubleBoxPowerCost.getValue()/100, new AsyncCallback<Double>() {
 			public void onFailure(Throwable caught) {				
 				Window.alert(caught.getMessage());				
 			}
@@ -168,7 +169,7 @@ public class CalculationClient implements EntryPoint {
 	}
 //	Calculate Payback year
 	private void getPayBackYear( double dailySaving){
-		service.doPayBackYear(txtSystemCost.getValue(), txtLifeSpan.getValue(),
+		service.doPayBackYear(systemCostBox.getValue(), integerBoxLifeSpan.getValue(),
 				dailySaving,new AsyncCallback<Double>() {
 			public void onFailure(Throwable caught) {				
 				Window.alert(caught.getMessage());				
@@ -177,6 +178,211 @@ public class CalculationClient implements EntryPoint {
 			public void onSuccess(Double result) {
 				txtPayBackYear.setText(result.toString());
 			}});
+	}
+	private Widget loadAllControlsNew() {		
+		String irradianceMsg = "This value is auto updated based on your location you can also enter a value to override it";
+		PopMessage irradianceHelpMsg = new PopMessage(irradianceMsg);
+		
+		String overallCostMsg = "The overall cost is your solar system and installation cost minus any goverment rebates  ";
+		PopMessage overallCostHelpMsg = new PopMessage(overallCostMsg);
+		
+		 systemCostBox.setText("18000");	
+		 doubleBoxSize.setText("4950");	
+		 roofLossBox.setText("88.5"); 
+	     inverterBox.setText("96") ;
+	     doubleBoxWiring.setText("98");   
+	     integerBoxLifeSpan.setText("25");     
+	     doubleBoxPowerCost.setText("19.41");
+	     doubleBoxTarrif.setText("44");  
+	     doubleBoxReplacePercent.setText("24"); 
+		 doubleBoxAgeLoss.setText("0.7"); 
+		 doubleBoxIrradiance.setText("5.1"); 
+		
+		
+		Label lblAssumeSolarIrradiance = new Label("Solar irradiance level in your location is(kWh/m2/day):");
+		lblAssumeSolarIrradiance.addMouseOverHandler(irradianceHelpMsg);
+		lblAssumeSolarIrradiance.addMouseOutHandler(irradianceHelpMsg);
+		Label lblAssumeSolarPanel = new Label("Solar panel aging efficiency loss per year is(%):");
+		Label lblAssumeUseAtHome = new Label("The percentage of solar generation used at home is(%):");
+		Label lblTarrif = new Label("Your feed in tarrif is (cents in kwh):");
+		Label lblPowerCost = new Label("Your electricity cost is (cents per kwh):");
+		Label lblLifeSpan = new Label("The Solar panel life span is(years):");
+		Label lblWiring = new Label("The wiring efficiency is(%):");
+		Label inverterLbl = new Label("The inverter efficiency is(%):");
+		Label roofLossLbl = new Label("The efficiency loss due to angles and directions is(%):");
+		Label lblSystemSize = new Label("Your solar system size (watts):");
+		Label systemCostLbl = new Label("Your overall purchase cost(dollars):");
+		systemCostLbl.addMouseOverHandler(overallCostHelpMsg);
+		systemCostLbl.addMouseOutHandler(overallCostHelpMsg);
+		Label roofFaceLbl = new Label("Select your roof direction:");
+		Label cityLbl = new Label("Select your city:");	 
+		 
+		citycomboBox.addItem("Select City....");
+		citycomboBox.addItem("Sydney (NSW)");
+		citycomboBox.addItem("Melbourne (VIC)");
+		citycomboBox.addItem("Brisbane (QLD)");
+		citycomboBox.addItem("Perth (WA)");
+		citycomboBox.addItem("Adelaide (SA)");
+		citycomboBox.addItem("Gold Coast \u2013 Tweed (QLD/NSW)");
+		citycomboBox.addItem("Newcastle (NSW)");
+		citycomboBox.addItem("Canberra \u2013 Queanbeyan (ACT/NSW)");
+		citycomboBox.addItem("Wollongong (NSW)");
+		citycomboBox.addItem("Sunshine Coast (QLD)");
+		citycomboBox.addItem("Hobart (TAS)");
+		citycomboBox.addItem("Geelong (VIC)");
+		citycomboBox.addItem("Townsville (QLD)");
+		citycomboBox.addItem("Cairns (QLD)");
+		citycomboBox.addItem("Toowoomba (QLD)");
+		citycomboBox.addItem("Darwin (NT)");
+		citycomboBox.addItem("Albury \u2013 Wodonga (NSW/VIC)");
+		citycomboBox.addItem("Launceston (TAS)");
+		citycomboBox.addItem("Ballarat (VIC)");
+		citycomboBox.addItem("Bendigo (VIC)");
+		citycomboBox.addItem("Mandurah (WA)");
+		citycomboBox.addItem("Mackay (QLD)");
+		citycomboBox.addItem("Burnie \u2013 Devonport (TAS)");
+		citycomboBox.addItem("Latrobe Valley (VIC)");
+		citycomboBox.addItem("Rockhampton (QLD)");
+		citycomboBox.addItem("Bunbury (WA)");
+		citycomboBox.addItem("Bundaberg (QLD)");
+		citycomboBox.addItem("Hervey Bay (QLD)");
+		citycomboBox.addItem("Wagga Wagga (NSW)");
+		citycomboBox.addItem("Coffs Habour (NSW)");
+		citycomboBox.addItem("Gladstone (QLD)");
+		citycomboBox.addItem("Mildura (VIC)");
+		citycomboBox.addItem("Shepparton (VIC)");
+	
+	
+		roofDirectioncomboBox.addItem("Select panel direction...");
+		roofDirectioncomboBox.addItem("Facing directly South");
+		roofDirectioncomboBox.addItem("South South West(22.5 degrees from South)");
+		roofDirectioncomboBox.addItem("South West(45 degrees from South)");
+		roofDirectioncomboBox.addItem("West South West(67.5 degrees from South)");
+		roofDirectioncomboBox.addItem("Facing directly West");
+		roofDirectioncomboBox.addItem("South South East(22.5 degrees from South)");
+		roofDirectioncomboBox.addItem("South East(45 degrees from South)");
+		roofDirectioncomboBox.addItem("East South East(67.5 degrees from South)");
+		roofDirectioncomboBox.addItem("Facing directly East");
+		
+	
+		doubleBoxSize.setWidth("106px");
+	    // Create a table to layout the form options
+	    FlexTable layout = new FlexTable();
+	    layout.setCellSpacing(2);
+	    layout.setWidth("364px");
+
+	    FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
+	    layout.setWidget(1, 0, cityLbl);
+	    layout.setWidget(1, 1,citycomboBox);
+	    citycomboBox.setWidth("122px");
+	    layout.setWidget(2, 0, roofFaceLbl);
+	    layout.setWidget(2, 1, roofDirectioncomboBox);
+	    roofDirectioncomboBox.setWidth("123px");
+	    layout.setWidget(3, 0, lblSystemSize);
+	    layout.setWidget(3, 1, doubleBoxSize);
+	    systemCostBox.setWidth("106px");
+	    layout.setWidget(4, 0, systemCostLbl);
+	    layout.setWidget(4, 1, systemCostBox);
+	   
+	    roofLossLbl.setStyleName("gwt-Label-assumptions"); 	   
+	    roofLossBox.setStyleName("gwt-DoubleBox-assumptions");   
+	    inverterLbl.setStyleName("gwt-Label-assumptions");	
+	    inverterBox.setStyleName("gwt-DoubleBox-assumptions");		
+		lblWiring.setStyleName("gwt-Label-assumptions");			
+		doubleBoxWiring.setStyleName("gwt-DoubleBox-assumptions");	
+		lblLifeSpan.setStyleName("gwt-Label-assumptions");		
+		integerBoxLifeSpan.setStyleName("gwt-DoubleBox-assumptions");		
+		lblPowerCost.setStyleName("gwt-Label-assumptions");
+		doubleBoxPowerCost.setStyleName("gwt-DoubleBox-assumptions");		
+		lblTarrif.setStyleName("gwt-Label-assumptions");
+		doubleBoxTarrif.setStyleName("gwt-DoubleBox-assumptions");		
+		lblAssumeUseAtHome.setStyleName("gwt-Label-assumptions");
+		doubleBoxReplacePercent.setStyleName("gwt-DoubleBox-assumptions");		
+		lblAssumeSolarPanel.setStyleName("gwt-Label-assumptions");	
+		doubleBoxAgeLoss.setStyleName("gwt-DoubleBox-assumptions");		
+		doubleBoxIrradiance.setStyleName("gwt-DoubleBox-assumptions");		
+		lblAssumeSolarIrradiance.setStyleName("gwt-Label-assumptions");
+	    
+	    HorizontalPanel horizontalPanel = new HorizontalPanel();
+	    HorizontalPanel horizontalPanel1 = new HorizontalPanel();
+	    HorizontalPanel horizontalPanel2 = new HorizontalPanel();
+	    HorizontalPanel horizontalPanel3 = new HorizontalPanel();	    
+	    HorizontalPanel horizontalPanel4 = new HorizontalPanel();
+	    HorizontalPanel horizontalPanel5 = new HorizontalPanel();
+	    HorizontalPanel horizontalPanel6 = new HorizontalPanel();
+	    HorizontalPanel horizontalPanel7 = new HorizontalPanel();
+	    HorizontalPanel horizontalPanel8 = new HorizontalPanel();	    
+	    horizontalPanel.add(roofLossLbl);
+	    horizontalPanel.add(roofLossBox);
+	    horizontalPanel1.add(inverterLbl);
+	    horizontalPanel1.add(inverterBox);	    
+	    horizontalPanel2.add(lblWiring);
+	    horizontalPanel2.add(doubleBoxWiring);
+	    horizontalPanel3.add(lblLifeSpan);
+	    horizontalPanel3.add(integerBoxLifeSpan);
+	    horizontalPanel4.add(lblPowerCost);
+	    horizontalPanel4.add(doubleBoxPowerCost);
+	    horizontalPanel5.add(lblTarrif);
+	    horizontalPanel5.add(doubleBoxTarrif);
+	    horizontalPanel6.add(lblAssumeUseAtHome);
+	    horizontalPanel6.add(doubleBoxReplacePercent);
+	    horizontalPanel7.add(lblAssumeSolarPanel);
+	    horizontalPanel7.add(doubleBoxAgeLoss);
+	    horizontalPanel8.add(lblAssumeSolarIrradiance);
+	    horizontalPanel8.add(doubleBoxIrradiance);    
+	    VerticalPanel verticalPanel = new VerticalPanel();
+	    verticalPanel.add(horizontalPanel);
+	    verticalPanel.add(horizontalPanel1);
+	    verticalPanel.add(horizontalPanel2);
+	    verticalPanel.add(horizontalPanel3);
+	    verticalPanel.add(horizontalPanel4);
+	    verticalPanel.add(horizontalPanel5);
+	    verticalPanel.add(horizontalPanel6);
+	    verticalPanel.add(horizontalPanel7);
+	    verticalPanel.add(horizontalPanel8);    
+	    
+	    // Add advanced options to form in a disclosure panel
+	    DisclosurePanel advancedDisclosure = new DisclosurePanel(
+	        "Our assumptions");
+	    advancedDisclosure.setContent(verticalPanel);
+	    advancedDisclosure.setOpen(true);
+	    advancedDisclosure.setAnimationEnabled(true);   
+	    layout.setWidget(5, 0, advancedDisclosure);
+	    advancedDisclosure.setWidth("358px");
+	    cellFormatter.setColSpan(5, 0, 2);
+	 // Wrap the content in a DecoratorPanel
+	    DecoratorPanel decPanel = new DecoratorPanel();
+	    decPanel.setWidget(layout);
+	    return decPanel;
+	  }
+	
+	/*use to add pop msg to explain stuff*/
+	class PopMessage implements MouseOverHandler,MouseOutHandler {
+		// Create a basic popup widget
+		 PopupPanel simplePopup ;
+		public PopMessage(String whatMsg){
+			simplePopup = new PopupPanel(true);
+			simplePopup.addStyleName("gwt-PopupPanel");
+		    simplePopup.ensureDebugId("cwBasicPopup-simplePopup");
+		    simplePopup.setWidth("150px");
+		    simplePopup.setWidget(
+		        new HTML(whatMsg));
+	}
+		@Override
+		public void onMouseOver(MouseOverEvent event) {
+			// Reposition the popup relative to the button
+			Widget source = (Widget) event.getSource();
+            int left = source.getAbsoluteLeft() + 10;
+            int top = source.getAbsoluteTop() +20;
+            simplePopup.setPopupPosition(left, top);
+            // Show the popup
+            simplePopup.show();			
+		}	
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			// hide it 
+			simplePopup.hide();			
+		}		
 	}
 
 }

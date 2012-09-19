@@ -573,3 +573,20 @@ a:hover {
 	font-style: italic;
 	font-weight: normal;
 }
+<---below is newly added styles------>
+.gwt-Label-assumptions {
+	font-size: 10px;
+	width:266px;
+}
+.gwt-DoubleBox-assumptions{
+	width:22px;
+	height:10px;
+	font-size: 7pt;
+}
+.gwt-ListBox {
+	font-size: 10px;
+}
+.gwt-PopupPanel {
+ background-color: lightcyan;
+  font-size: 6pt;
+}

@@ -10,4 +10,11 @@ public interface CalculationServiceAsync {
 	void doPayBackYear(double systemCost, double lifeSpan, double dailySavings,
 			AsyncCallback<Double> callback);
 	void doPowerConsumption(Integer householdSize, String usageType,AsyncCallback<Double> callback);
+	void doDailySavings(double dailyGeneration, double replacePercent,
+			double feedInTarrif, double powerCost,
+			AsyncCallback<Double> callback);
+	void doDailySolarGeneration(double systemSize, double roofEfficiency,
+			double inverterEfficiency, double wiringEfficiency,
+			double agingEfficiencyLoss, double solarIrradiance,
+			AsyncCallback<Double> callback);
 }

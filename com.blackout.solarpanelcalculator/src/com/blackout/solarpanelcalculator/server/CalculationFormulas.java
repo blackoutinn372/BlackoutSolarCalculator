@@ -36,6 +36,7 @@ public class CalculationFormulas{
 	public static double getDailySolarGeneFormula(double systemSize,double roofEfficiency,double inverterEfficiency,
 											  double wiringEfficiency,double whatYear, double agingEfficiencyLoss,double solarIrradiance)
 {
+		
 //		if values invalid , use default values instead
 	if(chkInput(systemSize))
 		systemSize = defaultSystemSize;
@@ -51,6 +52,7 @@ public class CalculationFormulas{
 		agingEfficiencyLoss = defaultPanelAgeEfficiencyLoss;
 	if (chkInput(solarIrradiance))
 		solarIrradiance = defaultSolarIrradiance;
+
 	double panelEfficiency = Math.pow((1 - agingEfficiencyLoss)	,whatYear);
 	
 //	assume no efficiency loss in the first year	
@@ -60,6 +62,21 @@ public class CalculationFormulas{
 	
 	return TwoDecimals(resultInGivenYear);
 	
+}
+	public static double getDailySolarGeneFormula(double systemSize,double roofEfficiency,double inverterEfficiency,
+			  double wiringEfficiency, double agingEfficiencyLoss,double solarIrradiance)
+{
+
+double whatYear=0;
+double panelEfficiency = Math.pow((1 - agingEfficiencyLoss)	,whatYear);
+
+//assume no efficiency loss in the first year	
+double generation = systemSize*roofEfficiency*inverterEfficiency*wiringEfficiency*solarIrradiance;
+
+double resultInGivenYear = generation * panelEfficiency;
+
+return TwoDecimals(resultInGivenYear);
+
 }
 	
 	public static String getSolarGeneFormulaForAllMonths(double systemSize,double roofEfficiency,double inverterEfficiency,
@@ -78,7 +95,7 @@ public class CalculationFormulas{
 	
 	public static double getMonthlySolarGeneFormula(double systemSize,double roofEfficiency,double inverterEfficiency,
 			  double wiringEfficiency,double whatYear, double agingEfficiencyLoss,int month)
-	{
+	{	
 		if(month>=0&&month<=12){
 			return getDailySolarGeneFormula(systemSize,roofEfficiency,inverterEfficiency,
 					  wiringEfficiency,whatYear,agingEfficiencyLoss,monthlySolarIrradiance[month]);
@@ -100,7 +117,7 @@ public class CalculationFormulas{
  public static double getDailySavingsFormula(double dailyGeneration, double exportPercent, double replacePercent,double feedInTarrif,double powerCost){
 	 
 //		if values invalid , use default values instead
-	
+
 	 if (chkEfficiency(exportPercent))
 		 exportPercent = defaultExportPercent;
 	 if (chkEfficiency(replacePercent)){
@@ -115,6 +132,27 @@ public class CalculationFormulas{
 	
 	return TwoDecimals(result);
  }
+ public static double getDailySavingsFormula(double dailyGeneration, double replacePercent,double feedInTarrif,double powerCost){
+	 
+
+	 
+//		if values invalid , use default values instead
+	 double exportPercent = 1-replacePercent;
+
+	 if (chkEfficiency(exportPercent))
+		 exportPercent = defaultExportPercent;
+	 if (chkEfficiency(replacePercent)){
+		 replacePercent = defaultReplacePercent;
+	 }
+	 if (chkInput(feedInTarrif))
+		 feedInTarrif = defaultFeedInFee;
+	 if(chkInput(powerCost))
+		 powerCost = defaultPowerCost;
+	 
+	double result = dailyGeneration * (exportPercent *feedInTarrif + replacePercent*powerCost);
+	
+	return TwoDecimals(result);
+}
 /**
  * Calculate pay back year
  * @param systemCost
