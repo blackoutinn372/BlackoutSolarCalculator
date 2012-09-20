@@ -2,6 +2,8 @@ package com.blackout.solarpanelcalculator.client;
 
 
 
+
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,19 +25,29 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
+import com.google.gwt.visualization.client.AbstractDataTable;
+import com.google.gwt.visualization.client.DataTable;
+import com.google.gwt.visualization.client.VisualizationUtils;
+import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
+import com.google.gwt.visualization.client.visualizations.ColumnChart;
+import com.google.gwt.visualization.client.visualizations.ColumnChart.Options;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class CalculationClient implements EntryPoint {
 
+	private double[] monthResults = null;
+	ColumnChart chart;
 	
+	Label lblmonthsResultstext = new Label();
 	ListBox citycomboBox = new ListBox();	
 	ListBox roofDirectioncomboBox = new ListBox();		
 	DoubleBox systemCostBox = new DoubleBox();		
@@ -62,7 +74,6 @@ public class CalculationClient implements EntryPoint {
 	
 	
 	private DoubleBox txtPayBackYear = new DoubleBox();
-    private Label lblMonthResult=new Label();
     private DoubleBox txtPowerEstimate = new DoubleBox();
     private IntegerBox txtHouseholdSize = new IntegerBox();
     private RadioButton rdbtnHeavy = new RadioButton("usage", "Heavy");
@@ -78,8 +89,12 @@ public class CalculationClient implements EntryPoint {
 		ServiceDefTarget serviceDef = (ServiceDefTarget) service;
         serviceDef.setServiceEntryPoint(GWT.getModuleBaseURL()
             + "calculationService");
+        
+        createColumnChart(monthResults);
+       
 	}
 
+	
 	private void loadAllUIControls() {
 	
 		txtWhatYear.setText("0");
@@ -98,7 +113,7 @@ public class CalculationClient implements EntryPoint {
 		});
 		RootPanel.get("tdDailySolarGenerationCalculate").add(btnCalculation);
 		RootPanel.get("tdDailySolarGenerationResult").add(txtDailySolarGeneration);		
-		RootPanel.get("idMonthSolarGenerationResults").add(lblMonthResult);
+		
 		RootPanel.get("tdDailySavingsResult").add(txtDailySavings);		
 		RootPanel.get("tdPowerEstimateResult").add(txtPowerEstimate);		
 		RootPanel.get("tdHouseholdSize").add(txtHouseholdSize);		
@@ -106,19 +121,30 @@ public class CalculationClient implements EntryPoint {
 		RootPanel.get("tdUsageType").add(rdbtnMedium);
 		RootPanel.get("tdUsageType").add(rdbtnLight);
 		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);
-		
+		RootPanel.get("idMonthTextResults").add( lblmonthsResultstext);
 	}
 
 	protected void doCalculation(){		
         
         // calculate the generation for all months
-        service.doSolarGenerationForAllMonths(doubleBoxSize.getValue()/1000, roofLossBox.getValue()/100, inverterBox.getValue()/100, doubleBoxWiring.getValue()/100, txtWhatYear.getValue(), doubleBoxAgeLoss.getValue()/100, new AsyncCallback<String>() {
+        service.doSolarGenerationForAllMonths(doubleBoxSize.getValue()/1000, roofLossBox.getValue()/100, inverterBox.getValue()/100, doubleBoxWiring.getValue()/100, txtWhatYear.getValue(), doubleBoxAgeLoss.getValue()/100, new AsyncCallback<double[]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());				
 			}
 
-			public void onSuccess(String result) {
-				lblMonthResult.setText(result);
+			public void onSuccess(double[] result) {
+				chart.draw(createMonthGenerationTable(result),createOptions());//draw column chart
+				
+				//to remove the string month results display when charts are properly set up
+				 String months[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+				 StringBuffer buffer = new StringBuffer();
+				 for(int i=0;i<12;i++){
+						buffer.append(months[i]);
+						buffer.append(":");
+						buffer.append(result[i]);
+						buffer.append("kwh\n");					
+			}
+				 lblmonthsResultstext.setText(buffer.toString());
 			}
 		});
 
@@ -179,13 +205,16 @@ public class CalculationClient implements EntryPoint {
 				txtPayBackYear.setText(result.toString());
 			}});
 	}
-	private Widget loadAllControlsNew() {		
-		String irradianceMsg = "This value is auto updated based on your location you can also enter a value to override it";
-		PopMessage irradianceHelpMsg = new PopMessage(irradianceMsg);
+	private Widget loadAllControlsNew() {
 		
+//		pop up message
+		String irradianceMsg = "This value is auto updated based on your location you can also enter a value to override it";
+		PopMessage irradianceHelpMsg = new PopMessage(irradianceMsg);		
 		String overallCostMsg = "The overall cost is your solar system and installation cost minus any goverment rebates  ";
 		PopMessage overallCostHelpMsg = new PopMessage(overallCostMsg);
 		
+		
+//		set boxes to their default values
 		 systemCostBox.setText("18000");	
 		 doubleBoxSize.setText("4950");	
 		 roofLossBox.setText("88.5"); 
@@ -198,7 +227,7 @@ public class CalculationClient implements EntryPoint {
 		 doubleBoxAgeLoss.setText("0.7"); 
 		 doubleBoxIrradiance.setText("5.1"); 
 		
-		
+//		create labels
 		Label lblAssumeSolarIrradiance = new Label("Solar irradiance level in your location is(kWh/m2/day):");
 		lblAssumeSolarIrradiance.addMouseOverHandler(irradianceHelpMsg);
 		lblAssumeSolarIrradiance.addMouseOutHandler(irradianceHelpMsg);
@@ -216,7 +245,8 @@ public class CalculationClient implements EntryPoint {
 		systemCostLbl.addMouseOutHandler(overallCostHelpMsg);
 		Label roofFaceLbl = new Label("Select your roof direction:");
 		Label cityLbl = new Label("Select your city:");	 
-		 
+		
+//		 combobox selections
 		citycomboBox.addItem("Select City....");
 		citycomboBox.addItem("Sydney (NSW)");
 		citycomboBox.addItem("Melbourne (VIC)");
@@ -252,7 +282,7 @@ public class CalculationClient implements EntryPoint {
 		citycomboBox.addItem("Mildura (VIC)");
 		citycomboBox.addItem("Shepparton (VIC)");
 	
-	
+//	root combobox selections
 		roofDirectioncomboBox.addItem("Select panel direction...");
 		roofDirectioncomboBox.addItem("Facing directly South");
 		roofDirectioncomboBox.addItem("South South West(22.5 degrees from South)");
@@ -271,6 +301,7 @@ public class CalculationClient implements EntryPoint {
 	    layout.setCellSpacing(2);
 	    layout.setWidth("364px");
 
+//	    add widgets to flextable
 	    FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
 	    layout.setWidget(1, 0, cityLbl);
 	    layout.setWidget(1, 1,citycomboBox);
@@ -283,7 +314,8 @@ public class CalculationClient implements EntryPoint {
 	    systemCostBox.setWidth("106px");
 	    layout.setWidget(4, 0, systemCostLbl);
 	    layout.setWidget(4, 1, systemCostBox);
-	   
+	    
+//	   set styles to labels and boxes
 	    roofLossLbl.setStyleName("gwt-Label-assumptions"); 	   
 	    roofLossBox.setStyleName("gwt-DoubleBox-assumptions");   
 	    inverterLbl.setStyleName("gwt-Label-assumptions");	
@@ -303,6 +335,7 @@ public class CalculationClient implements EntryPoint {
 		doubleBoxIrradiance.setStyleName("gwt-DoubleBox-assumptions");		
 		lblAssumeSolarIrradiance.setStyleName("gwt-Label-assumptions");
 	    
+//		all the horizontalPanels host each label and doublebox in disclosure panel
 	    HorizontalPanel horizontalPanel = new HorizontalPanel();
 	    HorizontalPanel horizontalPanel1 = new HorizontalPanel();
 	    HorizontalPanel horizontalPanel2 = new HorizontalPanel();
@@ -384,5 +417,62 @@ public class CalculationClient implements EntryPoint {
 			simplePopup.hide();			
 		}		
 	}
+	
+	
+	
+	
+	 void createColumnChart(final double monthResults[]){
+	        Runnable onLoadCallback = new Runnable() {
+	          public void run() {
+	            Panel panel = RootPanel.get("idMonthSolarGenerationResults");
+	     
+	            // Create a column chart visualization.
+	           
+	            chart = new ColumnChart(createMonthGenerationTable(monthResults), createOptions());
+	           //chart.addSelectHandler(createSelectHandler(chart));
+	           
+	            panel.add(chart);
+	            
+	          }
+	        };
 
+	        // Load the visualization api, passing the onLoadCallback to be called
+	        // when loading is done.
+	        VisualizationUtils.loadVisualizationApi(onLoadCallback, ColumnChart.PACKAGE);
+	        }
+	        
+	//use to populate month generation table for Column chart
+	
+	private AbstractDataTable createMonthGenerationTable(double monthResults[]) {
+	    DataTable data = DataTable.create();
+	    data.addColumn(ColumnType.STRING, "Month");
+	    data.addColumn(ColumnType.NUMBER, "kwh");
+	    String months[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+	    
+	    data.addRows(months.length);
+	    
+	    for(int i = 0; i<months.length;i++){
+	    	data.setValue(i, 0, months[i].toString());
+	    	if(monthResults==null)
+	    		data.setValue(i, 1, 0);
+	    	else
+	    	data.setValue(i, 1, monthResults[i]);
+	    }
+	   
+	    return data;
+
+}
+	//column create options
+	private Options createOptions() {
+	    Options options = ColumnChart.Options.create();
+	    options.setWidth(600);
+	    options.setHeight(240);
+	    options.set3D(true);
+	    options.setTitle("kwh Generation per month");
+	    options.setStacked(true);
+	    options.setMin(0);
+	    options.setEnableTooltip(true);
+	    
+	    return options;
+	  }
 }

@@ -30,13 +30,7 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 		return CalculationFormulas.getDailySolarGeneFormula(systemSize, roofEfficiency, inverterEfficiency, wiringEfficiency, whatYear, agingEfficiencyLoss, solarIrradiance);
 	}
 	
-	@Override
-	public double doMonthlySolarGeneration(double systemSize,
-			double roofEfficiency, double inverterEfficiency,
-			double wiringEfficiency, double whatYear,
-			double agingEfficiencyLoss, int month) {
-		return CalculationFormulas.getMonthlySolarGeneFormula(systemSize, roofEfficiency, inverterEfficiency, wiringEfficiency, whatYear, agingEfficiencyLoss, month);
-	}	
+	
 	
 	@Override
 	public double doDailySavings(double dailyGeneration, double exportPercent,
@@ -52,7 +46,7 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	}
 
 	@Override
-	public String doSolarGenerationForAllMonths(double systemSize,
+	public double[] doSolarGenerationForAllMonths(double systemSize,
 			double roofEfficiency, double inverterEfficiency,
 			double wiringEfficiency, double whatYear, double agingEfficiencyLoss) {
 		
@@ -75,5 +69,7 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 			double solarIrradiance) {
 		return CalculationFormulas.getDailySolarGeneFormula(systemSize, roofEfficiency, inverterEfficiency, wiringEfficiency, agingEfficiencyLoss, solarIrradiance);
 	}
+
+
 	
 }

@@ -20,7 +20,7 @@ public class CalculationFormulas{
 	public static final double defaultExportPercent = 0.76;
 	public static final double defaultReplacePercent = 0.24;
 	public static final double defaultLifeSpan = 25;
-	public static final double[] monthlySolarIrradiance={6.19,5,3.9,4.95,3.98,3.23,3.02,3.22,4.04,5.12,5.52,6.07,6.35};
+	public static final double[] monthlySolarIrradiance={6.19*31,5*28,3.9*31,4.95*30,3.98*31,3.23*30,3.02*31,3.22*30,4.04*31,5.12*30,5.52*31,6.07*30,6.35*31};
 	public static final String[] months={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
 	/**
 	 * calculate daily solar generation
@@ -79,31 +79,18 @@ return TwoDecimals(resultInGivenYear);
 
 }
 	
-	public static String getSolarGeneFormulaForAllMonths(double systemSize,double roofEfficiency,double inverterEfficiency,
+	public static double[] getSolarGeneFormulaForAllMonths(double systemSize,double roofEfficiency,double inverterEfficiency,
 			  double wiringEfficiency,double whatYear, double agingEfficiencyLoss){
-		StringBuffer buffer=new StringBuffer();	
-		for(int i=0;i<12;i++){
-			buffer.append(months[i]);
-			buffer.append(":");
-			buffer.append(getMonthlySolarGeneFormula(systemSize, roofEfficiency, inverterEfficiency, wiringEfficiency, whatYear, agingEfficiencyLoss, i));
-			buffer.append(" kws\n");
+		double monthsResults[] = new double[12];
+		for(int i = 0; i<monthsResults.length;i++){
+			monthsResults[i] = getDailySolarGeneFormula(systemSize,roofEfficiency,inverterEfficiency,
+					  wiringEfficiency,whatYear,agingEfficiencyLoss,monthlySolarIrradiance[i]);
 		}
-		return buffer.toString();
+		return monthsResults;
 		
 	}
 	 
 	
-	public static double getMonthlySolarGeneFormula(double systemSize,double roofEfficiency,double inverterEfficiency,
-			  double wiringEfficiency,double whatYear, double agingEfficiencyLoss,int month)
-	{	
-		if(month>=0&&month<=12){
-			return getDailySolarGeneFormula(systemSize,roofEfficiency,inverterEfficiency,
-					  wiringEfficiency,whatYear,agingEfficiencyLoss,monthlySolarIrradiance[month]);
-		}
-		
-		return 1;
-						
-	}
 	
 	/**
 	 * calculate daily savings 
