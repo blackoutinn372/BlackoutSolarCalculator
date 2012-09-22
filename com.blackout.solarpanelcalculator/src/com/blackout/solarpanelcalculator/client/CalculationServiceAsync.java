@@ -1,5 +1,7 @@
 package com.blackout.solarpanelcalculator.client;
 
+import java.util.TreeMap;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface CalculationServiceAsync {
@@ -19,4 +21,9 @@ public interface CalculationServiceAsync {
 
 	void doWorthInvestment(double savings, double paybackYear, double duration,
 			AsyncCallback<Double> callback);
+	void getPayBackTime(double systemCost, double lifeSpan,
+			double replacePercent, double feedInTarrif, double powerCost,
+			double dailyGeneration, double agingEfficiencyLoss,
+			double yearsToCalculate,
+			AsyncCallback<TreeMap<Double, String>> callback);
 }

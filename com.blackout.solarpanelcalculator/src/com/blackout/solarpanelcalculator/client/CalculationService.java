@@ -1,5 +1,7 @@
 package com.blackout.solarpanelcalculator.client;
 
+import java.util.TreeMap;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -13,4 +15,6 @@ public interface CalculationService extends RemoteService {
 	double doPowerConsumption(Integer householdSize, String usageType);	
 	double doDailySavings(double dailyGeneration, double replacePercent, double feedInTarrif, double powerCost);
 	double doWorthInvestment(double savings, double paybackYear, double duration);
+	TreeMap<Double,String> getPayBackTime(double systemCost, double lifeSpan, double replacePercent,double feedInTarrif,
+			 double powerCost, double dailyGeneration , double agingEfficiencyLoss,double yearsToCalculate);
 }

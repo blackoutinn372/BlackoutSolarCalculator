@@ -1,5 +1,7 @@
 package com.blackout.solarpanelcalculator.server;
 
+import java.util.TreeMap;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.blackout.solarpanelcalculator.client.CalculationService;
 
@@ -73,6 +75,16 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	
 	public double doWorthInvestment(double dailySavings, double paybackYear, double duration) {
 		return CalculationFormulas.isWorthInvesting(dailySavings, paybackYear, duration);
+	}
+
+
+	@Override
+	public TreeMap<Double, String> getPayBackTime(double systemCost,
+			double lifeSpan, double replacePercent, double feedInTarrif,
+			double powerCost, double dailyGeneration,
+			double agingEfficiencyLoss, double yearsToCalculate) {
+		// TODO Auto-generated method stub
+		return CalculationFormulas.getPayBackTime(systemCost, lifeSpan, replacePercent, feedInTarrif, powerCost, dailyGeneration, agingEfficiencyLoss, yearsToCalculate);
 	}
 	
 }

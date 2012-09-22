@@ -1,8 +1,6 @@
 package com.blackout.solarpanelcalculator.client;
-
-
-
-
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -38,21 +36,25 @@ import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.visualizations.ColumnChart;
 import com.google.gwt.visualization.client.visualizations.ColumnChart.Options;
+import com.google.gwt.visualization.client.visualizations.LineChart;
+
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class CalculationClient implements EntryPoint {
 
-	private double[] monthResults = null;
-	ColumnChart chart;
 	
+	private double[] monthResults = null;
+	private ColumnChart chart;//for monthly results chart
+	private LineChart lineChart;//for payback time line chart
+	private TreeMap<Double,String> payBackTime = null;
 	Label lblmonthsResultstext = new Label();
 	ListBox citycomboBox = new ListBox();	
 	ListBox roofDirectioncomboBox = new ListBox();		
 	DoubleBox systemCostBox = new DoubleBox();		
 	DoubleBox doubleBoxSize = new DoubleBox();	
-	DoubleBox roofLossBox = new DoubleBox();	
+	DoubleBox roofLossBox = new DoubleBox();	              
     DoubleBox inverterBox = new DoubleBox();    
     DoubleBox doubleBoxWiring = new DoubleBox();   
     IntegerBox integerBoxLifeSpan = new IntegerBox();    
@@ -61,6 +63,7 @@ public class CalculationClient implements EntryPoint {
     DoubleBox doubleBoxReplacePercent = new DoubleBox();	
 	DoubleBox doubleBoxAgeLoss = new DoubleBox();
 	DoubleBox doubleBoxIrradiance = new DoubleBox();
+	private IntegerBox integerBoxpaybackYear = new IntegerBox();
 	private DoubleBox txtWhatYear = new DoubleBox();
 
 	private DoubleBox txtDailySolarGeneration = new DoubleBox();
@@ -98,8 +101,8 @@ public class CalculationClient implements EntryPoint {
         serviceDef.setServiceEntryPoint(GWT.getModuleBaseURL()
             + "calculationService");
         
-        createColumnChart(monthResults);
-       
+        createColumnChart(monthResults);//load months results charts
+        createLineChart(payBackTime);
 	}
 
 	
@@ -129,7 +132,7 @@ public class CalculationClient implements EntryPoint {
 		RootPanel.get("tdUsageType").add(rdbtnMedium);
 		RootPanel.get("tdUsageType").add(rdbtnLight);
 		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);
-		RootPanel.get("idMonthTextResults").add( lblmonthsResultstext);
+		//RootPanel.get("idMonthTextResults").add( lblmonthsResultstext);
 	}
 	
 	/* Court's WorthInvestment method */
@@ -195,6 +198,7 @@ public class CalculationClient implements EntryPoint {
 			public void onSuccess(Double result) {
 				txtDailySolarGeneration.setValue(result);
 				getDailySaving(result);//use dailyCalculation result for dailySavingCalculation
+				getPaybackTime(result);
 			}});
         
         //calculate power consumption
@@ -209,6 +213,27 @@ public class CalculationClient implements EntryPoint {
         
 	}
 	
+	protected void getPaybackTime(Double result) {
+		service.getPayBackTime(systemCostBox.getValue(), integerBoxLifeSpan.getValue(), doubleBoxReplacePercent.getValue()/100, 
+				doubleBoxTarrif.getValue()/100, doubleBoxPowerCost.getValue()/100, result, doubleBoxAgeLoss.getValue()/100,integerBoxpaybackYear.getValue(), new AsyncCallback<TreeMap<Double,String>>(){
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert(caught.getMessage());	
+						
+					}
+
+					@Override
+					public void onSuccess(TreeMap<Double, String> result) {
+						lineChart.draw(createPayBackTable(result),createLineChartOptions());
+						
+					}
+			
+		});
+		
+	}
+
+
 	private String getUsageSelection() {
 		if (rdbtnHeavy.getValue())
 			return "Heavy";
@@ -264,6 +289,7 @@ public class CalculationClient implements EntryPoint {
 	     doubleBoxReplacePercent.setText("24"); 
 		 doubleBoxAgeLoss.setText("0.7"); 
 		 doubleBoxIrradiance.setText("5.1"); 
+		 integerBoxpaybackYear.setValue(25);
 		
 //		create labels
 		Label lblAssumeSolarIrradiance = new Label("Solar irradiance level in your location is(kWh/m2/day):");
@@ -458,17 +484,15 @@ public class CalculationClient implements EntryPoint {
 	
 	
 	
-	
+	/* use gwt char api to create column chart*/
 	 void createColumnChart(final double monthResults[]){
 	        Runnable onLoadCallback = new Runnable() {
 	          public void run() {
 	            Panel panel = RootPanel.get("idMonthSolarGenerationResults");
 	     
-	            // Create a column chart visualization.
-	           
+	            // Create a column chart visualization.	           
 	            chart = new ColumnChart(createMonthGenerationTable(monthResults), createOptions());
-	           //chart.addSelectHandler(createSelectHandler(chart));
-	           
+	           //to do chart.addSelectHandler(createSelectHandler(chart));	           
 	            panel.add(chart);
 	            
 	          }
@@ -478,9 +502,68 @@ public class CalculationClient implements EntryPoint {
 	        // when loading is done.
 	        VisualizationUtils.loadVisualizationApi(onLoadCallback, ColumnChart.PACKAGE);
 	        }
-	        
-	//use to populate month generation table for Column chart
-	
+	       
+	 /*create line chart for payback time*/
+	 private void createLineChart(final TreeMap<Double,String> paybackResults){
+		 Runnable onLoadCallback = new Runnable() {
+	          public void run() {
+	            Panel panel = RootPanel.get("idPayBackYearLineGraph");
+	     
+	            // Create a column chart visualization.	           
+	            lineChart = new LineChart(createPayBackTable(paybackResults),createLineChartOptions());
+	           //to do chart.addSelectHandler(createSelectHandler(chart));
+	           
+	            panel.add(lineChart);
+	            
+	          }
+	        };
+
+	        // Load the visualization api, passing the onLoadCallback to be called
+	        // when loading is done.
+	        VisualizationUtils.loadVisualizationApi(onLoadCallback, LineChart.PACKAGE);
+	 }
+	 
+	protected com.google.gwt.visualization.client.visualizations.LineChart.Options createLineChartOptions() {
+		 com.google.gwt.visualization.client.visualizations.LineChart.Options options = LineChart.Options.create();
+		    options.setWidth(700);
+		    options.setHeight(400);		    
+		    options.setTitle("Payback years");		    
+		    options.setMin(systemCostBox.getValue()*-1);
+		    
+		return options;
+	}
+
+
+	protected AbstractDataTable createPayBackTable(
+			TreeMap<Double, String> paybackResults) {
+		 DataTable data = DataTable.create();
+		 data.addColumn(ColumnType.STRING,"Time");
+		 data.addColumn(ColumnType.NUMBER, "money");
+		 if(paybackResults==null){
+			 data.addRows(integerBoxpaybackYear.getValue());
+			for(int i = 0; i<integerBoxpaybackYear.getValue();i++){
+				data.setValue(i, 0, Integer.toString(i));
+				data.setValue(i, 1, 0);
+				
+			}
+		 }
+		 else{
+		 data.addRows(paybackResults.size());
+		 
+			 int i = 0;
+			for(Entry<Double, String> entry :paybackResults.entrySet()){
+				
+				data.setValue(i, 0, entry.getValue());
+				data.setValue(i, 1, entry.getKey());
+				i++;
+			}
+
+		 }
+		return data;
+	}
+
+
+	//use to populate month generation table for Column chart	
 	private AbstractDataTable createMonthGenerationTable(double monthResults[]) {
 	    DataTable data = DataTable.create();
 	    data.addColumn(ColumnType.STRING, "Month");
@@ -503,7 +586,7 @@ public class CalculationClient implements EntryPoint {
 	//column create options
 	private Options createOptions() {
 	    Options options = ColumnChart.Options.create();
-	    options.setWidth(600);
+	    options.setWidth(700);
 	    options.setHeight(240);
 	    options.set3D(true);
 	    options.setTitle("kwh Generation per month");

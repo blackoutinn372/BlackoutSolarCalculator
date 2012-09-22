@@ -1,4 +1,9 @@
 package com.blackout.solarpanelcalculator.server;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * 
  * @author Sen
@@ -119,6 +124,15 @@ return TwoDecimals(resultInGivenYear);
 	
 	return TwoDecimals(result);
  }
+ 
+/**
+ * calculate daily savings without electricity export percentage 
+ * @param dailyGeneration
+ * @param replacePercent
+ * @param feedInTarrif
+ * @param powerCost
+ * @return savings each day
+ */
  public static double getDailySavingsFormula(double dailyGeneration, double replacePercent,double feedInTarrif,double powerCost){
 	 
 
@@ -165,6 +179,40 @@ return TwoDecimals(resultInGivenYear);
 		return year;
 	else return (int)(year-lifeSpan);
 
+ }
+ 
+ public static TreeMap<Double,String> getPayBackTime(double systemCost, double lifeSpan, double replacePercent,double feedInTarrif,
+		 double powerCost, double dailyGeneration , double agingEfficiencyLoss,double yearsToCalculate){
+	 
+	 if(lifeSpan <yearsToCalculate )
+	 yearsToCalculate = lifeSpan;//use panel life span if number of calculate years is greater
+	 
+	 TreeMap<Double,String> resultsMap = new TreeMap<Double, String>();
+	 String yearMonth = null;
+	 int totalMonthsInYears = (int)yearsToCalculate * 12;
+	 
+	double panelEfficiencyMonthly = (1-agingEfficiencyLoss/12);
+	double generationMonthly;
+	double accumulativeCashFlow = systemCost * -1;
+	int monthCounter = 0;
+	int yearCounter = 0;
+	int month = 1;
+	while( month<=totalMonthsInYears){
+	 
+	
+	generationMonthly= dailyGeneration*Math.pow(panelEfficiencyMonthly, month)*30;
+	
+	accumulativeCashFlow +=getDailySavingsFormula(generationMonthly, replacePercent, feedInTarrif, powerCost);
+	if(monthCounter==12){
+		monthCounter =0;
+		yearCounter++;
+	}
+	yearMonth = "y"+yearCounter;
+	resultsMap.put(TwoDecimals(accumulativeCashFlow),yearMonth);
+	month++;
+	monthCounter++;
+	}
+	return resultsMap;
  }
  
  /**
