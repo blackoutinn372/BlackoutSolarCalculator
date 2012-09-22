@@ -16,4 +16,7 @@ public interface CalculationServiceAsync {
 			double inverterEfficiency, double wiringEfficiency,
 			double agingEfficiencyLoss, double solarIrradiance,
 			AsyncCallback<Double> callback);
+
+	void doWorthInvestment(double savings, double paybackYear, double duration,
+			AsyncCallback<Double> callback);
 }

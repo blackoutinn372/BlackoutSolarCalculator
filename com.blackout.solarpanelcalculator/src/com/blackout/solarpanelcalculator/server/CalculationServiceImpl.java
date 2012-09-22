@@ -70,6 +70,9 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 		return CalculationFormulas.getDailySolarGeneFormula(systemSize, roofEfficiency, inverterEfficiency, wiringEfficiency, agingEfficiencyLoss, solarIrradiance);
 	}
 
-
+	
+	public double doWorthInvestment(double dailySavings, double paybackYear, double duration) {
+		return CalculationFormulas.isWorthInvesting(dailySavings, paybackYear, duration);
+	}
 	
 }

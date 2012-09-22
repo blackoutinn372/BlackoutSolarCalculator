@@ -79,7 +79,15 @@ public class CalculationClient implements EntryPoint {
     private RadioButton rdbtnHeavy = new RadioButton("usage", "Heavy");
     private RadioButton rdbtnMedium = new RadioButton("usage", "Medium");
     private RadioButton rdbtnLight = new RadioButton("usage", "Light");    
-	
+    
+    /* vv Court's WorthInvestment items vv */
+    private DoubleBox txtDailySavings2;
+    private DoubleBox txtPayBackYear2;
+    private DoubleBox txtExpectedDuration;
+    private Button btnWorthInvesting;
+    private DoubleBox lblWorthInvesting;
+    /* ^^ Court's WorthInvestment items ^^ */
+    
 	private CalculationServiceAsync service; 
 	
 	public void onModuleLoad() {
@@ -122,6 +130,36 @@ public class CalculationClient implements EntryPoint {
 		RootPanel.get("tdUsageType").add(rdbtnLight);
 		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);
 		RootPanel.get("idMonthTextResults").add( lblmonthsResultstext);
+	}
+	
+	/* Court's WorthInvestment method */
+	private void loadWorthInvesting() {
+		txtDailySavings2.setText("0");
+		txtPayBackYear2.setText("3");
+		txtExpectedDuration.setText("5");
+		btnWorthInvesting.setText("Worth it?");
+		lblWorthInvesting.setText("");
+		
+		btnWorthInvesting.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				getWorthInvestmentFromServer();
+			}
+		});
+		
+		RootPanel.get("tdDailySaved").add(txtDailySavings2);
+		RootPanel.get("tdFinalPayback").add(txtPayBackYear2);
+		RootPanel.get("tdExpectedDuration").add(txtExpectedDuration);
+		RootPanel.get("tdWorthInvestingCalculate").add(btnWorthInvesting);
+		RootPanel.get("tdWorthInvestingResult").add(lblWorthInvesting);
+	}
+	
+	protected void getWorthInvestmentFromServer() {
+		CalculationServiceAsync service = (CalculationServiceAsync) GWT.create(CalculationService.class);
+        ServiceDefTarget serviceDef = (ServiceDefTarget) service;
+        serviceDef.setServiceEntryPoint(GWT.getModuleBaseURL()
+            + "calculationService");
+        WorthInvestingCallback callback = new WorthInvestingCallback(lblWorthInvesting);
+        service.doWorthInvestment(txtDailySavings2.getValue(), txtPayBackYear2.getValue(), txtExpectedDuration.getValue(), callback);
 	}
 
 	protected void doCalculation(){		

@@ -12,4 +12,5 @@ public interface CalculationService extends RemoteService {
 	double doPayBackYear(double systemCost, double lifeSpan, double dailySavings);
 	double doPowerConsumption(Integer householdSize, String usageType);	
 	double doDailySavings(double dailyGeneration, double replacePercent, double feedInTarrif, double powerCost);
+	double doWorthInvestment(double savings, double paybackYear, double duration);
 }

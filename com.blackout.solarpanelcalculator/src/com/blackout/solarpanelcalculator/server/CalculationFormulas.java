@@ -145,7 +145,8 @@ return TwoDecimals(resultInGivenYear);
  * @param systemCost
  * @param lifeSpan
  * @param dailySavings
- * @return paybackyear if not exceeding panel life Span, return -1 otherwise
+ * @return paybackyear if not exceeding panel life Span, otherwise return how many years
+ * it would take to pay back (in negatives).
  */
  public static int getPayBackYear(double systemCost, double lifeSpan, double dailySavings  ){
 //	 use default year if input not valid
@@ -162,8 +163,22 @@ return TwoDecimals(resultInGivenYear);
 	 }
 	if(year<lifeSpan)
 		return year;
-	else return -1;
+	else return (int)(year-lifeSpan);
 
+ }
+ 
+ /**
+  * Is it worth investing in a system of solar panels? This assumes the user already knows how much
+  * their system will earn them and how long it would take to pay itself off.
+  * @param savings How much their Daily Savings is
+  * @param paybackYear The expected PayBack Year of their panels are
+  * @param duration How many years later should the result wait for. 
+  * @return How much money the user should expect to earn after the duration of years. 
+  * (or how much they lose, should the paybackyear be higher than the duration)
+  */
+ public static double isWorthInvesting(double savings, double paybackYear, double duration) {
+	 double yearsSaved = duration - paybackYear;
+	 return savings * yearsSaved;
  }
 // use to for two decimals places, gwt doesn't support java.text.decimal	
 private static double TwoDecimals(double number){
