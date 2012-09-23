@@ -84,11 +84,11 @@ public class CalculationClient implements EntryPoint {
     private RadioButton rdbtnLight = new RadioButton("usage", "Light");    
     
     /* vv Court's WorthInvestment items vv */
-    private DoubleBox txtDailySavings2;
-    private DoubleBox txtPayBackYear2;
-    private DoubleBox txtExpectedDuration;
-    private Button btnWorthInvesting;
-    private DoubleBox lblWorthInvesting;
+    private DoubleBox txtDailySavings2 = new DoubleBox();
+    private DoubleBox txtPayBackYear2 = new DoubleBox();
+    private DoubleBox txtExpectedDuration = new DoubleBox();
+    private Button btnWorthInvesting = new Button();
+    private DoubleBox lblWorthInvesting = new DoubleBox();
     /* ^^ Court's WorthInvestment items ^^ */
     
 	private CalculationServiceAsync service; 
@@ -133,6 +133,8 @@ public class CalculationClient implements EntryPoint {
 		RootPanel.get("tdUsageType").add(rdbtnLight);
 		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);
 		//RootPanel.get("idMonthTextResults").add( lblmonthsResultstext);
+		
+		loadWorthInvesting();
 	}
 	
 	/* Court's WorthInvestment method */
