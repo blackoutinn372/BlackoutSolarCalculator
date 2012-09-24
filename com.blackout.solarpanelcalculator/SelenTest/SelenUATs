@@ -8,6 +8,7 @@
 <body>
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="SelenUATs">SelenUATs</a></td></tr>
 <tr><td><a href="TestCase01.html">TestCase01</a></td></tr>
 <tr><td><a href="TestCase02.html">TestCase02</a></td></tr>
 <tr><td><a href="TestCase03.html">TestCase03</a></td></tr>
@@ -28,6 +29,16 @@
 <tr><td><a href="TestCase18.html">TestCase18</a></td></tr>
 <tr><td><a href="TestCase19.html">TestCase19</a></td></tr>
 <tr><td><a href="TestCase20.html">TestCase20</a></td></tr>
+<tr><td><a href="TestCase21.html">TestCase21</a></td></tr>
+<tr><td><a href="TestCase22.html">TestCase22</a></td></tr>
+<tr><td><a href="TestCase23.html">TestCase23</a></td></tr>
+<tr><td><a href="TestCase24.html">TestCase24</a></td></tr>
+<tr><td><a href="TestCase25.html">TestCase25</a></td></tr>
+<tr><td><a href="TestCase26.html">TestCase26</a></td></tr>
+<tr><td><a href="TestCase27.html">TestCase27</a></td></tr>
+<tr><td><a href="TestCase28.html">TestCase28</a></td></tr>
+<tr><td><a href="TestCase29.html">TestCase29</a></td></tr>
+<tr><td><a href="TestCase30.html">TestCase30</a></td></tr>
 </tbody></table>
 </body>
 </html>
