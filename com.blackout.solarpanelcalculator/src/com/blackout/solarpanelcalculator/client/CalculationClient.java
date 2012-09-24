@@ -2,20 +2,40 @@ package com.blackout.solarpanelcalculator.client;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+
+import com.google.code.gwt.geolocation.client.Coordinates;
+import com.google.code.gwt.geolocation.client.Geolocation;
+import com.google.code.gwt.geolocation.client.Position;
+import com.google.code.gwt.geolocation.client.PositionCallback;
+import com.google.code.gwt.geolocation.client.PositionError;
+import com.google.code.gwt.geolocation.client.PositionOptions;
+import com.google.gwt.maps.client.Maps;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.maps.client.InfoWindowContent;
+import com.google.gwt.maps.client.MapType;
+import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.maps.client.control.LargeMapControl;
+import com.google.gwt.maps.client.control.MapTypeControl;
+
+import com.google.gwt.maps.client.geocode.Geocoder;
+import com.google.gwt.maps.client.geocode.LatLngCallback;
+import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -26,7 +46,9 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RadioButton;
+
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
@@ -37,6 +59,8 @@ import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.visualizations.ColumnChart;
 import com.google.gwt.visualization.client.visualizations.ColumnChart.Options;
 import com.google.gwt.visualization.client.visualizations.LineChart;
+import com.google.gwt.visualization.client.visualizations.Table;
+import com.google.gwt.maps.client.MapOptions;
 
 
 /**
@@ -44,38 +68,34 @@ import com.google.gwt.visualization.client.visualizations.LineChart;
  */
 public class CalculationClient implements EntryPoint {
 
-	
+	MapWidget map = null ;
 	private double[] monthResults = null;
 	private ColumnChart chart;//for monthly results chart
 	private LineChart lineChart;//for payback time line chart
-	private TreeMap<Double,String> payBackTime = null;
-	Label lblmonthsResultstext = new Label();
-	ListBox citycomboBox = new ListBox();	
-	ListBox roofDirectioncomboBox = new ListBox();		
-	DoubleBox systemCostBox = new DoubleBox();		
-	DoubleBox doubleBoxSize = new DoubleBox();	
-	DoubleBox roofLossBox = new DoubleBox();	              
-    DoubleBox inverterBox = new DoubleBox();    
-    DoubleBox doubleBoxWiring = new DoubleBox();   
-    IntegerBox integerBoxLifeSpan = new IntegerBox();    
-    DoubleBox doubleBoxPowerCost = new DoubleBox();  
-    DoubleBox doubleBoxTarrif = new DoubleBox();    
-    DoubleBox doubleBoxReplacePercent = new DoubleBox();	
-	DoubleBox doubleBoxAgeLoss = new DoubleBox();
-	DoubleBox doubleBoxIrradiance = new DoubleBox();
+	private TreeMap<Double,String> payBackTime = null;	
+	private Label lblAddressInput = new Label();
+	private TextBox txtBoxAddressInput = new TextBox();
+	private Button btnAddressInput = new Button();
+	private Label lblNotFound = new Label();
+	private Label lblmonthsResultstext = new Label();
+	private ListBox citycomboBox = new ListBox();	
+	private ListBox roofDirectioncomboBox = new ListBox();		
+	private DoubleBox systemCostBox = new DoubleBox();		
+	private DoubleBox doubleBoxSize = new DoubleBox();	
+	private DoubleBox roofLossBox = new DoubleBox();	              
+    private DoubleBox inverterBox = new DoubleBox();    
+    private DoubleBox doubleBoxWiring = new DoubleBox();   
+    private IntegerBox integerBoxLifeSpan = new IntegerBox();    
+    private DoubleBox doubleBoxPowerCost = new DoubleBox();  
+    private DoubleBox doubleBoxTarrif = new DoubleBox();    
+    private DoubleBox doubleBoxReplacePercent = new DoubleBox();	
+	private DoubleBox doubleBoxAgeLoss = new DoubleBox();
+	private DoubleBox doubleBoxIrradiance = new DoubleBox();
 	private IntegerBox integerBoxpaybackYear = new IntegerBox();
 	private DoubleBox txtWhatYear = new DoubleBox();
-
 	private DoubleBox txtDailySolarGeneration = new DoubleBox();
-
-
-	private Button btnCalculation = new Button();
-	
-	
-	private DoubleBox txtDailySavings = new DoubleBox();
-	
-	
-	
+	private Button btnCalculation = new Button();	
+	private DoubleBox txtDailySavings = new DoubleBox();	
 	private DoubleBox txtPayBackYear = new DoubleBox();
     private DoubleBox txtPowerEstimate = new DoubleBox();
     private IntegerBox txtHouseholdSize = new IntegerBox();
@@ -92,7 +112,9 @@ public class CalculationClient implements EntryPoint {
     /* ^^ Court's WorthInvestment items ^^ */
     
 	private CalculationServiceAsync service; 
-	
+	//private final CalculationServiceAsync addressService = (CalculationServiceAsync)GWT
+      //      .create(CalculationService.class);
+
 	public void onModuleLoad() {
 		 RootPanel.get("tdMainPanel").add(loadAllControlsNew());
 		loadAllUIControls();
@@ -103,174 +125,11 @@ public class CalculationClient implements EntryPoint {
         
         createColumnChart(monthResults);//load months results charts
         createLineChart(payBackTime);
+        loadUserLocationOnMap();	
+        createTable();
 	}
 
-	
-	private void loadAllUIControls() {
-	
-		txtWhatYear.setText("0");
-	
-		rdbtnMedium.setValue(true);
-		txtHouseholdSize.setValue(0);
-		
-		btnCalculation.setText("Calculate");
-		
-		txtDailySavings.setText("0");
-		txtPayBackYear.setText("");
-		btnCalculation.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				doCalculation();
-			}
-		});
-		RootPanel.get("tdDailySolarGenerationCalculate").add(btnCalculation);
-		RootPanel.get("tdDailySolarGenerationResult").add(txtDailySolarGeneration);		
-		
-		RootPanel.get("tdDailySavingsResult").add(txtDailySavings);		
-		RootPanel.get("tdPowerEstimateResult").add(txtPowerEstimate);		
-		RootPanel.get("tdHouseholdSize").add(txtHouseholdSize);		
-		RootPanel.get("tdUsageType").add(rdbtnHeavy);
-		RootPanel.get("tdUsageType").add(rdbtnMedium);
-		RootPanel.get("tdUsageType").add(rdbtnLight);
-		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);
-		//RootPanel.get("idMonthTextResults").add( lblmonthsResultstext);
-		
-		loadWorthInvesting();
-	}
-	
-	/* Court's WorthInvestment method */
-	private void loadWorthInvesting() {
-		txtDailySavings2.setText("0");
-		txtPayBackYear2.setText("3");
-		txtExpectedDuration.setText("5");
-		btnWorthInvesting.setText("Worth it?");
-		lblWorthInvesting.setText("");
-		
-		btnWorthInvesting.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				getWorthInvestmentFromServer();
-			}
-		});
-		
-		RootPanel.get("tdDailySaved").add(txtDailySavings2);
-		RootPanel.get("tdFinalPayback").add(txtPayBackYear2);
-		RootPanel.get("tdExpectedDuration").add(txtExpectedDuration);
-		RootPanel.get("tdWorthInvestingCalculate").add(btnWorthInvesting);
-		RootPanel.get("tdWorthInvestingResult").add(lblWorthInvesting);
-	}
-	
-	protected void getWorthInvestmentFromServer() {
-		CalculationServiceAsync service = (CalculationServiceAsync) GWT.create(CalculationService.class);
-        ServiceDefTarget serviceDef = (ServiceDefTarget) service;
-        serviceDef.setServiceEntryPoint(GWT.getModuleBaseURL()
-            + "calculationService");
-        WorthInvestingCallback callback = new WorthInvestingCallback(lblWorthInvesting);
-        service.doWorthInvestment(txtDailySavings2.getValue(), txtPayBackYear2.getValue(), txtExpectedDuration.getValue(), callback);
-	}
-
-	protected void doCalculation(){		
-        
-        // calculate the generation for all months
-        service.doSolarGenerationForAllMonths(doubleBoxSize.getValue()/1000, roofLossBox.getValue()/100, inverterBox.getValue()/100, doubleBoxWiring.getValue()/100, txtWhatYear.getValue(), doubleBoxAgeLoss.getValue()/100, new AsyncCallback<double[]>() {
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());				
-			}
-
-			public void onSuccess(double[] result) {
-				chart.draw(createMonthGenerationTable(result),createOptions());//draw column chart
-				
-				//to remove the string month results display when charts are properly set up
-				 String months[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-				 StringBuffer buffer = new StringBuffer();
-				 for(int i=0;i<12;i++){
-						buffer.append(months[i]);
-						buffer.append(":");
-						buffer.append(result[i]);
-						buffer.append("kwh\n");					
-			}
-				 lblmonthsResultstext.setText(buffer.toString());
-			}
-		});
-
-        // calculate the daily generation,  
-        service.doDailySolarGeneration(doubleBoxSize.getValue()/1000, roofLossBox.getValue()/100, inverterBox.getValue()/100, doubleBoxWiring.getValue()/100, txtWhatYear.getValue(), doubleBoxAgeLoss.getValue()/100, doubleBoxIrradiance.getValue(), new AsyncCallback<Double>() {
-			public void onFailure(Throwable caught) {				
-				Window.alert(caught.getMessage());				
-			}
-
-			public void onSuccess(Double result) {
-				txtDailySolarGeneration.setValue(result);
-				getDailySaving(result);//use dailyCalculation result for dailySavingCalculation
-				getPaybackTime(result);
-			}});
-        
-        //calculate power consumption
-        service.doPowerConsumption(txtHouseholdSize.getValue(), getUsageSelection(), new AsyncCallback<Double>() {
-			public void onFailure(Throwable caught) {				
-				Window.alert(caught.getMessage());				
-			}
-
-			public void onSuccess(Double result) {
-				txtPowerEstimate.setValue(result);				
-			}});
-        
-	}
-	
-	protected void getPaybackTime(Double result) {
-		service.getPayBackTime(systemCostBox.getValue(), integerBoxLifeSpan.getValue(), doubleBoxReplacePercent.getValue()/100, 
-				doubleBoxTarrif.getValue()/100, doubleBoxPowerCost.getValue()/100, result, doubleBoxAgeLoss.getValue()/100,integerBoxpaybackYear.getValue(), new AsyncCallback<TreeMap<Double,String>>(){
-
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert(caught.getMessage());	
-						
-					}
-
-					@Override
-					public void onSuccess(TreeMap<Double, String> result) {
-						lineChart.draw(createPayBackTable(result),createLineChartOptions());
-						
-					}
-			
-		});
-		
-	}
-
-
-	private String getUsageSelection() {
-		if (rdbtnHeavy.getValue())
-			return "Heavy";
-		else if(rdbtnLight.getValue())
-			return "Light";
-		else return "Medium";
-		
-	}
-	
-//	Calculate Daily savings
-	private void getDailySaving( double dailyGeneration){
- 		   service.doDailySavings(dailyGeneration, doubleBoxReplacePercent.getValue()/100, doubleBoxTarrif.getValue()/100, doubleBoxPowerCost.getValue()/100, new AsyncCallback<Double>() {
-			public void onFailure(Throwable caught) {				
-				Window.alert(caught.getMessage());				
-			}
-
-			public void onSuccess(Double result) {
-				txtDailySavings.setText(result.toString());
-				getPayBackYear(result);// use savings result to calculate pay back year
-			}});			
-
-	}
-//	Calculate Payback year
-	private void getPayBackYear( double dailySaving){
-		service.doPayBackYear(systemCostBox.getValue(), integerBoxLifeSpan.getValue(),
-				dailySaving,new AsyncCallback<Double>() {
-			public void onFailure(Throwable caught) {				
-				Window.alert(caught.getMessage());				
-			}
-
-			public void onSuccess(Double result) {
-				txtPayBackYear.setText(result.toString());
-			}});
-	}
-	private Widget loadAllControlsNew() {
+private Widget loadAllControlsNew() {
 		
 //		pop up message
 		String irradianceMsg = "This value is auto updated based on your location you can also enter a value to override it";
@@ -278,6 +137,54 @@ public class CalculationClient implements EntryPoint {
 		String overallCostMsg = "The overall cost is your solar system and installation cost minus any goverment rebates  ";
 		PopMessage overallCostHelpMsg = new PopMessage(overallCostMsg);
 		
+		/*address input controls*/
+		lblAddressInput.setText("Enter your address to find it on the map:");
+		btnAddressInput.setText("Enter");
+		lblNotFound.setText("address not found");
+		lblNotFound.setStyleName("gwt-Label-error");
+		lblNotFound.setVisible(false);
+		btnAddressInput.addClickHandler(new ClickHandler(){
+/* click the button to show the address on the map*/
+			@Override
+			public void onClick(ClickEvent event) {
+					lblNotFound.setVisible(false);
+				 	Geocoder geocoder=new Geocoder();
+				 	final String address = txtBoxAddressInput.getText();
+				    geocoder.getLatLng(address, new LatLngCallback(){
+				    @Override
+				    public void onFailure() {
+				    	lblNotFound.setVisible(true);//display error msg if not found
+				    }
+				    @Override
+				    public void onSuccess(LatLng point) { 
+				   LatLng addressLatlng = LatLng.newInstance(point.getLatitude(), point.getLongitude());
+				   map.setCurrentMapType(MapType.getSatelliteMap());
+				    map.setCenter(addressLatlng);
+				    
+				    map.setZoomLevel(18);
+				    // Add a marker
+				    map.addOverlay(new Marker(point)); 
+				    // Add an info window to highlight a point of interest
+				    map.getInfoWindow().open(map.getCenter(),
+				            new InfoWindowContent(address));
+				    }
+				    });				
+			}		
+		});
+		/*add address labels, box */
+		VerticalPanel verticalpanel = new VerticalPanel();
+		HorizontalPanel addressPanel = new HorizontalPanel();
+		addressPanel.add(lblAddressInput);
+		
+		HorizontalPanel addressPanel2 = new HorizontalPanel();
+		txtBoxAddressInput.setWidth("280px");
+		addressPanel2.add(txtBoxAddressInput);
+		
+		addressPanel2.add(lblNotFound);
+		verticalpanel.add(addressPanel);
+		verticalpanel.add(addressPanel2);
+		verticalpanel.add(btnAddressInput);
+		RootPanel.get("idAddressInput").add(verticalpanel);
 		
 //		set boxes to their default values
 		 systemCostBox.setText("18000");	
@@ -444,8 +351,8 @@ public class CalculationClient implements EntryPoint {
 	    DisclosurePanel advancedDisclosure = new DisclosurePanel(
 	        "Our assumptions");
 	    advancedDisclosure.setContent(verticalPanel);
-	    advancedDisclosure.setOpen(true);
-	    advancedDisclosure.setAnimationEnabled(true);   
+	    advancedDisclosure.setOpen(false);
+	    advancedDisclosure.setAnimationEnabled(false);   
 	    layout.setWidget(5, 0, advancedDisclosure);
 	    advancedDisclosure.setWidth("358px");
 	    cellFormatter.setColSpan(5, 0, 2);
@@ -454,6 +361,227 @@ public class CalculationClient implements EntryPoint {
 	    decPanel.setWidget(layout);
 	    return decPanel;
 	  }
+	private void loadAllUIControls() {
+	
+		txtWhatYear.setText("0");
+	
+		rdbtnMedium.setValue(true);
+		txtHouseholdSize.setValue(0);
+		
+		btnCalculation.setText("Calculate");
+		
+		txtDailySavings.setText("0");
+		txtPayBackYear.setText("");
+		btnCalculation.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				doCalculation();
+			}
+		});
+		RootPanel.get("tdDailySolarGenerationCalculate").add(btnCalculation);
+		RootPanel.get("tdDailySolarGenerationResult").add(txtDailySolarGeneration);		
+		
+		RootPanel.get("tdDailySavingsResult").add(txtDailySavings);		
+		RootPanel.get("tdPowerEstimateResult").add(txtPowerEstimate);		
+		RootPanel.get("tdHouseholdSize").add(txtHouseholdSize);		
+		RootPanel.get("tdUsageType").add(rdbtnHeavy);
+		RootPanel.get("tdUsageType").add(rdbtnMedium);
+		RootPanel.get("tdUsageType").add(rdbtnLight);
+		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);	
+		loadWorthInvesting();
+	}
+	
+	/*track user's location and load google map using obtained latitude and longitude*/
+	private void loadUserLocationOnMap() {
+		if (!Geolocation.isSupported()) {
+			Window.alert("Obtaining Geolocation FAILED! Geolocation API is not supported.");
+        }
+		
+		final Geolocation geo = Geolocation.getGeolocation();
+		
+	    if (geo == null) {
+	      Window.alert("Obtaining Geolocation FAILED!");
+	      return;
+	    }
+	    geo.getCurrentPosition(new PositionCallback() {
+	        public void onFailure(PositionError error) {
+	          String message = "";
+	          switch (error.getCode()) {
+	            case PositionError.UNKNOWN_ERROR:
+	              message = "Unknown Error";
+	              break;
+	            case PositionError.PERMISSION_DENIED:
+	              message = "Permission Denied";
+	              break;
+	            case PositionError.POSITION_UNAVAILABLE:
+	              message = "Position Unavailable";
+	              break;
+	            case PositionError.TIMEOUT:
+	              message = "Time-out";
+	              break;
+	            default:
+	              message = "Unknown error code.";
+	          }
+	          Window.alert("Obtaining position FAILED! Message: '"
+		              + error.getMessage() + "', code: " + error.getCode() + " ("
+		              + message + ")");
+	          loadMap(32.3456,141.4346);//load map using default Australia latitude and longtitude
+	        }      
+			@Override
+			public void onSuccess(
+					Position position) {
+		          Coordinates c = position.getCoords();
+		          
+		          loadMap(c.getLatitude(),c.getLongitude());//load map use detected ip address's latititude and longitude 	
+		          String latLng = c.getLatitude()+","+c.getLongitude();
+		          
+		          service = (CalculationServiceAsync)GWT.create(CalculationService.class);
+		          
+                  service.getAddress(latLng, new AsyncCallback<String>() {
+                	  
+                          public void onFailure(Throwable arg0) {
+                                  txtBoxAddressInput.setText("Address not found");
+                                  
+                          }
+
+                          public void onSuccess(String fullAddress) {
+                                 txtBoxAddressInput.setText(fullAddress);
+                                 
+                          }});
+		          
+		          
+			}
+	      }, PositionOptions.getPositionOptions(true, 15000, 30000));
+	   
+	  
+	}
+	/* Court's WorthInvestment method */
+	private void loadWorthInvesting() {
+		txtDailySavings2.setText("0");
+		txtPayBackYear2.setText("3");
+		txtExpectedDuration.setText("5");
+		btnWorthInvesting.setText("Worth it?");
+		lblWorthInvesting.setText("");
+		
+		btnWorthInvesting.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				getWorthInvestmentFromServer();
+			}
+		});
+		
+		RootPanel.get("tdDailySaved").add(txtDailySavings2);
+		RootPanel.get("tdFinalPayback").add(txtPayBackYear2);
+		RootPanel.get("tdExpectedDuration").add(txtExpectedDuration);
+		RootPanel.get("tdWorthInvestingCalculate").add(btnWorthInvesting);
+		RootPanel.get("tdWorthInvestingResult").add(lblWorthInvesting);
+	}
+	
+	protected void getWorthInvestmentFromServer() {
+		CalculationServiceAsync service = (CalculationServiceAsync) GWT.create(CalculationService.class);
+        ServiceDefTarget serviceDef = (ServiceDefTarget) service;
+        serviceDef.setServiceEntryPoint(GWT.getModuleBaseURL()
+            + "calculationService");
+        WorthInvestingCallback callback = new WorthInvestingCallback(lblWorthInvesting);
+        service.doWorthInvestment(txtDailySavings2.getValue(), txtPayBackYear2.getValue(), txtExpectedDuration.getValue(), callback);
+	}
+
+	protected void doCalculation(){		
+        
+        // calculate the generation for all months
+        service.doSolarGenerationForAllMonths(doubleBoxSize.getValue()/1000, roofLossBox.getValue()/100, inverterBox.getValue()/100, doubleBoxWiring.getValue()/100, txtWhatYear.getValue(), doubleBoxAgeLoss.getValue()/100, new AsyncCallback<double[]>() {
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());				
+			}
+
+			public void onSuccess(double[] result) {
+				chart.draw(createMonthGenerationTable(result),createOptions());//draw column chart
+				
+				//to remove the string month results display when charts are properly set up
+				 String months[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+				 StringBuffer buffer = new StringBuffer();
+				 for(int i=0;i<12;i++){
+						buffer.append(months[i]);
+						buffer.append(":");
+						buffer.append(result[i]);
+						buffer.append("kwh\n");					
+			}
+				 lblmonthsResultstext.setText(buffer.toString());
+			}
+		});
+
+        // calculate the daily generation,  
+        service.doDailySolarGeneration(doubleBoxSize.getValue()/1000, roofLossBox.getValue()/100, inverterBox.getValue()/100, doubleBoxWiring.getValue()/100, txtWhatYear.getValue(), doubleBoxAgeLoss.getValue()/100, doubleBoxIrradiance.getValue(), new AsyncCallback<Double>() {
+			public void onFailure(Throwable caught) {				
+				Window.alert(caught.getMessage());				
+			}
+
+			public void onSuccess(Double result) {
+				txtDailySolarGeneration.setValue(result);
+				getDailySaving(result);//use dailyCalculation result for dailySavingCalculation
+				getPaybackTime(result);
+			}});
+        
+        //calculate power consumption
+        service.doPowerConsumption(txtHouseholdSize.getValue(), getUsageSelection(), new AsyncCallback<Double>() {
+			public void onFailure(Throwable caught) {				
+				Window.alert(caught.getMessage());				
+			}
+
+			public void onSuccess(Double result) {
+				txtPowerEstimate.setValue(result);				
+			}});
+        
+	}
+	
+	protected void getPaybackTime(Double result) {
+		service.getPayBackTime(systemCostBox.getValue(), integerBoxLifeSpan.getValue(), doubleBoxReplacePercent.getValue()/100, 
+				doubleBoxTarrif.getValue()/100, doubleBoxPowerCost.getValue()/100, result, doubleBoxAgeLoss.getValue()/100,integerBoxpaybackYear.getValue(), new AsyncCallback<TreeMap<Double,String>>(){
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert(caught.getMessage());		
+					}
+					@Override
+					public void onSuccess(TreeMap<Double, String> result) {
+						lineChart.draw(createPayBackTable(result),createLineChartOptions());	
+					}
+		});
+		
+	}
+
+
+	private String getUsageSelection() {
+		if (rdbtnHeavy.getValue())
+			return "Heavy";
+		else if(rdbtnLight.getValue())
+			return "Light";
+		else return "Medium";
+		
+	}
+	
+//	Calculate Daily savings
+	private void getDailySaving( double dailyGeneration){
+ 		   service.doDailySavings(dailyGeneration, doubleBoxReplacePercent.getValue()/100, doubleBoxTarrif.getValue()/100, doubleBoxPowerCost.getValue()/100, new AsyncCallback<Double>() {
+			public void onFailure(Throwable caught) {				
+				Window.alert(caught.getMessage());				
+			}
+
+			public void onSuccess(Double result) {
+				txtDailySavings.setText(result.toString());
+				getPayBackYear(result);// use savings result to calculate pay back year
+			}});			
+
+	}
+//	Calculate Payback year
+	private void getPayBackYear( double dailySaving){
+		service.doPayBackYear(systemCostBox.getValue(), integerBoxLifeSpan.getValue(),
+				dailySaving,new AsyncCallback<Double>() {
+			public void onFailure(Throwable caught) {				
+				Window.alert(caught.getMessage());				
+			}
+			public void onSuccess(Double result) {
+				txtPayBackYear.setText(result.toString());
+			}});
+	}
+	
 	
 	/*use to add pop msg to explain stuff*/
 	class PopMessage implements MouseOverHandler,MouseOutHandler {
@@ -483,8 +611,6 @@ public class CalculationClient implements EntryPoint {
 			simplePopup.hide();			
 		}		
 	}
-	
-	
 	
 	/* use gwt char api to create column chart*/
 	 void createColumnChart(final double monthResults[]){
@@ -524,7 +650,7 @@ public class CalculationClient implements EntryPoint {
 	        // when loading is done.
 	        VisualizationUtils.loadVisualizationApi(onLoadCallback, LineChart.PACKAGE);
 	 }
-	 
+	 /*create options for payback linechart*/
 	protected com.google.gwt.visualization.client.visualizations.LineChart.Options createLineChartOptions() {
 		 com.google.gwt.visualization.client.visualizations.LineChart.Options options = LineChart.Options.create();
 		    options.setWidth(700);
@@ -535,7 +661,7 @@ public class CalculationClient implements EntryPoint {
 		return options;
 	}
 
-
+/*data table used for payback line chart*/
 	protected AbstractDataTable createPayBackTable(
 			TreeMap<Double, String> paybackResults) {
 		 DataTable data = DataTable.create();
@@ -545,27 +671,23 @@ public class CalculationClient implements EntryPoint {
 			 data.addRows(integerBoxpaybackYear.getValue());
 			for(int i = 0; i<integerBoxpaybackYear.getValue();i++){
 				data.setValue(i, 0, Integer.toString(i));
-				data.setValue(i, 1, 0);
-				
+				data.setValue(i, 1, 0);			
 			}
 		 }
 		 else{
-		 data.addRows(paybackResults.size());
-		 
+		 data.addRows(paybackResults.size());	 
 			 int i = 0;
 			for(Entry<Double, String> entry :paybackResults.entrySet()){
-				
 				data.setValue(i, 0, entry.getValue());
 				data.setValue(i, 1, entry.getKey());
 				i++;
 			}
-
 		 }
 		return data;
 	}
 
-
-	//use to populate month generation table for Column chart	
+	
+	/*use to populate month generation table for Column chart*/	
 	private AbstractDataTable createMonthGenerationTable(double monthResults[]) {
 	    DataTable data = DataTable.create();
 	    data.addColumn(ColumnType.STRING, "Month");
@@ -581,11 +703,10 @@ public class CalculationClient implements EntryPoint {
 	    	else
 	    	data.setValue(i, 1, monthResults[i]);
 	    }
-	   
 	    return data;
 
 }
-	//column create options
+	/*column create options*/
 	private Options createOptions() {
 	    Options options = ColumnChart.Options.create();
 	    options.setWidth(700);
@@ -595,7 +716,117 @@ public class CalculationClient implements EntryPoint {
 	    options.setStacked(true);
 	    options.setMin(0);
 	    options.setEnableTooltip(true);
-	    
 	    return options;
 	  }
+	 private void createTable(){
+		 Runnable onLoadCallback = new Runnable() {
+	          public void run() {
+	            Panel panel = RootPanel.get("idPanelTable");
+	            Panel panelInverter = RootPanel.get("idInverterTable");
+	            // Create a table visualization.	           
+	            Table table= new Table(createTableData(),createTableOptions());
+	            Table tableInverter = new Table(createInverterData(),createTableOptions());
+	           
+	            panel.add(table);
+	            panelInverter.add(tableInverter);
+	            
+	          }
+	        };
+
+	        // Load the visualization api, passing the onLoadCallback to be called
+	        // when loading is done.
+	        VisualizationUtils.loadVisualizationApi(onLoadCallback, Table.PACKAGE);
+	        
+	 }
+	 /* dataset for inverter need to be refactored by using datastore data*/
+	protected AbstractDataTable createInverterData() {
+		DataTable data = DataTable.create();
+		data.addColumn(ColumnType.STRING, "Brand");
+		data.addColumn(ColumnType.STRING, "Descriptions","desc");
+		data.addColumn(ColumnType.NUMBER,"Power(watts)");
+		data.addColumn(ColumnType.NUMBER, "Efficiency(%)");
+		data.addColumn(ColumnType.NUMBER, "Price($)");
+		
+		data.addRows(2);
+		data.setValue(0, 0, "Aurora");
+		data.setValue(0, 1, "PVI-2000-AU Outdoor 2kW Grid Connect Inverter IP65 rated");
+		data.setValue(0, 2, 2000);
+		data.setValue(0, 3, 96);
+		data.setValue(0, 4, 1174);
+		data.setValue(1, 0, "Aurora");
+		data.setValue(1, 1, "PVI-4.2-AU Outdoor 4.2kW Grid Connect Inverter IP65 rated (transformerless)");
+		data.setValue(1, 2, 4200);
+		data.setValue(1, 3, 96);
+		data.setValue(1, 4, 2376);
+		
+		
+		return data;
+	}
+	/*create tables options for both inverter and solar panels tables*/
+	protected com.google.gwt.visualization.client.visualizations.Table.Options createTableOptions() {
+		com.google.gwt.visualization.client.visualizations.Table.Options options = Table.Options.create();
+		
+
+		return options;
+	}
+/* dataset for solar panels need to be refactored by using datastore data*/
+	protected AbstractDataTable createTableData() {
+		DataTable data = DataTable.create();
+		data.addColumn(ColumnType.STRING, "Brand");
+		data.addColumn(ColumnType.STRING, "Descriptions","desc");
+		data.addColumn(ColumnType.NUMBER,"Power(watts)");
+//		data.addColumn(, "Quantity", "quantity");
+		
+		//data.addColumn(ColumnType.NUMBER, "Efficiency(%)");
+		data.addColumn(ColumnType.NUMBER, "Price($)");
+		data.addRows(1);
+		data.setValue(0, 0, "REC Solar");
+		data.setValue(0, 1, "REC Solar 250 W Peak Energy Series, polycrystalline cell Black Frame");
+		data.setValue(0, 2, 250);
+		data.setValue(0, 3, 412.50);	
+		
+		return data;
+	}
+
+	/*load the map*/
+	private void loadMap(final double latitude,final double longitude){
+		 /*
+		    * Asynchronously loads the Maps API.
+		    *
+		    * The first parameter should be a valid Maps API Key to deploy this
+		    * application on a public server, but a blank key will work for an
+		    * application served from localhost.
+		   */
+		Maps.loadMapsApi("AIzaSyDJms88qiHMw8AA3qNZaxVCXyV9r59LVJk", "2", false, new Runnable() {
+		      public void run() {
+		        buildUi(latitude,longitude);
+		      }
+		    });
+	}
+	/*build map ui*/
+	private void buildUi(double latitude,double longitude) {
+	    // Open a map centered in Australia
+	    LatLng australia = LatLng.newInstance(latitude, longitude);	   
+	     map = new MapWidget(australia,15);
+	    MapType mapType = MapType.getSatelliteMap();
+	    map.addMapType(mapType);	    
+	    map.setSize("100%", "100%");
+	    // Add some controls for the zoom level	 
+	   
+	    map.setCurrentMapType(MapType.getNormalMap());
+	    map.addControl(new LargeMapControl());
+	 // Add some type controls for the different map types
+	    map.addControl(new MapTypeControl());
+	    map.setCenter(australia);
+	    final DockLayoutPanel dock = new DockLayoutPanel(Unit.PX);
+	    dock.addNorth(map,400);
+	    // Add the map to the HTML host page
+	    RootPanel.get("tdMap").add(dock); 
+	  }
+	/*optonal for maps not used */
+	private MapOptions createMapOptions(){
+		MapOptions mapOption = MapOptions.newInstance();
+		
+		return mapOption;
+	}
 }

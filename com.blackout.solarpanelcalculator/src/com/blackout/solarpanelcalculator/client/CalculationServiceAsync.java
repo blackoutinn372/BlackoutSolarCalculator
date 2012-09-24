@@ -26,4 +26,7 @@ public interface CalculationServiceAsync {
 			double dailyGeneration, double agingEfficiencyLoss,
 			double yearsToCalculate,
 			AsyncCallback<TreeMap<Double, String>> callback);
+	
+	
+	void getAddress(String latLong, AsyncCallback<String> callback);
 }

@@ -4,6 +4,8 @@
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
   <inherits name="com.google.gwt.i18n.I18N"/>
    <inherits name='com.google.gwt.visualization.Visualization'/>
+   <inherits name='com.google.gwt.maps.GoogleMaps' />
+   <inherits name='com.google.code.gwt.geolocation.Html5Geolocation' />
   <entry-point class='com.blackout.solarpanelcalculator.client.CalculationClient'></entry-point>
 
 </module>

@@ -17,4 +17,8 @@ public interface CalculationService extends RemoteService {
 	double doWorthInvestment(double savings, double paybackYear, double duration);
 	TreeMap<Double,String> getPayBackTime(double systemCost, double lifeSpan, double replacePercent,double feedInTarrif,
 			 double powerCost, double dailyGeneration , double agingEfficiencyLoss,double yearsToCalculate);
+	
+	
+	/*geo address*/
+	String getAddress(String latLong);
 }
