@@ -15,10 +15,12 @@
     <servlet-name>userServlet</servlet-name>
     <servlet-class>com.blackout.solarpanelcalculator.server.CalculationServiceImpl</servlet-class>
   </servlet>
+
   
   <servlet-mapping>
     <servlet-name>userServlet</servlet-name>
     <url-pattern>/com_blackout_solarpanelcalculator/calculationService</url-pattern>
   </servlet-mapping>
+
   
 </web-app>
