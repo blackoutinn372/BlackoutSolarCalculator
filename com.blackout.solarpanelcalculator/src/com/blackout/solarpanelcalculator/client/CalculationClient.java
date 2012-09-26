@@ -125,7 +125,8 @@ public class CalculationClient implements EntryPoint {
         
         createColumnChart(monthResults);//load months results charts
         createLineChart(payBackTime);
-        loadUserLocationOnMap();	
+        
+        //loadUserLocationOnMap();	//commented out 
         createTable();
 	}
 
@@ -172,19 +173,19 @@ private Widget loadAllControlsNew() {
 			}		
 		});
 		/*add address labels, box */
-		VerticalPanel verticalpanel = new VerticalPanel();
-		HorizontalPanel addressPanel = new HorizontalPanel();
-		addressPanel.add(lblAddressInput);
-		
-		HorizontalPanel addressPanel2 = new HorizontalPanel();
-		txtBoxAddressInput.setWidth("280px");
-		addressPanel2.add(txtBoxAddressInput);
-		
-		addressPanel2.add(lblNotFound);
-		verticalpanel.add(addressPanel);
-		verticalpanel.add(addressPanel2);
-		verticalpanel.add(btnAddressInput);
-		RootPanel.get("idAddressInput").add(verticalpanel);
+//		VerticalPanel verticalpanel = new VerticalPanel();
+//		HorizontalPanel addressPanel = new HorizontalPanel();
+//		addressPanel.add(lblAddressInput);
+//		
+//		HorizontalPanel addressPanel2 = new HorizontalPanel();
+//		txtBoxAddressInput.setWidth("280px");
+//		addressPanel2.add(txtBoxAddressInput);
+//		
+//		addressPanel2.add(lblNotFound);
+//		verticalpanel.add(addressPanel);
+//		verticalpanel.add(addressPanel2);
+//		verticalpanel.add(btnAddressInput);
+//		RootPanel.get("idAddressInput").add(verticalpanel);
 		
 //		set boxes to their default values
 		 systemCostBox.setText("18000");	
