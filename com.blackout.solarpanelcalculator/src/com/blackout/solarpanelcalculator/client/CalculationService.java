@@ -21,4 +21,7 @@ public interface CalculationService extends RemoteService {
 	
 	/*geo address*/
 	String getAddress(String latLong);
+	/*test sql database*/
+	double getSolarIrradiance(String city);
+	double getFeedInTariff(String city);
 }

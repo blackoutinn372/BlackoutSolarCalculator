@@ -3,6 +3,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 
+
 import com.google.code.gwt.geolocation.client.Coordinates;
 import com.google.code.gwt.geolocation.client.Geolocation;
 import com.google.code.gwt.geolocation.client.Position;
@@ -13,6 +14,8 @@ import com.google.gwt.maps.client.Maps;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -67,7 +70,10 @@ import com.google.gwt.maps.client.MapOptions;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class CalculationClient implements EntryPoint {
-
+	
+	private double defaultIrradiance = 5.1;
+	private double defaultFeedInTariff = 44;
+	String cityName = "Sydney";
 	MapWidget map = null ;
 	private double[] monthResults = null;
 	private ColumnChart chart;//for monthly results chart
@@ -112,21 +118,22 @@ public class CalculationClient implements EntryPoint {
     /* ^^ Court's WorthInvestment items ^^ */
     
 	private CalculationServiceAsync service; 
-	//private final CalculationServiceAsync addressService = (CalculationServiceAsync)GWT
-      //      .create(CalculationService.class);
+	
+	
 
 	public void onModuleLoad() {
 		 RootPanel.get("tdMainPanel").add(loadAllControlsNew());
-		loadAllUIControls();
+		 
+		
 		service= (CalculationServiceAsync) GWT.create(CalculationService.class);
-		ServiceDefTarget serviceDef = (ServiceDefTarget) service;
-        serviceDef.setServiceEntryPoint(GWT.getModuleBaseURL()
-            + "calculationService");
-        
+
+       
+		
+		loadAllUIControls();
         createColumnChart(monthResults);//load months results charts
         createLineChart(payBackTime);
         
-        //loadUserLocationOnMap();	//commented out 
+        loadUserLocationOnMap();	//commented out 
         createTable();
 	}
 
@@ -173,19 +180,19 @@ private Widget loadAllControlsNew() {
 			}		
 		});
 		/*add address labels, box */
-//		VerticalPanel verticalpanel = new VerticalPanel();
-//		HorizontalPanel addressPanel = new HorizontalPanel();
-//		addressPanel.add(lblAddressInput);
-//		
-//		HorizontalPanel addressPanel2 = new HorizontalPanel();
-//		txtBoxAddressInput.setWidth("280px");
-//		addressPanel2.add(txtBoxAddressInput);
-//		
-//		addressPanel2.add(lblNotFound);
-//		verticalpanel.add(addressPanel);
-//		verticalpanel.add(addressPanel2);
-//		verticalpanel.add(btnAddressInput);
-//		RootPanel.get("idAddressInput").add(verticalpanel);
+		VerticalPanel verticalpanel = new VerticalPanel();
+		HorizontalPanel addressPanel = new HorizontalPanel();
+		addressPanel.add(lblAddressInput);
+		
+		HorizontalPanel addressPanel2 = new HorizontalPanel();
+		txtBoxAddressInput.setWidth("280px");
+		addressPanel2.add(txtBoxAddressInput);
+		
+		addressPanel2.add(lblNotFound);
+		verticalpanel.add(addressPanel);
+		verticalpanel.add(addressPanel2);
+		verticalpanel.add(btnAddressInput);
+		RootPanel.get("idAddressInput").add(verticalpanel);
 		
 //		set boxes to their default values
 		 systemCostBox.setText("18000");	
@@ -195,10 +202,10 @@ private Widget loadAllControlsNew() {
 	     doubleBoxWiring.setText("98");   
 	     integerBoxLifeSpan.setText("25");     
 	     doubleBoxPowerCost.setText("19.41");
-	     doubleBoxTarrif.setText("44");  
+	     doubleBoxTarrif.setValue(defaultFeedInTariff);  
 	     doubleBoxReplacePercent.setText("24"); 
 		 doubleBoxAgeLoss.setText("0.7"); 
-		 doubleBoxIrradiance.setText("5.1"); 
+		 doubleBoxIrradiance.setValue(defaultIrradiance); //get irradiance from database based on city selection
 		 integerBoxpaybackYear.setValue(25);
 		
 //		create labels
@@ -222,39 +229,32 @@ private Widget loadAllControlsNew() {
 		
 //		 combobox selections
 		citycomboBox.addItem("Select City....");
-		citycomboBox.addItem("Sydney (NSW)");
-		citycomboBox.addItem("Melbourne (VIC)");
-		citycomboBox.addItem("Brisbane (QLD)");
-		citycomboBox.addItem("Perth (WA)");
-		citycomboBox.addItem("Adelaide (SA)");
-		citycomboBox.addItem("Gold Coast \u2013 Tweed (QLD/NSW)");
-		citycomboBox.addItem("Newcastle (NSW)");
-		citycomboBox.addItem("Canberra \u2013 Queanbeyan (ACT/NSW)");
-		citycomboBox.addItem("Wollongong (NSW)");
-		citycomboBox.addItem("Sunshine Coast (QLD)");
-		citycomboBox.addItem("Hobart (TAS)");
-		citycomboBox.addItem("Geelong (VIC)");
-		citycomboBox.addItem("Townsville (QLD)");
-		citycomboBox.addItem("Cairns (QLD)");
-		citycomboBox.addItem("Toowoomba (QLD)");
-		citycomboBox.addItem("Darwin (NT)");
-		citycomboBox.addItem("Albury \u2013 Wodonga (NSW/VIC)");
-		citycomboBox.addItem("Launceston (TAS)");
-		citycomboBox.addItem("Ballarat (VIC)");
-		citycomboBox.addItem("Bendigo (VIC)");
-		citycomboBox.addItem("Mandurah (WA)");
-		citycomboBox.addItem("Mackay (QLD)");
-		citycomboBox.addItem("Burnie \u2013 Devonport (TAS)");
-		citycomboBox.addItem("Latrobe Valley (VIC)");
-		citycomboBox.addItem("Rockhampton (QLD)");
-		citycomboBox.addItem("Bunbury (WA)");
-		citycomboBox.addItem("Bundaberg (QLD)");
-		citycomboBox.addItem("Hervey Bay (QLD)");
-		citycomboBox.addItem("Wagga Wagga (NSW)");
-		citycomboBox.addItem("Coffs Habour (NSW)");
-		citycomboBox.addItem("Gladstone (QLD)");
-		citycomboBox.addItem("Mildura (VIC)");
-		citycomboBox.addItem("Shepparton (VIC)");
+		citycomboBox.addItem("Sydney");
+		citycomboBox.addItem("Melbourne");
+		citycomboBox.addItem("Brisbane");
+		citycomboBox.addItem("Perth");
+		citycomboBox.addItem("Adelaide");
+		citycomboBox.addItem("Gold Coast");
+		citycomboBox.addItem("Newcastle");
+		citycomboBox.addItem("Canberra");
+		citycomboBox.addItem("Wollongong");
+		citycomboBox.addItem("Sunshine Coast");
+		citycomboBox.addItem("Hobart");
+		citycomboBox.addItem("Geelong");
+		citycomboBox.addItem("Townsville");
+		citycomboBox.addItem("Cairns");
+		citycomboBox.addItem("Toowoomba");
+		citycomboBox.addItem("Darwin");
+		citycomboBox.addChangeHandler(new ChangeHandler(){
+
+			@Override
+			public void onChange(ChangeEvent event) {
+				
+				getCityValues();
+				
+			}
+			
+		});
 	
 //	root combobox selections
 		roofDirectioncomboBox.addItem("Select panel direction...");
@@ -362,6 +362,54 @@ private Widget loadAllControlsNew() {
 	    decPanel.setWidget(layout);
 	    return decPanel;
 	  }
+
+	private void getCityValues() {
+		int selectedIndex = 0;
+	
+//		 final double solarIrradiance;
+		selectedIndex = citycomboBox.getSelectedIndex();
+		if(selectedIndex ==0){
+			doubleBoxIrradiance.setValue(defaultIrradiance);//default value
+			doubleBoxTarrif.setValue(defaultFeedInTariff);
+			return;
+		}
+		cityName = citycomboBox.getItemText(selectedIndex);
+		service.getSolarIrradiance(cityName,new AsyncCallback<Double>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());		
+				
+			}
+
+			@Override
+			public void onSuccess(Double result) {
+				 doubleBoxIrradiance.setValue(result);
+				
+			}
+			
+		});
+		
+		service.getFeedInTariff(cityName, new AsyncCallback<Double>(){
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+				
+			}
+
+			@Override
+			public void onSuccess(Double result) {
+				doubleBoxTarrif.setValue(result);
+				
+			}
+			
+		});
+		
+
+	
+}
+
 	private void loadAllUIControls() {
 	
 		txtWhatYear.setText("0");

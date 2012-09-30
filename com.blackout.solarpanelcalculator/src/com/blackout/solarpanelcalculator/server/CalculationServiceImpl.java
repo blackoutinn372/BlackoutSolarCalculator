@@ -113,4 +113,18 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	}
 	
 }
+	public double getSolarIrradiance(String city) {
+		// TODO Auto-generated method stub
+		return DatabaseValues.getSolarIrradiance(city);
+//		return 19;
+	}
+
+
+	@Override
+	public double getFeedInTariff(String city) {
+		// TODO Auto-generated method stub
+		return DatabaseValues.getFeedInTariff(city);
+	}
+
+
 }
