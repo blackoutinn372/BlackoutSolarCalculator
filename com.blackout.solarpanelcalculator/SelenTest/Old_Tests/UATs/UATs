@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+  <title>Test Suite</title>
+</head>
+<body>
+<table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
+<tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="Sunlight00.html">Invalid Sunlight</a></td></tr>
+<tr><td><a href="Sunlight01.html">Too much Sunlight</a></td></tr>
+<tr><td><a href="SystemSize00.html">Negative System Size</a></td></tr>
+<tr><td><a href="SystemSize01.html">Invalid System Size</a></td></tr>
+<tr><td><a href="NormalUse01.html">No input at all</a></td></tr>
+<tr><td><a href="NormalUse02.html">Reset Button</a></td></tr>
+<tr><td><a href="NormalUse00.html">Minimal Scenario</a></td></tr>
+<tr><td><a href="TestDuration00.html">Check Seasons</a></td></tr>
+<tr><td><a href="TestDuration01.html">Check Months</a></td></tr>
+<tr><td><a href="TestDuration02.html">Check Weekly</a></td></tr>
+<tr><td><a href="TestDuration02.html">Check Daily Use</a></td></tr>
+<tr><td><a href="TestUsage00.html">Usage - Invalid People</a></td></tr>
+<tr><td><a href="TestUsage01.html">Usage - (1-Light)</a></td></tr>
+<tr><td><a href="TestUsage02.html">Usage - (3-Medium)</a></td></tr>
+<tr><td><a href="TestUsage03.html">Usage - (5-Heavy)</a></td></tr>
+</tbody></table>
+</body>
+</html>
