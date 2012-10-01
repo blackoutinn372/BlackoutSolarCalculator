@@ -818,7 +818,7 @@ private Widget loadAllControlsNew() {
 
 		return options;
 	}
-/* dataset for solar panels need to be refactored by using datastore data*/
+	/* dataset for solar panels need to be refactored by using datastore data*/
 	protected AbstractDataTable createTableData() {
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Brand");
