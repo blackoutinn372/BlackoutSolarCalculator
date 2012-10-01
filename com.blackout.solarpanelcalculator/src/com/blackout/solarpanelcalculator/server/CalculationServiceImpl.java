@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.blackout.solarpanelcalculator.client.CalculationService;
+import com.blackout.solarpanelcalculator.client.City;
 
 public class CalculationServiceImpl extends RemoteServiceServlet implements CalculationService {
 
@@ -113,17 +114,12 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	}
 	
 }
-	public double getSolarIrradiance(String city) {
-		// TODO Auto-generated method stub
-		return DatabaseValues.getSolarIrradiance(city);
-//		return 19;
-	}
 
 
 	@Override
-	public double getFeedInTariff(String city) {
+	public City getCity(String cityName) {
 		// TODO Auto-generated method stub
-		return DatabaseValues.getFeedInTariff(city);
+		return CityDAO.getCity(cityName);
 	}
 
 

@@ -73,6 +73,7 @@ public class CalculationClient implements EntryPoint {
 	
 	private double defaultIrradiance = 5.1;
 	private double defaultFeedInTariff = 44;
+	private double defaultElectricityCost = 19.41;
 	String cityName = "Sydney";
 	MapWidget map = null ;
 	private double[] monthResults = null;
@@ -371,10 +372,11 @@ private Widget loadAllControlsNew() {
 		if(selectedIndex ==0){
 			doubleBoxIrradiance.setValue(defaultIrradiance);//default value
 			doubleBoxTarrif.setValue(defaultFeedInTariff);
+			doubleBoxPowerCost.setValue(defaultElectricityCost);
 			return;
 		}
 		cityName = citycomboBox.getItemText(selectedIndex);
-		service.getSolarIrradiance(cityName,new AsyncCallback<Double>(){
+		service.getCity(cityName,new AsyncCallback<City>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -383,30 +385,14 @@ private Widget loadAllControlsNew() {
 			}
 
 			@Override
-			public void onSuccess(Double result) {
-				 doubleBoxIrradiance.setValue(result);
+			public void onSuccess(City city) {
+				 doubleBoxIrradiance.setValue(city.getAvgIrradiance());
+				 doubleBoxTarrif.setValue(city.getFeedInTariff());
+				 doubleBoxPowerCost.setValue(city.getElectricityCost());
 				
 			}
 			
 		});
-		
-		service.getFeedInTariff(cityName, new AsyncCallback<Double>(){
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-				
-			}
-
-			@Override
-			public void onSuccess(Double result) {
-				doubleBoxTarrif.setValue(result);
-				
-			}
-			
-		});
-		
-
 	
 }
 
@@ -818,7 +804,7 @@ private Widget loadAllControlsNew() {
 
 		return options;
 	}
-	/* dataset for solar panels need to be refactored by using datastore data*/
+/* dataset for solar panels need to be refactored by using datastore data*/
 	protected AbstractDataTable createTableData() {
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Brand");

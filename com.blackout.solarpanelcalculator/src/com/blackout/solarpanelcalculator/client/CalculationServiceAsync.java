@@ -29,7 +29,7 @@ public interface CalculationServiceAsync {
 	
 	
 	void getAddress(String latLong, AsyncCallback<String> callback);
-	void getSolarIrradiance(String city, AsyncCallback<Double> callback);
-	void getFeedInTariff(String city, AsyncCallback<Double> callback);
+	
+	void getCity(String cityName, AsyncCallback<City> callback);
 
 }
