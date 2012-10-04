@@ -118,6 +118,13 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	}
 
 
+	@Override
+	public int getCityIDFromPostcode(int postcode) {
+		// TODO Auto-generated method stub
+		return CityDAO.getCityIDFromPostcode(postcode);
+	}
+
+
 	
 	
 

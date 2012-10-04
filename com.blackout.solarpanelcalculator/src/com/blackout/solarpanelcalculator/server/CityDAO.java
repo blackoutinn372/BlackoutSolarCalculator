@@ -112,4 +112,41 @@ public class CityDAO {
 	public static int returnCityIndex(){
 		return cityIndex;
 	}
+	public static int getCityIDFromPostcode(int postcode){
+		
+		int cityID = -1;
+		Connection connection = null;
+		
+		String select_sql = "select CityID from cities where CapitalCity = 'true' and StateCode=(" +
+				"select StateCode from states where PostcodeMin<= ? and PostcodeMax>=?)";
+		PreparedStatement select = null;
+		try {
+			connection = DriverManager.getConnection("jdbc:google:rdbms://solarcalculator372:solarcalculator/solar");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			select = connection.prepareStatement(select_sql);
+			select.setInt(1, postcode);
+			select.setInt(2, postcode);
+			ResultSet rs = select.executeQuery();
+			
+		while(rs.next()){
+			cityID = rs.getInt(1);
+		}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			select.close();
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return cityID;
+	}
+	
 }

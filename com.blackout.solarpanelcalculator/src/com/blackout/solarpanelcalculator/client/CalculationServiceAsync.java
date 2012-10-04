@@ -25,5 +25,6 @@ public interface CalculationServiceAsync {
 	void getCity(int cityIndex, AsyncCallback<City> callback);
 	void getCityList(int postcode, AsyncCallback<String[]> callback);
 	void getCityIndex(AsyncCallback<Integer> callback);
+	void getCityIDFromPostcode(int postcode, AsyncCallback<Integer> callback);
 
 }

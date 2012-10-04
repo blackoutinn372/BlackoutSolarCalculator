@@ -56,7 +56,7 @@ a:hover {
 
 #header-wrapper {
 	overflow: hidden;
-	height: 480px;
+
 	background: url(images/img01.jpg) repeat-x left top;
 }
 
@@ -148,10 +148,11 @@ a:hover {
 /* Content */
 
 #content {
-	float: left;
-	width: 620px;
+	position:absolute;
+	left:230px;
+	right:230px;
 	padding: 0px 40px 0px 0px;
-	background: url(images/img05.jpg) no-repeat right 40px;
+	background: url(images/img05.jpg) no-repeat right 10px;
 }
 
 .post {
@@ -578,7 +579,7 @@ a:hover {
 	width:266px;
 }
 .gwt-DoubleBox-assumptions{
-	width:22px;
+	width:23px;
 	height:10px;
 	font-size: 7pt;
 }

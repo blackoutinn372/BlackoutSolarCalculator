@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html>
@@ -21,24 +22,33 @@
 					</ul>
 				</div>
 			</div>
-			<div id="banner" class="container">
-				<p id="tdMap"></p>
-			</div>
+		
 		</div>
-		<div id="wrapper">
-			<div id="page" class="container">
+		
+		
 				<div id="content">
-					<div class="post">
-						<div class="entry">
-							<p id="idAddressInput"></p>
+						<div id="banner" class="container">
+						<p id="idAddressInput"></p>
+						<p id="tdMap"></p>
+						</div>
+							
+							
 							<h2 class="title">Enter your parameters here:</h2>
 									
-									<p id="tdMainPanel" ></p>
-									<p id="tdDailySolarGenerationCalculate"></p>
-						
-							</br>
+									
+									
+							<table>
+							
+								<tr>
+									
+									<td id="tdMainPanel"></td>
+									
+								</tr>
+							</table>
+							<p id="tdDailySolarGenerationCalculate"></p>
+							
 							<h3>Enter your details to estimate power consumption:</h3>
-							</br>
+							
 							<table>
 								<tr>
 									<td>Your household Size:</td>
@@ -53,10 +63,8 @@
 								</tr>
 							</table>
 							
-						</div>
-					</div>
-					<div class="post">						
-						<div class="entry">
+				
+				
 							<p><img src="images/img07.jpg" width="620" height="100" alt="" /></p>
 							<h2 class="title">These are your results</h2>
 							<table>
@@ -74,19 +82,21 @@
 								</tr>
 							</table>
 							</br>
-							<h2 class="title">Monthly generation results:</h2>
+							<h2 class="title">Monthly generation and payback year:</h2>
 							
-								<!--monthresults-->
-									<p id="idMonthSolarGenerationResults"></p>
-									<p id="idPayBackYearLineGraph"></p>
 							
+							<table>
+							<tr>
+								<td id="idMonthSolarGenerationResults"></td>
+								<td id="idPayBackYearLineGraph"></td>
+							</tr>
+							</table>
 							</br>
 								
-						</div>
-					</div>
-					<div class="post">
-						<h2 class="title"><a href="#">Savings</a></h2>
-						<div class="entry">
+				
+				
+						<h2 class="title">Savings</a></h2>
+				
 							<p><img src="images/img07.jpg" width="620" height="200" alt="" /></p>
 							<p>How much do you stand to gain by investing?</p>
 							<table>
@@ -112,21 +122,14 @@
 									<td id="tdWorthInvestingResult" colspan="4"></td>
 								</tr>
 							</table>
+							<h2 class="title">Sample solar system products</a></h2>
+							<h3>Solar panels table </h3>
+							<p id="idPanelTable"></p>
+							<h3>Inverters table</h3>
+							<p id="idInverterTable"></p>
+								<div style="clear: both;">&nbsp;</div>	
 						</div>
-					</div>				
-					<div style="clear: both;">&nbsp;</div>
-				</div>
-				<div id="sidebar">
-					<div id="box1">
-						<h2>Sample solar system components</h2>
-						<h3>Solar panels table </h3>
-						<p id="idPanelTable"></p>
-						<h3>Inverters table</h3>
-						<p id="idInverterTable"></p>
-					</div>
-				</div>
-				<div style="clear: both;">&nbsp;</div>
-			</div>
-		</div>
+							
+					
 	</body>
 </html>

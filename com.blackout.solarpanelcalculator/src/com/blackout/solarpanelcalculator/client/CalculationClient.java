@@ -70,7 +70,7 @@ import com.google.gwt.visualization.client.visualizations.Table;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class CalculationClient implements EntryPoint {
-	
+
 	private double defaultIrradiance = 5.1;//kWh/m2/day
 	private double defaultRoofLossPercent = 88.5;//percentage
 	private double defaultFeedInTariff = 44;// cents
@@ -112,6 +112,7 @@ public class CalculationClient implements EntryPoint {
 	private TextBox txtPayBackYear = new TextBox();
     private DoubleBox txtPowerEstimate = new DoubleBox();
     private IntegerBox txtHouseholdSize = new IntegerBox();
+    private IntegerBox integerBoxPostcode = new IntegerBox();
     private RadioButton rdbtnHeavy = new RadioButton("usage", "Heavy");
     private RadioButton rdbtnMedium = new RadioButton("usage", "Medium");
     private RadioButton rdbtnLight = new RadioButton("usage", "Light");    
@@ -126,7 +127,7 @@ public class CalculationClient implements EntryPoint {
     
 	private CalculationServiceAsync service;
 	private double[] monthResults =null; 
-	
+
 	public void onModuleLoad() {
 		 RootPanel.get("tdMainPanel").add(loadAllControlsNew());		 
 		service= (CalculationServiceAsync) GWT.create(CalculationService.class);
@@ -166,7 +167,7 @@ private Widget loadAllControlsNew() {
 				   LatLng addressLatlng = LatLng.newInstance(point.getLatitude(), point.getLongitude());
 				   map.setCurrentMapType(MapType.getSatelliteMap());
 				    map.setCenter(addressLatlng);
-				    
+
 				    map.setZoomLevel(18);
 				    // Add a marker
 				    map.addOverlay(new Marker(point)); 
@@ -181,17 +182,18 @@ private Widget loadAllControlsNew() {
 		VerticalPanel verticalpanel = new VerticalPanel();
 		HorizontalPanel addressPanel = new HorizontalPanel();
 		addressPanel.add(lblAddressInput);
-		
+
 		HorizontalPanel addressPanel2 = new HorizontalPanel();
-		txtBoxAddressInput.setWidth("280px");
+		txtBoxAddressInput.setWidth("342px");
 		addressPanel2.add(txtBoxAddressInput);
-		
+
 		addressPanel2.add(lblNotFound);
+		lblNotFound.setWidth("117px");
 		verticalpanel.add(addressPanel);
 		verticalpanel.add(addressPanel2);
 		verticalpanel.add(btnAddressInput);
 		RootPanel.get("idAddressInput").add(verticalpanel);
-		
+
 //		set boxes to their default values
 		 systemCostBox.setValue(defaultSystemCost);	
 		 doubleBoxSize.setValue(defaultSystemSize);	
@@ -205,7 +207,7 @@ private Widget loadAllControlsNew() {
 		 doubleBoxAgeLoss.setValue(defaultAgingEfficiencyLoss);
 		 doubleBoxIrradiance.setValue(defaultIrradiance); //get irradiance from database based on city selection
 		 integerBoxpaybackYear.setValue(25);
-		
+
 //		create labels
 		Label lblAssumeSolarIrradiance = new Label("Solar irradiance level in your location is(kWh/m2/day):");
 		lblAssumeSolarIrradiance.addMouseOverHandler(irradianceHelpMsg);
@@ -223,20 +225,49 @@ private Widget loadAllControlsNew() {
 		systemCostLbl.addMouseOverHandler(overallCostHelpMsg);
 		systemCostLbl.addMouseOutHandler(overallCostHelpMsg);
 		Label roofFaceLbl = new Label("Select your roof direction:");
-		Label cityLbl = new Label("Select your city:");	 
+		HTML cityLbl = new HTML("&nbsp or Select city:");	 
+		Label postcodeLbl = new Label("Postcode:");
 		
-		
+		integerBoxPostcode.addChangeHandler(new ChangeHandler(){
+
+			@Override
+			public void onChange(ChangeEvent event) {
+
+				 service.getCityIDFromPostcode(integerBoxPostcode.getValue(), new AsyncCallback<Integer> (){
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("get postcode failed");
+						
+					}
+
+					@Override
+					public void onSuccess(Integer result) {
+						if(result ==-1){
+							Window.alert("invalid postcode");
+							integerBoxPostcode.setFocus(true);	
+						}
+						citycomboBox.setSelectedIndex(result);
+						getCityValues();
+						
+					}
+					
+				});
+
+			}
+
+		});
 		citycomboBox.addChangeHandler(new ChangeHandler(){
 
 			@Override
 			public void onChange(ChangeEvent event) {
-				
+
 				getCityValues();
-				
+
 			}
-			
+
 		});
-	
+
 //	root combobox selections
 		roofDirectioncomboBox.addItem("South");
 		roofDirectioncomboBox.addItem("South West");
@@ -247,18 +278,26 @@ private Widget loadAllControlsNew() {
 		roofDirectioncomboBox.addItem("North East");
 		roofDirectioncomboBox.addItem("East");
 		roofDirectioncomboBox.addItem("North East");
-		
-	
+
+
 		doubleBoxSize.setWidth("106px");
 	    // Create a table to layout the form options
 	    FlexTable layout = new FlexTable();
 	    layout.setCellSpacing(2);
-	    layout.setWidth("364px");
+	    layout.setWidth("500px");
 
 //	    add widgets to flextable
 	    FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
-	    layout.setWidget(1, 0, cityLbl);
-	    layout.setWidget(1, 1,citycomboBox);
+	    HorizontalPanel hpanel = new HorizontalPanel();
+	    hpanel.add(postcodeLbl);
+	    hpanel.add(integerBoxPostcode);
+	    hpanel.add(cityLbl);
+	    integerBoxPostcode.setWidth("55px");
+	    HorizontalPanel hpanel2 = new HorizontalPanel();
+	    
+	    hpanel2.add(citycomboBox);
+	    layout.setWidget(1, 0, hpanel);
+	    layout.setWidget(1, 1,hpanel2);
 	    citycomboBox.setWidth("122px");
 	    layout.setWidget(2, 0, roofFaceLbl);
 	    layout.setWidget(2, 1, roofDirectioncomboBox);
@@ -268,7 +307,7 @@ private Widget loadAllControlsNew() {
 	    systemCostBox.setWidth("106px");
 	    layout.setWidget(4, 0, systemCostLbl);
 	    layout.setWidget(4, 1, systemCostBox);
-	    
+
 //	   set styles to labels and boxes
 	    roofLossLbl.setStyleName("gwt-Label-assumptions"); 	   
 	    roofLossBox.setStyleName("gwt-DoubleBox-assumptions");   
@@ -289,56 +328,38 @@ private Widget loadAllControlsNew() {
 		doubleBoxIrradiance.setStyleName("gwt-DoubleBox-assumptions");		
 		lblAssumeSolarIrradiance.setStyleName("gwt-Label-assumptions");
 	    
-//		all the horizontalPanels host each label and doublebox in disclosure panel
-	    HorizontalPanel horizontalPanel = new HorizontalPanel();
-	    HorizontalPanel horizontalPanel1 = new HorizontalPanel();
-	    HorizontalPanel horizontalPanel2 = new HorizontalPanel();
-	    HorizontalPanel horizontalPanel3 = new HorizontalPanel();	    
-	    HorizontalPanel horizontalPanel4 = new HorizontalPanel();
-	    HorizontalPanel horizontalPanel5 = new HorizontalPanel();
-	    HorizontalPanel horizontalPanel6 = new HorizontalPanel();
-	    HorizontalPanel horizontalPanel7 = new HorizontalPanel();
-	    HorizontalPanel horizontalPanel8 = new HorizontalPanel();	    
-	    horizontalPanel.add(roofLossLbl);
-	    horizontalPanel.add(roofLossBox);
-	    horizontalPanel1.add(inverterLbl);
-	    horizontalPanel1.add(inverterBox);	    
-	    horizontalPanel2.add(lblWiring);
-	    horizontalPanel2.add(doubleBoxWiring);
-	    horizontalPanel3.add(lblLifeSpan);
-	    horizontalPanel3.add(integerBoxLifeSpan);
-	    horizontalPanel4.add(lblPowerCost);
-	    horizontalPanel4.add(doubleBoxPowerCost);
-	    horizontalPanel5.add(lblTarrif);
-	    horizontalPanel5.add(doubleBoxTarrif);
-	    horizontalPanel6.add(lblAssumeUseAtHome);
-	    horizontalPanel6.add(doubleBoxReplacePercent);
-	    horizontalPanel7.add(lblAssumeSolarPanel);
-	    horizontalPanel7.add(doubleBoxAgeLoss);
-	    horizontalPanel8.add(lblAssumeSolarIrradiance);
-	    horizontalPanel8.add(doubleBoxIrradiance);    
-	    VerticalPanel verticalPanel = new VerticalPanel();
-	    verticalPanel.add(horizontalPanel);
-	    verticalPanel.add(horizontalPanel1);
-	    verticalPanel.add(horizontalPanel2);
-	    verticalPanel.add(horizontalPanel3);
-	    verticalPanel.add(horizontalPanel4);
-	    verticalPanel.add(horizontalPanel5);
-	    verticalPanel.add(horizontalPanel6);
-	    verticalPanel.add(horizontalPanel7);
-	    verticalPanel.add(horizontalPanel8);    
-	    
+	    FlexTable parameters = new FlexTable();
+	    parameters.setCellSpacing(2);
+	    parameters.setWidth("500px");
+	    parameters.setWidget(1, 0, roofLossLbl);
+	    parameters.setWidget(1, 1, roofLossBox);
+	    parameters.setWidget(2, 0, inverterLbl);
+	    parameters.setWidget(2, 1, inverterBox);
+	    parameters.setWidget(3, 0, lblWiring);
+	    parameters.setWidget(3, 1, doubleBoxWiring);
+	    parameters.setWidget(4, 0, lblLifeSpan);
+	    parameters.setWidget(4, 1, integerBoxLifeSpan);
+	    parameters.setWidget(5, 0, lblPowerCost);
+	    parameters.setWidget(5, 1,doubleBoxPowerCost);
+	    parameters.setWidget(6, 0,lblTarrif);
+	    parameters.setWidget(6, 1,doubleBoxTarrif);
+	    parameters.setWidget(7, 0,lblAssumeUseAtHome);
+	    parameters.setWidget(7, 1,doubleBoxReplacePercent);
+	    parameters.setWidget(8, 0,lblAssumeSolarPanel);
+	    parameters.setWidget(8, 1,doubleBoxAgeLoss);
+	    parameters.setWidget(9, 0,lblAssumeSolarIrradiance);
+	    parameters.setWidget(9, 1,doubleBoxIrradiance);    
 	    // Add advanced options to form in a disclosure panel
 	    DisclosurePanel advancedDisclosure = new DisclosurePanel(
 	        "Our assumptions");
-	    advancedDisclosure.setContent(verticalPanel);
-	    advancedDisclosure.setOpen(false);
+	    advancedDisclosure.setContent(parameters);
 	    advancedDisclosure.setAnimationEnabled(false);   
 	    layout.setWidget(5, 0, advancedDisclosure);
-	    advancedDisclosure.setWidth("358px");
+	    advancedDisclosure.setWidth("516px");
 	    cellFormatter.setColSpan(5, 0, 2);
 	 // Wrap the content in a DecoratorPanel
 	    DecoratorPanel decPanel = new DecoratorPanel();
+	    decPanel.setSize("550", "700");
 	    decPanel.setWidget(layout);
 	    return decPanel;
 	  }
@@ -351,7 +372,7 @@ private Widget loadAllControlsNew() {
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());		
-				
+
 			}
 			@Override
 			public void onSuccess(City city) {
@@ -364,14 +385,14 @@ private Widget loadAllControlsNew() {
 }
 
 	private void loadAllUIControls() {
-		
+
 		txtWhatYear.setText("0");
-	
+
 		rdbtnMedium.setValue(true);
 		txtHouseholdSize.setValue(0);
-		
+
 		btnCalculation.setText("Calculate");
-		
+
 		txtDailySavings.setText("0");
 		txtPayBackYear.setText("");
 		btnCalculation.addClickHandler(new ClickHandler() {
@@ -381,7 +402,7 @@ private Widget loadAllControlsNew() {
 		});
 		RootPanel.get("tdDailySolarGenerationCalculate").add(btnCalculation);
 		RootPanel.get("tdDailySolarGenerationResult").add(txtDailySolarGeneration);		
-		
+
 		RootPanel.get("tdDailySavingsResult").add(txtDailySavings);		
 		RootPanel.get("tdPowerEstimateResult").add(txtPowerEstimate);		
 		RootPanel.get("tdHouseholdSize").add(txtHouseholdSize);		
@@ -389,17 +410,18 @@ private Widget loadAllControlsNew() {
 		RootPanel.get("tdUsageType").add(rdbtnMedium);
 		RootPanel.get("tdUsageType").add(rdbtnLight);
 		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);	
+		txtPayBackYear.setSize("151", "26");
 		loadWorthInvesting();
 	}
-	
+
 	/*track user's location and load google map using obtained latitude and longitude*/
 	private void loadUserLocationOnMap() {
 		if (!Geolocation.isSupported()) {
 			Window.alert("Obtaining Geolocation FAILED! Geolocation API is not supported.");
         }
-		
+
 		final Geolocation geo = Geolocation.getGeolocation();
-		
+
 	    if (geo == null) {
 	      Window.alert("Obtaining Geolocation FAILED!");
 	      loadCityList("43 Queen St,Brisbane QLD 4000,Australia");//if use decline ip tracking,use default address
@@ -434,7 +456,7 @@ private Widget loadAllControlsNew() {
 			public void onSuccess(
 					Position position) {
 		          Coordinates c = position.getCoords();
-		          
+
 		          loadMap(c.getLatitude(),c.getLongitude());//load map use detected ip address's latititude and longitude 	
 		          String latLng = c.getLatitude()+","+c.getLongitude();
                   service.getAddress(latLng, new AsyncCallback<String>() {
@@ -446,13 +468,14 @@ private Widget loadAllControlsNew() {
                                  txtBoxAddressInput.setText(fullAddress);
                                  loadCityList(fullAddress);                                
                          }
-					
+
 						});		          		          
 			}
 	      }, PositionOptions.getPositionOptions(true, 15000, 30000));	   	  
 	}
 	private void loadCityList(String fullAddress) {
 		int postcode = Integer.parseInt(getPostCode(fullAddress));
+		integerBoxPostcode.setValue(postcode);
 		service.getCityList(postcode, new AsyncCallback<String[]>(){
 
 			@Override
@@ -477,10 +500,10 @@ private Widget loadAllControlsNew() {
 						}						
 					});
 				}				
-						
+
 		});
-		
-		
+
+
 	}
 /*get postcode from a complete address such as 217 George St, Brisbane QLD 4000, Australia*/
 private String getPostCode(String fullAddress) {
@@ -491,7 +514,7 @@ private String getPostCode(String fullAddress) {
 	for(int i = postcode.length -5; i<postcode.length ;i++){
 		buffer.append(postcode[i]);
 	}
-	
+
 	return buffer.toString().trim();
 }
 	/* Court's WorthInvestment method */
@@ -501,20 +524,20 @@ private String getPostCode(String fullAddress) {
 		txtExpectedDuration.setText("5");
 		btnWorthInvesting.setText("Worth it?");
 		lblWorthInvesting.setText("");
-		
+
 		btnWorthInvesting.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				getWorthInvestmentFromServer();
 			}
 		});
-		
+
 		RootPanel.get("tdDailySaved").add(txtDailySavings2);
 		RootPanel.get("tdFinalPayback").add(txtPayBackYear2);
 		RootPanel.get("tdExpectedDuration").add(txtExpectedDuration);
 		RootPanel.get("tdWorthInvestingCalculate").add(btnWorthInvesting);
 		RootPanel.get("tdWorthInvestingResult").add(lblWorthInvesting);
 	}
-	
+
 	protected void getWorthInvestmentFromServer() {
 		CalculationServiceAsync service = (CalculationServiceAsync) GWT.create(CalculationService.class);
         ServiceDefTarget serviceDef = (ServiceDefTarget) service;
@@ -525,7 +548,7 @@ private String getPostCode(String fullAddress) {
 	}
 
 	protected void doCalculation(){		
-	
+
         // calculate the generation for all months
         service.doSolarGenerationForAllMonths(dailyIrradianceInMonth,doubleBoxSize.getValue(), roofLossBox.getValue(), inverterBox.getValue(), doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), new AsyncCallback<double[]>() {
 			public void onFailure(Throwable caught) {
@@ -534,8 +557,8 @@ private String getPostCode(String fullAddress) {
 
 			public void onSuccess(double[] result) {
 				chart.draw(createMonthGenerationTable(result),createOptions());//draw column chart
-				
-		
+
+
 			}});
 
         // calculate the daily generation,  
@@ -561,7 +584,7 @@ private String getPostCode(String fullAddress) {
 			}});
         
 	}
-	
+
 	protected void getPaybackTime(Double result) {
 		service.getPayBackTime(systemCostBox.getValue(), integerBoxLifeSpan.getValue(), doubleBoxReplacePercent.getValue(), 
 				doubleBoxTarrif.getValue(), doubleBoxPowerCost.getValue(), result, doubleBoxAgeLoss.getValue(),integerBoxpaybackYear.getValue(), new AsyncCallback<TreeMap<Double,String>>(){
@@ -573,13 +596,13 @@ private String getPostCode(String fullAddress) {
 					public void onSuccess(TreeMap<Double, String> result) {
 						calculatePayback(result);
 						lineChart.draw(createPayBackTable(result),createLineChartOptions());
-						
+
 					}
 		});
-		
+
 	}
 	protected  void calculatePayback(TreeMap<Double, String> result) {
-		
+
 		for (Entry<Double, String> entry : result.entrySet()) {
         	if (entry.getKey() >0){
         		
@@ -597,7 +620,7 @@ private String getPostCode(String fullAddress) {
 			return "Light";
 		else return "Medium";	
 	}
-	
+
 //	Calculate Daily savings
 	private void getDailySaving( double dailyGeneration){
  		   service.doDailySavings(dailyGeneration, doubleBoxReplacePercent.getValue(), doubleBoxTarrif.getValue(), doubleBoxPowerCost.getValue(), new AsyncCallback<Double>() {
@@ -607,7 +630,7 @@ private String getPostCode(String fullAddress) {
 
 			public void onSuccess(Double result) {
 				txtDailySavings.setText(result.toString());
-				
+
 			}});			
 
 	}
@@ -639,18 +662,18 @@ private String getPostCode(String fullAddress) {
 			simplePopup.hide();			
 		}		
 	}
-	
+
 	/* use gwt char api to create column chart*/
 	 void createColumnChart(final double monthResults[]){
 	        Runnable onLoadCallback = new Runnable() {
 	          public void run() {
 	            Panel panel = RootPanel.get("idMonthSolarGenerationResults");
-	     
+
 	            // Create a column chart visualization.	           
 	            chart = new ColumnChart(createMonthGenerationTable(monthResults), createOptions());
 	           //to do chart.addSelectHandler(createSelectHandler(chart));	           
 	            panel.add(chart);
-	            
+
 	          }
 	        };
 
@@ -658,19 +681,19 @@ private String getPostCode(String fullAddress) {
 	        // when loading is done.
 	        VisualizationUtils.loadVisualizationApi(onLoadCallback, ColumnChart.PACKAGE);
 	        }
-	       
+
 	 /*create line chart for payback time*/
 	 private void createLineChart(final TreeMap<Double,String> paybackResults){
 		 Runnable onLoadCallback = new Runnable() {
 	          public void run() {
 	            Panel panel = RootPanel.get("idPayBackYearLineGraph");
-	     
+
 	            // Create a column chart visualization.	           
 	            lineChart = new LineChart(createPayBackTable(paybackResults),createLineChartOptions());
 	           //to do chart.addSelectHandler(createSelectHandler(chart));
-	           
+
 	            panel.add(lineChart);
-	            
+
 	          }
 	        };
 
@@ -681,11 +704,11 @@ private String getPostCode(String fullAddress) {
 	 /*create options for payback linechart*/
 	protected com.google.gwt.visualization.client.visualizations.LineChart.Options createLineChartOptions() {
 		 com.google.gwt.visualization.client.visualizations.LineChart.Options options = LineChart.Options.create();
-		    options.setWidth(700);
-		    options.setHeight(400);		    
+		   options.setWidth(600);
+		    options.setHeight(240);    
 		    options.setTitle("Payback years");		    
 		    options.setMin(systemCostBox.getValue()*-1);
-		    
+
 		return options;
 	}
 
@@ -714,16 +737,16 @@ private String getPostCode(String fullAddress) {
 		return data;
 	}
 
-	
+
 	/*use to populate month generation table for Column chart*/	
 	private AbstractDataTable createMonthGenerationTable(double monthResults[]) {
 	    DataTable data = DataTable.create();
 	    data.addColumn(ColumnType.STRING, "Month");
 	    data.addColumn(ColumnType.NUMBER, "kwh");
 	    String months[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-	    
+
 	    data.addRows(months.length);
-	    
+
 	    for(int i = 0; i<months.length;i++){
 	    	data.setValue(i, 0, months[i].toString());
 	    	if(monthResults==null)
@@ -737,7 +760,7 @@ private String getPostCode(String fullAddress) {
 	/*column create options*/
 	private Options createOptions() {
 	    Options options = ColumnChart.Options.create();
-	    options.setWidth(700);
+	    options.setWidth(600);
 	    options.setHeight(240);
 	    options.set3D(true);
 	    options.setTitle("kwh Generation per month");
@@ -754,17 +777,17 @@ private String getPostCode(String fullAddress) {
 	            // Create a table visualization.	           
 	            Table table= new Table(createTableData(),createTableOptions());
 	            Table tableInverter = new Table(createInverterData(),createTableOptions());
-	           
+
 	            panel.add(table);
 	            panelInverter.add(tableInverter);
-	            
+
 	          }
 	        };
 
 	        // Load the visualization api, passing the onLoadCallback to be called
 	        // when loading is done.
 	        VisualizationUtils.loadVisualizationApi(onLoadCallback, Table.PACKAGE);
-	        
+
 	 }
 	 /* dataset for inverter need to be refactored by using datastore data*/
 	protected AbstractDataTable createInverterData() {
@@ -774,7 +797,7 @@ private String getPostCode(String fullAddress) {
 		data.addColumn(ColumnType.NUMBER,"Power(watts)");
 		data.addColumn(ColumnType.NUMBER, "Efficiency(%)");
 		data.addColumn(ColumnType.NUMBER, "Price($)");
-		
+
 		data.addRows(2);
 		data.setValue(0, 0, "Aurora");
 		data.setValue(0, 1, "PVI-2000-AU Outdoor 2kW Grid Connect Inverter IP65 rated");
@@ -786,14 +809,14 @@ private String getPostCode(String fullAddress) {
 		data.setValue(1, 2, 4200);
 		data.setValue(1, 3, 96);
 		data.setValue(1, 4, 2376);
-		
-		
+
+
 		return data;
 	}
 	/*create tables options for both inverter and solar panels tables*/
 	protected com.google.gwt.visualization.client.visualizations.Table.Options createTableOptions() {
 		com.google.gwt.visualization.client.visualizations.Table.Options options = Table.Options.create();
-		
+
 
 		return options;
 	}
@@ -804,7 +827,7 @@ private String getPostCode(String fullAddress) {
 		data.addColumn(ColumnType.STRING, "Descriptions","desc");
 		data.addColumn(ColumnType.NUMBER,"Power(watts)");
 //		data.addColumn(, "Quantity", "quantity");
-		
+
 		//data.addColumn(ColumnType.NUMBER, "Efficiency(%)");
 		data.addColumn(ColumnType.NUMBER, "Price($)");
 		data.addRows(1);
@@ -812,7 +835,7 @@ private String getPostCode(String fullAddress) {
 		data.setValue(0, 1, "REC Solar 250 W Peak Energy Series, polycrystalline cell Black Frame");
 		data.setValue(0, 2, 250);
 		data.setValue(0, 3, 412.50);	
-		
+
 		return data;
 	}
 
@@ -840,7 +863,9 @@ private String getPostCode(String fullAddress) {
 	    map.addMapType(mapType);	    
 	    map.setSize("100%", "100%");
 	    // Add some controls for the zoom level	 
-	   
+	    map.setWidth("600pt");
+	    map.setHeight("240pt");	
+	     
 	    map.setCurrentMapType(MapType.getNormalMap());
 	    map.addControl(new LargeMapControl());
 	 // Add some type controls for the different map types
@@ -851,5 +876,5 @@ private String getPostCode(String fullAddress) {
 	    // Add the map to the HTML host page
 	    RootPanel.get("tdMap").add(dock); 
 	  }
-	
+
 }
