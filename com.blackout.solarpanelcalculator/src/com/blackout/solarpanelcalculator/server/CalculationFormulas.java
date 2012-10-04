@@ -1,9 +1,5 @@
 package com.blackout.solarpanelcalculator.server;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeMap;
-
 /**
  * 
  * @author Sen
@@ -25,11 +21,10 @@ public class CalculationFormulas{
 	public static final double defaultExportPercent = 0.76;
 	public static final double defaultReplacePercent = 0.24;
 	public static final double defaultLifeSpan = 25;
-	public static final double[] monthlySolarIrradiance={6.19*31,5*28,3.9*31,4.95*30,3.98*31,3.23*30,3.02*31,3.22*30,4.04*31,5.12*30,5.52*31,6.07*30,6.35*31};
-	public static final String[] months={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
 	/**
-	 * calculate daily solar generation
-	 * @param systemSize
+	 * calculate daily solar generation in a given year
+	 * 0 year is first year or ignore panel aging efficiency loss
+	 * @param systemSize 
 	 * @param roofEfficiency
 	 * @param inverterEfficiency
 	 * @param wiringEfficiency
@@ -41,7 +36,12 @@ public class CalculationFormulas{
 	public static double getDailySolarGeneFormula(double systemSize,double roofEfficiency,double inverterEfficiency,
 											  double wiringEfficiency,double whatYear, double agingEfficiencyLoss,double solarIrradiance)
 {
-		
+		systemSize = systemSize /1000;//convert to kws
+		//convert to %
+		roofEfficiency = roofEfficiency /100;
+		inverterEfficiency = inverterEfficiency/100;
+		wiringEfficiency = wiringEfficiency/100;
+		agingEfficiencyLoss = agingEfficiencyLoss/100;
 //		if values invalid , use default values instead
 	if(chkInput(systemSize))
 		systemSize = defaultSystemSize;
@@ -65,66 +65,56 @@ public class CalculationFormulas{
 	
 	double resultInGivenYear = generation * panelEfficiency;
 	
-	return TwoDecimals(resultInGivenYear);
+	return twoDecimals(resultInGivenYear);
 	
 }
-	public static double getDailySolarGeneFormula(double systemSize,double roofEfficiency,double inverterEfficiency,
-			  double wiringEfficiency, double agingEfficiencyLoss,double solarIrradiance)
-{
-
-double whatYear=0;
-double panelEfficiency = Math.pow((1 - agingEfficiencyLoss)	,whatYear);
-
-//assume no efficiency loss in the first year	
-double generation = systemSize*roofEfficiency*inverterEfficiency*wiringEfficiency*solarIrradiance;
-
-double resultInGivenYear = generation * panelEfficiency;
-
-return TwoDecimals(resultInGivenYear);
-
-}
-	
-	public static double[] getSolarGeneFormulaForAllMonths(double systemSize,double roofEfficiency,double inverterEfficiency,
+	/**
+	 * calculate power generation for all months
+	 * @param systemSize
+	 * @param roofEfficiency
+	 * @param inverterEfficiency
+	 * @param wiringEfficiency
+	 * @param whatYear
+	 * @param agingEfficiencyLoss
+	 * @return an array of 12 months generation
+	 */
+	public static double[] getSolarGeneFormulaForAllMonths(double[]dailyIrradianceInMonth,double systemSize,double roofEfficiency,double inverterEfficiency,
 			  double wiringEfficiency,double whatYear, double agingEfficiencyLoss){
 		double monthsResults[] = new double[12];
+		
 		for(int i = 0; i<monthsResults.length;i++){
 			monthsResults[i] = getDailySolarGeneFormula(systemSize,roofEfficiency,inverterEfficiency,
-					  wiringEfficiency,whatYear,agingEfficiencyLoss,monthlySolarIrradiance[i]);
+			wiringEfficiency,whatYear,agingEfficiencyLoss,dailyIrradianceInMonth[i]);
+			switch(i){
+			case 0:monthsResults[i] =twoDecimals(monthsResults[i]*31);
+			break;
+			case 1:monthsResults[i] =twoDecimals(monthsResults[i]*28);
+			break;
+			case 2:monthsResults[i] =twoDecimals(monthsResults[i]*31);
+			break;
+			case 3:monthsResults[i] =twoDecimals(monthsResults[i]*30);
+			break;
+			case 4:monthsResults[i] =twoDecimals(monthsResults[i]*31);
+			break;
+			case 5:monthsResults[i] =twoDecimals(monthsResults[i]*30);
+			break;
+			case 6:monthsResults[i] =twoDecimals(monthsResults[i]*31);
+			break;
+			case 7:monthsResults[i] =twoDecimals(monthsResults[i]*31);
+			break;
+			case 8:monthsResults[i] =twoDecimals(monthsResults[i]*30);
+			break;
+			case 9:monthsResults[i] =twoDecimals(monthsResults[i]*31);
+			break;
+			case 10:monthsResults[i] =twoDecimals(monthsResults[i]*30);
+			break;
+			case 11:monthsResults[i] =twoDecimals(monthsResults[i]*31);
+			break;
+			
+			}
 		}
-		return monthsResults;
-		
+		return monthsResults;	
 	}
-	 
-	
-	
-	/**
-	 * calculate daily savings 
-	 * @param dailyGeneration
-	 * @param exportPercent
-	 * @param replacePercent
-	 * @param feedInTarrif
-	 * @param powerCost
-	 * @return savings each day
-	 */
- public static double getDailySavingsFormula(double dailyGeneration, double exportPercent, double replacePercent,double feedInTarrif,double powerCost){
-	 
-//		if values invalid , use default values instead
-
-	 if (chkEfficiency(exportPercent))
-		 exportPercent = defaultExportPercent;
-	 if (chkEfficiency(replacePercent)){
-		 replacePercent = defaultReplacePercent;
-	 }
-	 if (chkInput(feedInTarrif))
-		 feedInTarrif = defaultFeedInFee;
-	 if(chkInput(powerCost))
-		 powerCost = defaultPowerCost;
-	 
-	double result = dailyGeneration * (exportPercent *feedInTarrif + replacePercent*powerCost);
-	
-	return TwoDecimals(result);
- }
- 
 /**
  * calculate daily savings without electricity export percentage 
  * @param dailyGeneration
@@ -133,11 +123,14 @@ return TwoDecimals(resultInGivenYear);
  * @param powerCost
  * @return savings each day
  */
- public static double getDailySavingsFormula(double dailyGeneration, double replacePercent,double feedInTarrif,double powerCost){
+ public static double getDailySavingsFormula(double dailyGeneration, double replacePercent,double feedInTariff,double powerCost){
 	 
-
-	 
+	 replacePercent = replacePercent/100;
+	//convert cents to dollars
+	 feedInTariff = feedInTariff/100;
+	 powerCost = powerCost/100;
 //		if values invalid , use default values instead
+	 
 	 double exportPercent = 1-replacePercent;
 
 	 if (chkEfficiency(exportPercent))
@@ -145,52 +138,34 @@ return TwoDecimals(resultInGivenYear);
 	 if (chkEfficiency(replacePercent)){
 		 replacePercent = defaultReplacePercent;
 	 }
-	 if (chkInput(feedInTarrif))
-		 feedInTarrif = defaultFeedInFee;
+	 if (chkInput(feedInTariff))
+		 feedInTariff = defaultFeedInFee;
 	 if(chkInput(powerCost))
 		 powerCost = defaultPowerCost;
-	 
-	double result = dailyGeneration * (exportPercent *feedInTarrif + replacePercent*powerCost);
-	
-	return TwoDecimals(result);
+	double result = dailyGeneration * (exportPercent *feedInTariff + replacePercent*powerCost);
+	return twoDecimals(result);
 }
-/**
- * Calculate pay back year
- * @param systemCost
- * @param lifeSpan
- * @param dailySavings
- * @return paybackyear if not exceeding panel life Span, otherwise return how many years
- * it would take to pay back (in negatives).
- */
- public static int getPayBackYear(double systemCost, double lifeSpan, double dailySavings  ){
-//	 use default year if input not valid
-	 if (chkInput(lifeSpan))
-		 lifeSpan = defaultLifeSpan;
-	 int year = 1;
-	 double yearSavings = dailySavings * 365;
-	 while(systemCost>yearSavings){
-		 yearSavings += yearSavings;
-		 year++;
-		 if(systemCost<yearSavings){
-			 break;
-		 }		 
-	 }
-	if(year<lifeSpan)
-		return year;
-	else return (int)(year-lifeSpan);
 
- }
- 
+ /**
+  * calculate accumulative cash  in every month and year in given years
+  * @param systemCost
+  * @param lifeSpan
+  * @param replacePercent
+  * @param feedInTarrif
+  * @param powerCost
+  * @param dailyGeneration
+  * @param agingEfficiencyLoss
+  * @param yearsToCalculate
+  * @return a map of key in money , value in month and year
+  */
  public static TreeMap<Double,String> getPayBackTime(double systemCost, double lifeSpan, double replacePercent,double feedInTarrif,
 		 double powerCost, double dailyGeneration , double agingEfficiencyLoss,double yearsToCalculate){
-	 
+	 agingEfficiencyLoss = agingEfficiencyLoss/100;
 	 if(lifeSpan <yearsToCalculate )
-	 yearsToCalculate = lifeSpan;//use panel life span if number of calculate years is greater
-	 
+	 yearsToCalculate = lifeSpan;//use panel life span if number of calculate years is greater	 
 	 TreeMap<Double,String> resultsMap = new TreeMap<Double, String>();
 	 String yearMonth = null;
-	 int totalMonthsInYears = (int)yearsToCalculate * 12;
-	 
+	 int totalMonthsInYears = (int)yearsToCalculate * 12;	 
 	double panelEfficiencyMonthly = (1-agingEfficiencyLoss/12);
 	double generationMonthly;
 	double accumulativeCashFlow = systemCost * -1;
@@ -198,8 +173,6 @@ return TwoDecimals(resultInGivenYear);
 	int yearCounter = 0;
 	int month = 1;
 	while( month<=totalMonthsInYears){
-	 
-	
 	generationMonthly= dailyGeneration*Math.pow(panelEfficiencyMonthly, month)*30;
 	
 	accumulativeCashFlow +=getDailySavingsFormula(generationMonthly, replacePercent, feedInTarrif, powerCost);
@@ -207,14 +180,13 @@ return TwoDecimals(resultInGivenYear);
 		monthCounter =0;
 		yearCounter++;
 	}
-	yearMonth = "y"+yearCounter;
-	resultsMap.put(TwoDecimals(accumulativeCashFlow),yearMonth);
+	yearMonth = yearCounter+"y "+monthCounter+"m";
+	resultsMap.put(twoDecimals(accumulativeCashFlow),yearMonth);
 	month++;
 	monthCounter++;
 	}
 	return resultsMap;
  }
- 
  /**
   * Is it worth investing in a system of solar panels? This assumes the user already knows how much
   * their system will earn them and how long it would take to pay itself off.
@@ -229,7 +201,7 @@ return TwoDecimals(resultInGivenYear);
 	 return savings * yearsSaved;
  }
 // use to for two decimals places, gwt doesn't support java.text.decimal	
-private static double TwoDecimals(double number){
+private static double twoDecimals(double number){
 	
 	return Math.round(number*100.00)/100.00;
 }

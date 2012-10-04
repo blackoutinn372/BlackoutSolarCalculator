@@ -12,32 +12,12 @@ public class City implements IsSerializable {
 	private int optimalYearDegree;
 	private int bestWinterDegree;
 	private int bestSummerDegree;
-	private double avgIrradiance;
 	private double monthsIrradiance[];
+	private Double zoneRating = null; // to calculate solar rebates
+	private Double avgProduePerkw = null; // for similar system generation in your city if we can use that
+										//online site,we can remove this
 	
 	
-	public String getCityName() {
-		return cityName;
-	}
-
-	public double getFeedInTariff() {
-		return feedInTariff;
-	}
-
-	public double getElectricityCost() {
-		return electricityCost;
-	}
-
-	public int getPostcode() {
-		return postcode;
-	}
-	public double getIrradiance(){
-		return avgIrradiance;
-	}
-	public void setIrradiance(double irradiance){
-		this.avgIrradiance = irradiance;
-		
-	}
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
@@ -69,7 +49,39 @@ public class City implements IsSerializable {
 	public void setMonthsIrradiance(double[] monthsIrradiance) {
 		this.monthsIrradiance = monthsIrradiance;
 	}
+	
+	public Double getZoneRating() {
+		return zoneRating;
+	}
 
+	public void setZoneRating(Double zoneRating) {
+		this.zoneRating = zoneRating;
+	}
+
+	public Double getAvgProduePerkw() {
+		return avgProduePerkw;
+	}
+
+	public void setAvgProduePerkw(Double avgProduePerkw) {
+		this.avgProduePerkw = avgProduePerkw;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public double getFeedInTariff() {
+		return feedInTariff;
+	}
+
+	public double getElectricityCost() {
+		return electricityCost;
+	}
+
+	public int getPostcode() {
+		return postcode;
+	}
+	
 	public int getOptimalYearDegree() {
 		return optimalYearDegree;
 	}

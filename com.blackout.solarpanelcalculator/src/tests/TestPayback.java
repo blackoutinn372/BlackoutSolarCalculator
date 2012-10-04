@@ -16,12 +16,15 @@ public class TestPayback {
 	 */
 	public static void main(String[] args) {
 		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(18000
-				, 25, 0.24, 0.44, 0.1947, 20.0, 0.07, 25);
+				, 25, 24, 44, 19.47, 20.0, 0.7, 25);
 		 for (Entry<Double, String> entry : resultsMap.entrySet()) {
+		
 	        	System.out.println("Key : " + entry.getKey() 
 	       			+ " Value : " + entry.getValue());
-	        }
-
+	        	
+	        
+		 }
+		 System.out.println(resultsMap.get(14155.88));
 	}
 
 }

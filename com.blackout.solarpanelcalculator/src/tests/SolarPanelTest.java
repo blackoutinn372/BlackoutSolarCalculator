@@ -1,13 +1,9 @@
 package tests;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
-import com.blackout.solarpanelcalculator.server.CalculationFormulas;
 import com.blackout.solarpanelcalculator.server.SolarPanel;
-@SuppressWarnings("deprecation")
 public class SolarPanelTest {
 	private static final double DELTA = 1e-10;
 	

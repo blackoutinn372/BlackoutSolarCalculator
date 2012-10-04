@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.blackout.solarpanelcalculator.client.City;
 public class CityTest {
 	
-	private static final double DELTA = 1e-15;
+	
 	private static final String name1 = "Sydney";
 	private static final String name2 = "Melbourne";
 	City city1;

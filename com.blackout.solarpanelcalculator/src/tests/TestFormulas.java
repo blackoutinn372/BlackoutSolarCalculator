@@ -42,14 +42,5 @@ public class TestFormulas {
 		assertEquals(CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, inverter1, wiring1, year, age1, solarIrradiance),
 					expectedDailyGeneration1,DELTA);
 	}
-	
-	@Test
-	public void SolarSavings(){
-		assertEquals(CalculationFormulas.getDailySavingsFormula(dailyGeneration1, export1, replacement1, tarrif1, powerCost1),
-					expectedSavings1,DELTA);
-	}
-	@Test
-	public void PayBackTime(){
-		assertEquals(CalculationFormulas.getPayBackYear(systemCost1, lifeSpan1, dailySavings1),expectedPaybackYear1);
-	}
+
 	 }

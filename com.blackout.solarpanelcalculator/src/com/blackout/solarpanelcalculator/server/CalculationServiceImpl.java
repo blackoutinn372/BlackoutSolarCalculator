@@ -43,46 +43,23 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	}
 	
 	
-	
 	@Override
-	public double doDailySavings(double dailyGeneration, double exportPercent,
-			double replacePercent, double feedInTarrif, double powerCost) {
-		return CalculationFormulas.getDailySavingsFormula(dailyGeneration, exportPercent, replacePercent, feedInTarrif, powerCost);
-	}
-
-	@Override
-	public double doPayBackYear(double systemCost, double lifeSpan,
-			double dailySavings) {
-		
-		return CalculationFormulas.getPayBackYear(systemCost, lifeSpan, dailySavings);
-	}
-
-	@Override
-	public double[] doSolarGenerationForAllMonths(double systemSize,
+	public double[] doSolarGenerationForAllMonths(double[]dailyIrradianceInMonth,double systemSize,
 			double roofEfficiency, double inverterEfficiency,
 			double wiringEfficiency, double whatYear, double agingEfficiencyLoss) {
 		
-		return CalculationFormulas.getSolarGeneFormulaForAllMonths(systemSize, roofEfficiency, inverterEfficiency, wiringEfficiency, whatYear, agingEfficiencyLoss);
+		return CalculationFormulas.getSolarGeneFormulaForAllMonths(dailyIrradianceInMonth,systemSize, roofEfficiency, inverterEfficiency, wiringEfficiency, whatYear, agingEfficiencyLoss);
 	}
 
 
 	@Override
 	public double doDailySavings(double dailyGeneration, double replacePercent,
 			double feedInTarrif, double powerCost) {
-		// TODO Auto-generated method stub
 		return CalculationFormulas.getDailySavingsFormula(dailyGeneration, replacePercent, feedInTarrif, powerCost);
 	}
 
 
-	@Override
-	public double doDailySolarGeneration(double systemSize,
-			double roofEfficiency, double inverterEfficiency,
-			double wiringEfficiency, double agingEfficiencyLoss,
-			double solarIrradiance) {
-		return CalculationFormulas.getDailySolarGeneFormula(systemSize, roofEfficiency, inverterEfficiency, wiringEfficiency, agingEfficiencyLoss, solarIrradiance);
-	}
 
-	
 	public double doWorthInvestment(double dailySavings, double paybackYear, double duration) {
 		return CalculationFormulas.isWorthInvesting(dailySavings, paybackYear, duration);
 	}
@@ -93,34 +70,55 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 			double lifeSpan, double replacePercent, double feedInTarrif,
 			double powerCost, double dailyGeneration,
 			double agingEfficiencyLoss, double yearsToCalculate) {
-		// TODO Auto-generated method stub
 		return CalculationFormulas.getPayBackTime(systemCost, lifeSpan, replacePercent, feedInTarrif, powerCost, dailyGeneration, agingEfficiencyLoss, yearsToCalculate);
 	}
 	
+/**
+ * retrive address based on latitude and lontitude
+ * @param latLong
+ * @return a detailed address 
+ */
 	public String getAddress(String latLong) {
 		  try {
-            URL mapsUrl = new URL(
-                            "http://maps.googleapis.com/maps/api/geocode/xml?latlng="
-                                            + latLong + "&sensor=true");
-            InputStream openStream = mapsUrl.openStream();
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(openStream);
-            NodeList formattedAddress = doc.getElementsByTagName("formatted_address");
-            Element formattedAddressElement = (Element) formattedAddress.item(0);
-            return formattedAddressElement.getTextContent();
-    } catch (Exception e) {
-            return null;
+          URL mapsUrl = new URL(
+                          "http://maps.googleapis.com/maps/api/geocode/xml?latlng="
+                                          + latLong + "&sensor=true");
+          InputStream openStream = mapsUrl.openStream();
+          DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+          DocumentBuilder db = dbf.newDocumentBuilder();
+          Document doc = db.parse(openStream);
+          NodeList formattedAddress = doc.getElementsByTagName("formatted_address");
+          Element formattedAddressElement = (Element) formattedAddress.item(0);
+          return formattedAddressElement.getTextContent();
+  } catch (Exception e) {
+          return null;
 	}
-	
+
 }
 
 
 	@Override
-	public City getCity(String cityName) {
+	public City getCity(int cityIndex) {
 		// TODO Auto-generated method stub
-		return CityDAO.getCity(cityName);
+		return CityDAO.getCity(cityIndex);
 	}
 
+
+	@Override
+	public String[] getCityList(int postcode) {
+		// TODO Auto-generated method stub
+		return CityDAO.getCityList(postcode);
+	}
+
+
+	@Override
+	public int getCityIndex() {
+		// TODO Auto-generated method stub
+		return CityDAO.returnCityIndex();
+	}
+
+
+	
+	
 
 }
