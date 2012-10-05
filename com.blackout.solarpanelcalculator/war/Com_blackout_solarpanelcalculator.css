@@ -583,6 +583,16 @@ a:hover {
 	height:10px;
 	font-size: 7pt;
 }
+.gwt-DoubleBox-assumptions-Error{
+	width:23px;
+	height:10px;
+	font-size: 7pt;
+	background-color: salmon;
+}
+.gwt-TextBox-Error{
+
+	background-color: salmon;
+}
 .gwt-ListBox {
 	font-size: 10px;
 }
