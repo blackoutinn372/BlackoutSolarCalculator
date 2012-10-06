@@ -2,8 +2,6 @@ package com.blackout.solarpanelcalculator.client;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-
-
 import com.google.code.gwt.geolocation.client.Coordinates;
 import com.google.code.gwt.geolocation.client.Geolocation;
 import com.google.code.gwt.geolocation.client.Position;
@@ -113,7 +111,7 @@ public class CalculationClient implements EntryPoint
     private DoubleBox txtPowerEstimate = new DoubleBox();
     
     private IntegerBox txtHouseholdSize = new IntegerBox();
-    private IntegerBox integerBoxPostcode = new IntegerBox();
+    private TextBox txtBoxPostcode = new TextBox();
     private RadioButton rdbtnHeavy = new RadioButton("usage", "Heavy");
     private RadioButton rdbtnMedium = new RadioButton("usage", "Medium");
     private RadioButton rdbtnLight = new RadioButton("usage", "Light");    
@@ -227,36 +225,8 @@ private Widget loadAllControlsNew() {
 		Label roofFaceLbl = new Label("Select your roof direction:");
 		HTML cityLbl = new HTML("&nbsp or Select city:");	 
 		Label postcodeLbl = new Label("Postcode:");
-		
-		integerBoxPostcode.addChangeHandler(new ChangeHandler(){
-
-			@Override
-			public void onChange(ChangeEvent event) {
-
-				 service.getCityIDFromPostcode(integerBoxPostcode.getValue(), new AsyncCallback<Integer> (){
-
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("get postcode failed");
-						
-					}
-
-					@Override
-					public void onSuccess(Integer result) {
-						if(result ==-1){
-							Window.alert("invalid postcode");
-							integerBoxPostcode.setFocus(true);	
-						}
-						citycomboBox.setSelectedIndex(result);
-						getCityValues();
-						
-					}
-					
-				});
-
-			}
-
-		});
+	
+		txtBoxPostcode.addMouseOutHandler(new PostcodeHandler());
 		citycomboBox.addChangeHandler(new ChangeHandler(){
 
 			@Override
@@ -290,9 +260,9 @@ private Widget loadAllControlsNew() {
 	    FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
 	    HorizontalPanel hpanel = new HorizontalPanel();
 	    hpanel.add(postcodeLbl);
-	    hpanel.add(integerBoxPostcode);
+	    hpanel.add(txtBoxPostcode);
 	    hpanel.add(cityLbl);
-	    integerBoxPostcode.setWidth("55px");
+	    txtBoxPostcode.setWidth("55px");
 	    HorizontalPanel hpanel2 = new HorizontalPanel();
 	    
 	    hpanel2.add(citycomboBox);
@@ -363,7 +333,42 @@ private Widget loadAllControlsNew() {
 	    decPanel.setWidget(layout);
 	    return decPanel;
 	  }
+	class PostcodeHandler implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidPostcode(txtBoxPostcode.getText())==false)
+			{
+				txtBoxPostcode.setStyleName("gwt-TextBox-Error", true);
+				txtBoxPostcode.setFocus(true);
+				
+			}
+			else{
+				txtBoxPostcode.setStyleName("gwt-TextBox-Error", false);
+				selectCityOnPostcode();	
+			}
+			
+		}
+	
+		private void selectCityOnPostcode() {
+			 service.getCityIDFromPostcode(Integer.parseInt(txtBoxPostcode.getText()), new AsyncCallback<Integer> (){
 
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("server get postcode failed");						
+					}
+
+					@Override
+					public void onSuccess(Integer result) {
+						if(result ==-1){
+							Window.alert("cannot find your postcode");							
+						}
+						citycomboBox.setSelectedIndex(result);
+						getCityValues();						
+					}					
+				});
+			}		
+	}
 	private void getCityValues() {	
 //		 final double solarIrradiance;
 		int selectedIndex = citycomboBox.getSelectedIndex();
@@ -397,6 +402,11 @@ private Widget loadAllControlsNew() {
 		txtPayBackYear.setText("");
 		btnCalculation.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				if(txtBoxPostcode.getStyleName().equals("gwt-TextBox gwt-TextBox-Error"))
+				{
+					Window.alert("Please check your input");
+					return;
+				}
 				doCalculation();
 			}
 		});
@@ -475,7 +485,7 @@ private Widget loadAllControlsNew() {
 	}
 	private void loadCityList(String fullAddress) {
 		int postcode = Integer.parseInt(getPostCode(fullAddress));
-		integerBoxPostcode.setValue(postcode);
+		txtBoxPostcode.setText(Integer.toString(postcode));
 		service.getCityList(postcode, new AsyncCallback<String[]>(){
 
 			@Override
