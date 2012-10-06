@@ -10,10 +10,11 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import com.blackout.solarpanelcalculator.server.CalculationFormulas;
 
-public class TestFormulas {
+public class TestFormulas 
+{
 	private static final double DELTA = 1e-10;
 	
-//	1st set of values for solar generation
+	//	1st set of values for solar generation
 	private final double systemSize1 = 4.95;
 	private final double roof1 = 0.885;
 	double inverter1 = 0.96;
@@ -23,7 +24,7 @@ public class TestFormulas {
 	double age1 =0.007;
 	double expectedDailyGeneration1 = 21.02;
 	
-//	1st set of values for daily savings
+	//	1st set of values for daily savings
 	double dailyGeneration1 = 21.02;
 	double export1 = 0.76;
 	double replacement1 = 0.24;
@@ -31,16 +32,16 @@ public class TestFormulas {
 	double powerCost1 = 0.1941;
 	double expectedSavings1 = 8.01;
 	
-// 1st set of values of payback time
+	// 1st set of values of payback time
 	double systemCost1 = 18000;
 	int lifeSpan1 = 25;
 	double dailySavings1 = 8.01;
 	int expectedPaybackYear1 = 4;
+	
 	@Test
-	 public void SolarGeneration(){
-		
+	public void SolarGeneration() {
 		assertEquals(CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, inverter1, wiring1, year, age1, solarIrradiance),
 					expectedDailyGeneration1,DELTA);
 	}
 
-	 }
+ }

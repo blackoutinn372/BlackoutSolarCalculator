@@ -6,13 +6,20 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("calculationService")
-public interface CalculationService extends RemoteService {
-
-	double doDailySolarGeneration(double systemSize, double roofEfficiency, double inverterEfficiency, double wiringEfficiency, double whatYear, double agingEfficiencyLoss, double solarIrradiance);
-	double[] doSolarGenerationForAllMonths(double[]dailyIrradianceInMonth,double systemSize, double roofEfficiency, double inverterEfficiency, double wiringEfficiency, double whatYear, double agingEfficiencyLoss);
+public interface CalculationService extends RemoteService 
+{
+	
+	double doDailySolarGeneration(double systemSize, double roofEfficiency, 
+			double inverterEfficiency, double wiringEfficiency, double whatYear, 
+			double agingEfficiencyLoss, double solarIrradiance);
+	double[] doSolarGenerationForAllMonths(double[]dailyIrradianceInMonth,double systemSize, 
+			double roofEfficiency, double inverterEfficiency, double wiringEfficiency, 
+			double whatYear, double agingEfficiencyLoss);
 	
 	double doPowerConsumption(Integer householdSize, String usageType);	
+	
 	double doDailySavings(double dailyGeneration, double replacePercent, double feedInTarrif, double powerCost);
+	
 	double doWorthInvestment(double savings, double paybackYear, double duration);
 	TreeMap<Double,String> getPayBackTime(double systemCost, double lifeSpan, double replacePercent,double feedInTarrif,
 			 double powerCost, double dailyGeneration , double agingEfficiencyLoss,double yearsToCalculate);
