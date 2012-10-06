@@ -67,23 +67,23 @@ import com.google.gwt.visualization.client.visualizations.Table;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class CalculationClient implements EntryPoint {
-
-	private double defaultIrradiance = 5.1;//kWh/m2/day
-	private double defaultRoofLossPercent = 88.5;//percentage
-	private double defaultFeedInTariff = 44;// cents
-	private double defaultElectricityCost = 19.41;//cents
-	private double defaultSystemCost = 18000;// dollars
-	private double defaultSystemSize = 4950;//watts
-	private double defaultInverterEfficiency= 96;//percentage
-	private double defaultWiringEfficiency = 98;// percentage 
-	private double defaultHomeUsePercent = 24;//percentage
-	private double defaultAgingEfficiencyLoss = 0.7;//percentage
-	private double defaultSolarPanelLife = 25; //years
+public class CalculationClient implements EntryPoint 
+{
+	private double defaultIrradiance = 5.1;					//kWh/m2/day
+	private double defaultRoofLossPercent = 88.5;			//percentage
+	private double defaultFeedInTariff = 44;				// cents
+	private double defaultElectricityCost = 19.41;			//cents
+	private double defaultSystemCost = 18000;				// dollars
+	private double defaultSystemSize = 4950;				//watts
+	private double defaultInverterEfficiency= 96;			//percentage
+	private double defaultWiringEfficiency = 98;			// percentage 
+	private double defaultHomeUsePercent = 24;				//percentage
+	private double defaultAgingEfficiencyLoss = 0.7;		//percentage
+	private double defaultSolarPanelLife = 25; 				//years
 	MapWidget map = null ;
 	private double[] dailyIrradianceInMonth = {6.19,5,3.9,4.95,3.98,3.23,3.02,3.22,4.04,5.12,5.52,6.07,6.35};
-	private ColumnChart chart;//for monthly results chart
-	private LineChart lineChart;//for payback time line chart
+	private ColumnChart chart;								//for monthly results chart
+	private LineChart lineChart;							//for payback time line chart
 	private TreeMap<Double,String> payBackTime = null;	
 	private Label lblAddressInput = new Label();
 	private TextBox txtBoxAddressInput = new TextBox();
@@ -109,19 +109,19 @@ public class CalculationClient implements EntryPoint {
 	private DoubleBox txtDailySavings = new DoubleBox();	
 	private TextBox txtPayBackYear = new TextBox();
     private DoubleBox txtPowerEstimate = new DoubleBox();
+    
     private IntegerBox txtHouseholdSize = new IntegerBox();
     private TextBox txtBoxPostcode = new TextBox();
     private RadioButton rdbtnHeavy = new RadioButton("usage", "Heavy");
     private RadioButton rdbtnMedium = new RadioButton("usage", "Medium");
     private RadioButton rdbtnLight = new RadioButton("usage", "Light");    
     
-    /* vv Court's WorthInvestment items vv */
+    /* WorthInvestment items */
     private DoubleBox txtDailySavings2 = new DoubleBox();
     private DoubleBox txtPayBackYear2 = new DoubleBox();
     private DoubleBox txtExpectedDuration = new DoubleBox();
     private Button btnWorthInvesting = new Button();
     private DoubleBox lblWorthInvesting = new DoubleBox();
-    /* ^^ Court's WorthInvestment items ^^ */
     
 	private CalculationServiceAsync service;
 	private double[] monthResults =null; 
@@ -149,7 +149,7 @@ private Widget loadAllControlsNew() {
 		lblNotFound.setStyleName("gwt-Label-error");
 		lblNotFound.setVisible(false);
 		btnAddressInput.addClickHandler(new ClickHandler(){
-/* click the button to show the address on the map*/
+			/* click the button to show the address on the map*/
 			@Override
 			public void onClick(ClickEvent event) {
 					lblNotFound.setVisible(false);
@@ -238,7 +238,7 @@ private Widget loadAllControlsNew() {
 
 		});
 
-//	root combobox selections
+		//	root combobox selections
 		roofDirectioncomboBox.addItem("South");
 		roofDirectioncomboBox.addItem("South West");
 		roofDirectioncomboBox.addItem("South East");
@@ -256,7 +256,7 @@ private Widget loadAllControlsNew() {
 	    layout.setCellSpacing(2);
 	    layout.setWidth("500px");
 
-//	    add widgets to flextable
+	    //	    add widgets to flextable
 	    FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
 	    HorizontalPanel hpanel = new HorizontalPanel();
 	    hpanel.add(postcodeLbl);
@@ -278,7 +278,7 @@ private Widget loadAllControlsNew() {
 	    layout.setWidget(4, 0, systemCostLbl);
 	    layout.setWidget(4, 1, systemCostBox);
 
-//	   set styles to labels and boxes
+	    //	   set styles to labels and boxes
 	    roofLossLbl.setStyleName("gwt-Label-assumptions"); 	   
 	    roofLossBox.setStyleName("gwt-DoubleBox-assumptions");   
 	    inverterLbl.setStyleName("gwt-Label-assumptions");	

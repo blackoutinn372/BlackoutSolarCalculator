@@ -3,8 +3,8 @@ package tests;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import com.blackout.solarpanelcalculator.server.CalculationFormulas;
 
+import com.blackout.solarpanelcalculator.server.*;
 public class TestPayback {
 
 	public TestPayback() {
@@ -26,5 +26,7 @@ public class TestPayback {
 		 }
 		 System.out.println(resultsMap.get(14155.88));
 	}
+	
+	
 
 }

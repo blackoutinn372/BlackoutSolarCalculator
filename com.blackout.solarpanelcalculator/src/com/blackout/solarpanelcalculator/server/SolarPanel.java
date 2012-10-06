@@ -9,7 +9,6 @@ import com.google.appengine.api.datastore.Key;
 /**
  * SolarPanel entity used by JDO to store data
  * CURRENTLY UNUSED, LEFT IN FOR POTENTIAL USE.
- * @author Court
  */
 @PersistenceCapable
 public class SolarPanel {
