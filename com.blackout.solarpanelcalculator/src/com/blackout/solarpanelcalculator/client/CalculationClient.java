@@ -136,8 +136,8 @@ public class CalculationClient implements EntryPoint
         createTable();
 	}
 
-private Widget loadAllControlsNew() {
-//		pop up message
+	private Widget loadAllControlsNew() {
+		// Pop up message
 		String irradianceMsg = "This value is auto updated based on your location you can also enter a value to override it";
 		PopMessage irradianceHelpMsg = new PopMessage(irradianceMsg);		
 		String overallCostMsg = "The overall cost is your solar system and installation cost minus any goverment rebates  ";
@@ -176,7 +176,7 @@ private Widget loadAllControlsNew() {
 				    });				
 			}		
 		});
-		/*add address labels, box */
+		// Add address labels box
 		VerticalPanel verticalpanel = new VerticalPanel();
 		HorizontalPanel addressPanel = new HorizontalPanel();
 		addressPanel.add(lblAddressInput);
@@ -192,7 +192,7 @@ private Widget loadAllControlsNew() {
 		verticalpanel.add(btnAddressInput);
 		RootPanel.get("idAddressInput").add(verticalpanel);
 
-//		set boxes to their default values
+		//		Set boxes to their default values
 		 systemCostBox.setValue(defaultSystemCost);	
 		 doubleBoxSize.setValue(defaultSystemSize);	
 		 roofLossBox.setValue(defaultRoofLossPercent); 
@@ -206,7 +206,7 @@ private Widget loadAllControlsNew() {
 		 doubleBoxIrradiance.setValue(defaultIrradiance); //get irradiance from database based on city selection
 		 integerBoxpaybackYear.setValue(25);
 
-//		create labels
+		 //		Create labels
 		Label lblAssumeSolarIrradiance = new Label("Solar irradiance level in your location is(kWh/m2/day):");
 		lblAssumeSolarIrradiance.addMouseOverHandler(irradianceHelpMsg);
 		lblAssumeSolarIrradiance.addMouseOutHandler(irradianceHelpMsg);
@@ -236,7 +236,7 @@ private Widget loadAllControlsNew() {
 
 			}
 
-		});
+			});
 
 		//	root combobox selections
 		roofDirectioncomboBox.addItem("South");
@@ -319,6 +319,7 @@ private Widget loadAllControlsNew() {
 	    parameters.setWidget(8, 1,doubleBoxAgeLoss);
 	    parameters.setWidget(9, 0,lblAssumeSolarIrradiance);
 	    parameters.setWidget(9, 1,doubleBoxIrradiance);    
+	    
 	    // Add advanced options to form in a disclosure panel
 	    DisclosurePanel advancedDisclosure = new DisclosurePanel(
 	        "Our assumptions");
@@ -327,12 +328,14 @@ private Widget loadAllControlsNew() {
 	    layout.setWidget(5, 0, advancedDisclosure);
 	    advancedDisclosure.setWidth("516px");
 	    cellFormatter.setColSpan(5, 0, 2);
-	 // Wrap the content in a DecoratorPanel
+	    
+	    // Wrap the content in a DecoratorPanel
 	    DecoratorPanel decPanel = new DecoratorPanel();
 	    decPanel.setSize("550", "700");
 	    decPanel.setWidget(layout);
 	    return decPanel;
-	  }
+	}
+	
 	class PostcodeHandler implements MouseOutHandler{
 		@Override
 		public void onMouseOut(MouseOutEvent event) {
@@ -353,24 +356,25 @@ private Widget loadAllControlsNew() {
 		private void selectCityOnPostcode() {
 			 service.getCityIDFromPostcode(Integer.parseInt(txtBoxPostcode.getText()), new AsyncCallback<Integer> (){
 
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("server get postcode failed");						
-					}
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("server get postcode failed");						
+				}
 
-					@Override
-					public void onSuccess(Integer result) {
-						if(result ==-1){
-							Window.alert("cannot find your postcode");							
-						}
-						citycomboBox.setSelectedIndex(result);
-						getCityValues();						
-					}					
-				});
-			}		
+				@Override
+				public void onSuccess(Integer result) {
+					if(result ==-1){
+						Window.alert("cannot find your postcode");							
+					}
+					citycomboBox.setSelectedIndex(result);
+					getCityValues();						
+				}					
+			});
+		}		
 	}
+	
 	private void getCityValues() {	
-//		 final double solarIrradiance;
+	//		 final double solarIrradiance;
 		int selectedIndex = citycomboBox.getSelectedIndex();
 		service.getCity(selectedIndex,new AsyncCallback<City>(){
 
@@ -387,7 +391,7 @@ private Widget loadAllControlsNew() {
 				 dailyIrradianceInMonth = city.getMonthsIrradiance();
 			}			
 		});	
-}
+	}
 
 	private void loadAllUIControls() {
 
@@ -515,19 +519,21 @@ private Widget loadAllControlsNew() {
 
 
 	}
-/*get postcode from a complete address such as 217 George St, Brisbane QLD 4000, Australia*/
-private String getPostCode(String fullAddress) {
-	String addressString [] = fullAddress.split(",");
-	String cityPart = addressString[1];
-	char postcode []= cityPart.toCharArray();
-	StringBuffer buffer = new StringBuffer();
-	for(int i = postcode.length -5; i<postcode.length ;i++){
-		buffer.append(postcode[i]);
+	
+	/*get postcode from a complete address such as 217 George St, Brisbane QLD 4000, Australia*/
+	private String getPostCode(String fullAddress) {
+		String addressString [] = fullAddress.split(",");
+		String cityPart = addressString[1];
+		char postcode []= cityPart.toCharArray();
+		StringBuffer buffer = new StringBuffer();
+		for(int i = postcode.length -5; i<postcode.length ;i++){
+			buffer.append(postcode[i]);
+		}
+	
+		return buffer.toString().trim();
 	}
-
-	return buffer.toString().trim();
-}
-	/* Court's WorthInvestment method */
+	
+	/* WorthInvestment method */
 	private void loadWorthInvesting() {
 		txtDailySavings2.setText("0");
 		txtPayBackYear2.setText("3");
@@ -548,6 +554,7 @@ private String getPostCode(String fullAddress) {
 		RootPanel.get("tdWorthInvestingResult").add(lblWorthInvesting);
 	}
 
+	/* Send "worth investing" to the server */
 	protected void getWorthInvestmentFromServer() {
 		CalculationServiceAsync service = (CalculationServiceAsync) GWT.create(CalculationService.class);
         ServiceDefTarget serviceDef = (ServiceDefTarget) service;
@@ -557,10 +564,13 @@ private String getPostCode(String fullAddress) {
         service.doWorthInvestment(txtDailySavings2.getValue(), txtPayBackYear2.getValue(), txtExpectedDuration.getValue(), callback);
 	}
 
+	/* The main calculation */
 	protected void doCalculation(){		
 
         // calculate the generation for all months
-        service.doSolarGenerationForAllMonths(dailyIrradianceInMonth,doubleBoxSize.getValue(), roofLossBox.getValue(), inverterBox.getValue(), doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), new AsyncCallback<double[]>() {
+        service.doSolarGenerationForAllMonths(dailyIrradianceInMonth,doubleBoxSize.getValue(), roofLossBox.getValue(), 
+        		inverterBox.getValue(), doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), 
+        		new AsyncCallback<double[]>() {
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());				
 			}
@@ -572,7 +582,9 @@ private String getPostCode(String fullAddress) {
 			}});
 
         // calculate the daily generation,  
-        service.doDailySolarGeneration(doubleBoxSize.getValue(), roofLossBox.getValue(), inverterBox.getValue(), doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), doubleBoxIrradiance.getValue(), new AsyncCallback<Double>() {
+        service.doDailySolarGeneration(doubleBoxSize.getValue(), roofLossBox.getValue(), inverterBox.getValue(), 
+        		doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), 
+        		doubleBoxIrradiance.getValue(), new AsyncCallback<Double>() {
 			public void onFailure(Throwable caught) {				
 				Window.alert(caught.getMessage());				
 			}
@@ -597,7 +609,8 @@ private String getPostCode(String fullAddress) {
 
 	protected void getPaybackTime(Double result) {
 		service.getPayBackTime(systemCostBox.getValue(), integerBoxLifeSpan.getValue(), doubleBoxReplacePercent.getValue(), 
-				doubleBoxTarrif.getValue(), doubleBoxPowerCost.getValue(), result, doubleBoxAgeLoss.getValue(),integerBoxpaybackYear.getValue(), new AsyncCallback<TreeMap<Double,String>>(){
+				doubleBoxTarrif.getValue(), doubleBoxPowerCost.getValue(), result, doubleBoxAgeLoss.getValue(),
+				integerBoxpaybackYear.getValue(), new AsyncCallback<TreeMap<Double,String>>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						Window.alert(caught.getMessage());		
@@ -631,9 +644,10 @@ private String getPostCode(String fullAddress) {
 		else return "Medium";	
 	}
 
-//	Calculate Daily savings
+	/*	Calculate Daily savings */
 	private void getDailySaving( double dailyGeneration){
- 		   service.doDailySavings(dailyGeneration, doubleBoxReplacePercent.getValue(), doubleBoxTarrif.getValue(), doubleBoxPowerCost.getValue(), new AsyncCallback<Double>() {
+ 		   service.doDailySavings(dailyGeneration, doubleBoxReplacePercent.getValue(), doubleBoxTarrif.getValue(), 
+ 				   doubleBoxPowerCost.getValue(), new AsyncCallback<Double>() {
 			public void onFailure(Throwable caught) {				
 				Window.alert(caught.getMessage());				
 			}
@@ -644,18 +658,19 @@ private String getPostCode(String fullAddress) {
 			}});			
 
 	}
-	/*use to add pop msg to explain stuff*/
+	
+	/* use to add pop msg to explain stuff */
 	class PopMessage implements MouseOverHandler,MouseOutHandler {
 		// Create a basic popup widget
 		 PopupPanel simplePopup ;
-		public PopMessage(String whatMsg){
+		public PopMessage(String whatMsg) {
 			simplePopup = new PopupPanel(true);
 			simplePopup.addStyleName("gwt-PopupPanel");
 		    simplePopup.ensureDebugId("cwBasicPopup-simplePopup");
 		    simplePopup.setWidth("150px");
 		    simplePopup.setWidget(
 		        new HTML(whatMsg));
-	}
+		}
 		@Override
 		public void onMouseOver(MouseOverEvent event) {
 			// Reposition the popup relative to the button
@@ -678,19 +693,18 @@ private String getPostCode(String fullAddress) {
 	        Runnable onLoadCallback = new Runnable() {
 	          public void run() {
 	            Panel panel = RootPanel.get("idMonthSolarGenerationResults");
-
+	            
 	            // Create a column chart visualization.	           
 	            chart = new ColumnChart(createMonthGenerationTable(monthResults), createOptions());
-	           //to do chart.addSelectHandler(createSelectHandler(chart));	           
+	            //to do chart.addSelectHandler(createSelectHandler(chart));	           
 	            panel.add(chart);
-
 	          }
 	        };
 
 	        // Load the visualization api, passing the onLoadCallback to be called
 	        // when loading is done.
 	        VisualizationUtils.loadVisualizationApi(onLoadCallback, ColumnChart.PACKAGE);
-	        }
+	 }
 
 	 /*create line chart for payback time*/
 	 private void createLineChart(final TreeMap<Double,String> paybackResults){

@@ -12,6 +12,7 @@ public interface CalculationService extends RemoteService
 	double doDailySolarGeneration(double systemSize, double roofEfficiency, 
 			double inverterEfficiency, double wiringEfficiency, double whatYear, 
 			double agingEfficiencyLoss, double solarIrradiance);
+	
 	double[] doSolarGenerationForAllMonths(double[]dailyIrradianceInMonth,double systemSize, 
 			double roofEfficiency, double inverterEfficiency, double wiringEfficiency, 
 			double whatYear, double agingEfficiencyLoss);
@@ -27,6 +28,7 @@ public interface CalculationService extends RemoteService
 	
 	/*geo address*/
 	String getAddress(String latLong);
+	
 	/*test sql database*/
 	City getCity(int cityIndex);
 	String[] getCityList(int postcode);
