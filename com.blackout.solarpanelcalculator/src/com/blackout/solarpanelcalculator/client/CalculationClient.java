@@ -82,7 +82,8 @@ public class CalculationClient implements EntryPoint
 	private double defaultSolarPanelLife = 25; 				//years
 	MapWidget map = null ;
 	private double[] dailyIrradianceInMonth = {6.19,5,3.9,4.95,3.98,3.23,3.02,3.22,4.04,5.12,5.52,6.07,6.35};
-	
+	private TextBox txtSimilarSystem = new TextBox();
+	private double avgProducePerkw = 0;
 	
 	private ColumnChart chart;								//for monthly results chart
 	private LineChart lineChart;							//for payback time line chart
@@ -106,11 +107,11 @@ public class CalculationClient implements EntryPoint
 	private DoubleBox doubleBoxIrradiance = new DoubleBox();
 	private IntegerBox integerBoxpaybackYear = new IntegerBox();
 	private DoubleBox txtWhatYear = new DoubleBox();
-	private DoubleBox txtDailySolarGeneration = new DoubleBox();
+	private TextBox txtDailySolarGeneration = new TextBox();
 	private Button btnCalculation = new Button();	
-	private DoubleBox txtDailySavings = new DoubleBox();	
+	private TextBox txtDailySavings = new TextBox();	
 	private TextBox txtPayBackYear = new TextBox();
-    private DoubleBox txtPowerEstimate = new DoubleBox();
+    private TextBox txtPowerEstimate = new TextBox();
     
     private IntegerBox txtHouseholdSize = new IntegerBox();
     private TextBox txtBoxPostcode = new TextBox();
@@ -392,6 +393,7 @@ public class CalculationClient implements EntryPoint
 				 doubleBoxTarrif.setValue(city.getFeedInTariff());
 				 doubleBoxPowerCost.setValue(city.getElectricityCost());
 				 dailyIrradianceInMonth = city.getMonthsIrradiance();
+				 avgProducePerkw = city.getAvgProduePerkw(); 
 			}			
 		});	
 	}
@@ -415,6 +417,8 @@ public class CalculationClient implements EntryPoint
 					return;
 				}
 				doCalculation();
+				getSimilarSystemProduct();
+				
 			}
 		});
 		RootPanel.get("tdDailySolarGenerationCalculate").add(btnCalculation);
@@ -426,9 +430,21 @@ public class CalculationClient implements EntryPoint
 		RootPanel.get("tdUsageType").add(rdbtnHeavy);
 		RootPanel.get("tdUsageType").add(rdbtnMedium);
 		RootPanel.get("tdUsageType").add(rdbtnLight);
-		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);	
+		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);
+		RootPanel.get("tdSimilarSystem").add(txtSimilarSystem);
 		txtPayBackYear.setSize("151", "26");
 		loadWorthInvesting();
+	}
+
+	protected void getSimilarSystemProduct() {
+		if(avgProducePerkw ==0)
+			txtSimilarSystem.setText("No data");
+		else
+		{	double production = doubleBoxSize.getValue()/1000 *avgProducePerkw;
+			double twoDecimalResult = Math.round(production*100.00)/100.00;
+			txtSimilarSystem.setText(Double.toString(twoDecimalResult)+" kws");
+		}
+		
 	}
 
 	/*track user's location and load google map using obtained latitude and longitude*/
@@ -593,7 +609,7 @@ public class CalculationClient implements EntryPoint
 			}
 
 			public void onSuccess(Double result) {
-				txtDailySolarGeneration.setValue(result);
+				txtDailySolarGeneration.setText(result.toString()+" kws");
 				getDailySaving(result);//use dailyCalculation result for dailySavingCalculation
 				getPaybackTime(result);
 			}});
@@ -605,7 +621,7 @@ public class CalculationClient implements EntryPoint
 			}
 
 			public void onSuccess(Double result) {
-				txtPowerEstimate.setValue(result);				
+				txtPowerEstimate.setText(result.toString() +" kws");				
 			}});
         
 	}
@@ -656,7 +672,7 @@ public class CalculationClient implements EntryPoint
 			}
 
 			public void onSuccess(Double result) {
-				txtDailySavings.setText(result.toString());
+				txtDailySavings.setText(result.toString() + " dollars");
 
 			}});			
 
