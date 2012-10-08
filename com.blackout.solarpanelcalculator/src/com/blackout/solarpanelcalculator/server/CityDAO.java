@@ -109,9 +109,11 @@ public class CityDAO {
 		
 		return cityListArray;
 	}
+	
 	public static int returnCityIndex(){
 		return cityIndex;
 	}
+	
 	public static int getCityIDFromPostcode(int postcode){
 		
 		int cityID = -1;
