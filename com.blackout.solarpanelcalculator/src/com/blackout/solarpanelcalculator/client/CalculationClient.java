@@ -82,6 +82,8 @@ public class CalculationClient implements EntryPoint
 	private double defaultSolarPanelLife = 25; 				//years
 	MapWidget map = null ;
 	private double[] dailyIrradianceInMonth = {6.19,5,3.9,4.95,3.98,3.23,3.02,3.22,4.04,5.12,5.52,6.07,6.35};
+	
+	
 	private ColumnChart chart;								//for monthly results chart
 	private LineChart lineChart;							//for payback time line chart
 	private TreeMap<Double,String> payBackTime = null;	
@@ -127,7 +129,7 @@ public class CalculationClient implements EntryPoint
 	private double[] monthResults =null; 
 
 	public void onModuleLoad() {
-		 RootPanel.get("tdMainPanel").add(loadAllControlsNew());		 
+		RootPanel.get("tdMainPanel").add(loadAllControlsNew());		 
 		service= (CalculationServiceAsync) GWT.create(CalculationService.class);
 		loadAllUIControls();
         createColumnChart(monthResults );//load months results charts
@@ -227,7 +229,7 @@ public class CalculationClient implements EntryPoint
 		Label postcodeLbl = new Label("Postcode:");
 	
 		txtBoxPostcode.addMouseOutHandler(new PostcodeHandler());
-		citycomboBox.addChangeHandler(new ChangeHandler(){
+		citycomboBox.addChangeHandler(new ChangeHandler() {
 
 			@Override
 			public void onChange(ChangeEvent event) {
@@ -236,9 +238,9 @@ public class CalculationClient implements EntryPoint
 
 			}
 
-			});
+		});
 
-		//	root combobox selections
+		//	roof combobox selections
 		roofDirectioncomboBox.addItem("South");
 		roofDirectioncomboBox.addItem("South West");
 		roofDirectioncomboBox.addItem("South East");
@@ -322,7 +324,7 @@ public class CalculationClient implements EntryPoint
 	    
 	    // Add advanced options to form in a disclosure panel
 	    DisclosurePanel advancedDisclosure = new DisclosurePanel(
-	        "Our assumptions");
+	        "Advanced Controls");
 	    advancedDisclosure.setContent(parameters);
 	    advancedDisclosure.setAnimationEnabled(false);   
 	    layout.setWidget(5, 0, advancedDisclosure);
@@ -336,7 +338,8 @@ public class CalculationClient implements EntryPoint
 	    return decPanel;
 	}
 	
-	class PostcodeHandler implements MouseOutHandler{
+	
+	class PostcodeHandler implements MouseOutHandler {
 		@Override
 		public void onMouseOut(MouseOutEvent event) {
 			

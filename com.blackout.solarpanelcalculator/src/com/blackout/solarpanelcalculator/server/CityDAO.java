@@ -65,7 +65,7 @@ public class CityDAO {
 
 	public static String[] getCityList(int postcode) {
 		ArrayList<String> cityList = new ArrayList<String>();
-//		String cityList[] = new String[20];
+		//		String cityList[] = new String[20];
 		
 		Connection connection = null;
 		String select_sql = "select CityName from cities";

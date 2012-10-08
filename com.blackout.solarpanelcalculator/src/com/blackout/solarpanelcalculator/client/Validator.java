@@ -6,10 +6,11 @@ package com.blackout.solarpanelcalculator.client;
  */
 public class Validator {
 		
-public static int maxInt = 50;
-	private Validator(){		
+	public static int maxInt = 50;
+	private Validator() {		
 	}
 	
+	/* Checks if the postcode is valid for Australia */
 	static public boolean isValidPostcode(String str){
 		try {
 			int postcode = Integer.parseInt(str);
@@ -23,34 +24,55 @@ public static int maxInt = 50;
 			return false;
 		}
 	}
+	
+	/* Checks if a string is a sensible amount 0-50, inclusive. Used for Years */
 	static public boolean isValidNumber(String str){
 		try {
-			return Integer.parseInt(str) <=maxInt && Integer.parseInt(str)>0;			
+			return Integer.parseInt(str) <= maxInt && Integer.parseInt(str)>0;			
 		}
 		catch (Exception e) {
 			return false;
 		}
 	}
 	
-	static public boolean isValidPercentageAndCents(String str){
+	/* Checks if the format of a string is a valid percent 
+	 * (Basically 0-100) */
+	static public boolean isValidPercentage(String str){
 		try {
-			 return Double.parseDouble(str) > 0 && Double.parseDouble(str) <100;			
+			if (str.contains("%")) {
+				str.replaceFirst("%", "");
+			}
+			 return Double.parseDouble(str) > 0 && Double.parseDouble(str) <=100;			
 		}
 		catch (Exception e) {
 			return false;
 		}
 	}
+	
+	/* Checks if the format of a string is a valid amount of cents 
+	 * (Basically 0-99) */
+	static public boolean isValidCents(String str){
+		try {
+			 return Integer.parseInt(str) > 0 && Integer.parseInt(str) < 100;			
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
+	
+	/* Checks if the irradiance is sensible  */
 	static public boolean isValidIrradiance(String str){
 		try {
-			 return Double.parseDouble(str) > 0 && Double.parseDouble(str) <10;			
+			 return Double.parseDouble(str) > 0 && Double.parseDouble(str) < 10;			
 		}
 		catch (Exception e) {
 			return false;
 		}
 	}
-	static public boolean isValidDollarsAndWatts(String str){
+	/* For Watts and Dollars, we expect these numbers big.  */
+	static public boolean isValidBigNumber(String str){
 			try {
-				 return Double.parseDouble(str) > 0 && Double.parseDouble(str) <1000000;				
+				 return Double.parseDouble(str) > 0 && Double.parseDouble(str) < 1000000;				
 			}
 			catch (Exception e) {
 				return false;
