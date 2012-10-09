@@ -8,7 +8,9 @@ import java.util.TreeMap;
  */
 public class CalculationFormulas
 {
-	
+	public static final double rateForRecs = 40;//in dollars
+	public static final double ratedPowerOutput = 1.5; //kw
+	public static final int deemingPeriod = 15;//in years		
 	public static final double defaultSystemSize = 4.95;// in kw
 	public static final double defaultRoofEfficiency = 0.885;
 	public static final double defaultInverterEfficiency = 0.96;
@@ -191,6 +193,47 @@ public class CalculationFormulas
 			monthCounter++;
 		}
 		return resultsMap;
+	 }
+	 /**
+	  * calculate total subsidy
+	  * @param zoneRating
+	  * @return totalSubsidy
+	  */
+	 public static double getTotalSubsidy(double zoneRating){
+		 double totalSubsidy = zoneRating * rateForRecs *ratedPowerOutput*deemingPeriod;
+		 return twoDecimals(totalSubsidy);
+	 }
+	 public static double getEfficiencyForAngleAndDirection(int directionIndex, int angleIndex){
+		 double directionEfficiency =0;
+		 double angleEfficiency = 0;
+		 switch(directionIndex){
+		 case 0:directionEfficiency = 0.98;
+		 break;
+		 case 1:directionEfficiency = 0.975;
+		 break;
+		 case 2: directionEfficiency = 0.955;
+		 break;
+		 case 3: directionEfficiency = 0.783;
+		 break;
+		 case 4: directionEfficiency = 0.95;
+		 break;
+		 case 5: directionEfficiency = 0.9;
+		 break;
+		 case 6: directionEfficiency = 0.9;
+		 break;
+		 case 7: directionEfficiency = 0.783;
+		 break;
+		 }
+		 
+		 switch(angleIndex){
+		 case 0:angleEfficiency = 0.903;
+		 break;
+		 case 1:angleEfficiency = 0.81;
+		 break;
+		 case 2:angleEfficiency = 0.78;
+		 break;
+		 }
+		 return twoDecimals(directionEfficiency*angleEfficiency)*100; 
 	 }
 	 
 	 /**

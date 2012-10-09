@@ -1,5 +1,7 @@
 package tests;
-
+/**
+ * do not add more tests, we are not using this class 
+ */
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;

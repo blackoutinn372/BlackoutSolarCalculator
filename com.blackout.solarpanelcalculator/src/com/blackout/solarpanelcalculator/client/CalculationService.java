@@ -25,7 +25,8 @@ public interface CalculationService extends RemoteService
 	TreeMap<Double,String> getPayBackTime(double systemCost, double lifeSpan, double replacePercent,double feedInTarrif,
 			 double powerCost, double dailyGeneration , double agingEfficiencyLoss,double yearsToCalculate);
 	
-	
+	double doTotalSubsidy(double zoneRating);
+	double getEfficiencyForAngleAndDirection(int directionIndex, int angleIndex);
 	/*geo address*/
 	String getAddress(String latLong);
 	
@@ -34,4 +35,5 @@ public interface CalculationService extends RemoteService
 	String[] getCityList(int postcode);
 	int getCityIndex();
 	int getCityIDFromPostcode(int postcode);
+	
 }

@@ -125,6 +125,21 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	}
 
 
+	@Override
+	public double doTotalSubsidy(double zoneRating) {
+		// TODO Auto-generated method stub
+		return CalculationFormulas.getTotalSubsidy(zoneRating);
+	}
+
+
+	@Override
+	public double getEfficiencyForAngleAndDirection(int directionIndex,
+			int angleIndex) {
+		// TODO Auto-generated method stub
+		return CalculationFormulas.getEfficiencyForAngleAndDirection(directionIndex, angleIndex);
+	}
+
+
 	
 	
 

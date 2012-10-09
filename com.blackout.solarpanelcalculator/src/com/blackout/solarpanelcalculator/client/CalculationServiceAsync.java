@@ -26,5 +26,8 @@ public interface CalculationServiceAsync {
 	void getCityList(int postcode, AsyncCallback<String[]> callback);
 	void getCityIndex(AsyncCallback<Integer> callback);
 	void getCityIDFromPostcode(int postcode, AsyncCallback<Integer> callback);
+	void doTotalSubsidy(double zoneRating, AsyncCallback<Double> callback);
+	void getEfficiencyForAngleAndDirection(int directionIndex, int angleIndex,
+			AsyncCallback<Double> callback);
 
 }

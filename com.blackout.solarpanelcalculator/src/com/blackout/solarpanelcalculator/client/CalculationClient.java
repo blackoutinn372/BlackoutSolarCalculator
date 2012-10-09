@@ -80,11 +80,16 @@ public class CalculationClient implements EntryPoint
 	private double defaultHomeUsePercent = 24;				//percentage
 	private double defaultAgingEfficiencyLoss = 0.7;		//percentage
 	private double defaultSolarPanelLife = 25; 				//years
+	private String defaultAddress = "43 Queen St,Brisbane QLD 4000,Australia";
+	private int postcode = 4000;
 	MapWidget map = null ;
 	private double[] dailyIrradianceInMonth = {6.19,5,3.9,4.95,3.98,3.23,3.02,3.22,4.04,5.12,5.52,6.07,6.35};
 	private TextBox txtSimilarSystem = new TextBox();
 	private double avgProducePerkw = 0;
-	
+	private double zoneRating = 0; 							//used for REC entitlement and subsidy calculation
+	private double optimaYearRoundAngle = 0;
+	private double bestWinterAngle = 0;
+	private double bestSummerAngle = 0;
 	private ColumnChart chart;								//for monthly results chart
 	private LineChart lineChart;							//for payback time line chart
 	private TreeMap<Double,String> payBackTime = null;	
@@ -92,11 +97,12 @@ public class CalculationClient implements EntryPoint
 	private TextBox txtBoxAddressInput = new TextBox();
 	private Button btnAddressInput = new Button();
 	private Label lblNotFound = new Label();
-	private ListBox citycomboBox = new ListBox();	
-	private ListBox roofDirectioncomboBox = new ListBox();		
+	private ListBox cityComboBox = new ListBox();	
+	private ListBox roofDirectioncomboBox = new ListBox();
+	private ListBox angleComboBox = new ListBox();
 	private DoubleBox systemCostBox = new DoubleBox();		
 	private DoubleBox doubleBoxSize = new DoubleBox();	
-	private DoubleBox roofLossBox = new DoubleBox();	              
+	private DoubleBox efficiencyForDirectionAndAngle = new DoubleBox();	              
     private DoubleBox inverterBox = new DoubleBox();    
     private DoubleBox doubleBoxWiring = new DoubleBox();   
     private DoubleBox integerBoxLifeSpan = new DoubleBox();    
@@ -112,9 +118,10 @@ public class CalculationClient implements EntryPoint
 	private TextBox txtDailySavings = new TextBox();	
 	private TextBox txtPayBackYear = new TextBox();
     private TextBox txtPowerEstimate = new TextBox();
+    private TextBox txtTotalSubsidy = new TextBox();
     
     private IntegerBox txtHouseholdSize = new IntegerBox();
-    private TextBox txtBoxPostcode = new TextBox();
+    private TextBox txtPostcode = new TextBox();
     private RadioButton rdbtnHeavy = new RadioButton("usage", "Heavy");
     private RadioButton rdbtnMedium = new RadioButton("usage", "Medium");
     private RadioButton rdbtnLight = new RadioButton("usage", "Light");    
@@ -198,7 +205,7 @@ public class CalculationClient implements EntryPoint
 		//		Set boxes to their default values
 		 systemCostBox.setValue(defaultSystemCost);	
 		 doubleBoxSize.setValue(defaultSystemSize);	
-		 roofLossBox.setValue(defaultRoofLossPercent); 
+		 efficiencyForDirectionAndAngle.setValue(defaultRoofLossPercent); 
 	     inverterBox.setValue(defaultInverterEfficiency) ;
 	     doubleBoxWiring.setValue(defaultWiringEfficiency);   
 	     integerBoxLifeSpan.setValue(defaultSolarPanelLife);     
@@ -220,7 +227,7 @@ public class CalculationClient implements EntryPoint
 		Label lblLifeSpan = new Label("The Solar panel life span is(years):");
 		Label lblWiring = new Label("The wiring efficiency is(%):");
 		Label inverterLbl = new Label("The inverter efficiency is(%):");
-		Label roofLossLbl = new Label("The efficiency loss due to angles and directions is(%):");
+		Label roofLossLbl = new Label("The efficiency due to loss to angle and direction is(%):");
 		Label lblSystemSize = new Label("Your solar system size (watts):");
 		Label systemCostLbl = new Label("Your overall purchase cost(dollars):");
 		systemCostLbl.addMouseOverHandler(overallCostHelpMsg);
@@ -228,14 +235,15 @@ public class CalculationClient implements EntryPoint
 		Label roofFaceLbl = new Label("Select your roof direction:");
 		HTML cityLbl = new HTML("&nbsp or Select city:");	 
 		Label postcodeLbl = new Label("Postcode:");
-	
-		txtBoxPostcode.addMouseOutHandler(new PostcodeHandler());
-		citycomboBox.addChangeHandler(new ChangeHandler() {
+		Label angleLbl = new Label("Select your roof angle:");
+		txtPostcode.addMouseOutHandler(new PostcodeHandler());
+		cityComboBox.addChangeHandler(new ChangeHandler() {
 
 			@Override
 			public void onChange(ChangeEvent event) {
 
 				getCityValues();
+				
 
 			}
 
@@ -250,9 +258,16 @@ public class CalculationClient implements EntryPoint
 		roofDirectioncomboBox.addItem("North West");
 		roofDirectioncomboBox.addItem("North East");
 		roofDirectioncomboBox.addItem("East");
-		roofDirectioncomboBox.addItem("North East");
-
-
+		roofDirectioncomboBox.setSelectedIndex(0);
+		roofDirectioncomboBox.addChangeHandler(new DirectionAndAngleHandler());
+		
+		angleComboBox.addItem("Adjusted to best performance");
+		angleComboBox.addItem("Close to flat");		
+		angleComboBox.addItem("Close to steep");
+		angleComboBox.setSelectedIndex(0);
+		angleComboBox.addChangeHandler(new DirectionAndAngleHandler());
+		//getAngleDirectionEfficiency();
+		
 		doubleBoxSize.setWidth("106px");
 	    // Create a table to layout the form options
 	    FlexTable layout = new FlexTable();
@@ -263,27 +278,30 @@ public class CalculationClient implements EntryPoint
 	    FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
 	    HorizontalPanel hpanel = new HorizontalPanel();
 	    hpanel.add(postcodeLbl);
-	    hpanel.add(txtBoxPostcode);
+	    hpanel.add(txtPostcode);
 	    hpanel.add(cityLbl);
-	    txtBoxPostcode.setWidth("55px");
+	    txtPostcode.setWidth("55px");
 	    HorizontalPanel hpanel2 = new HorizontalPanel();
 	    
-	    hpanel2.add(citycomboBox);
+	    hpanel2.add(cityComboBox);
 	    layout.setWidget(1, 0, hpanel);
 	    layout.setWidget(1, 1,hpanel2);
-	    citycomboBox.setWidth("122px");
+	    cityComboBox.setWidth("122px");
 	    layout.setWidget(2, 0, roofFaceLbl);
 	    layout.setWidget(2, 1, roofDirectioncomboBox);
 	    roofDirectioncomboBox.setWidth("123px");
-	    layout.setWidget(3, 0, lblSystemSize);
-	    layout.setWidget(3, 1, doubleBoxSize);
+	    layout.setWidget(3, 0, angleLbl);
+	    layout.setWidget(3, 1, angleComboBox);
+	    angleComboBox.setWidth("123px");
+	    layout.setWidget(4, 0, lblSystemSize);
+	    layout.setWidget(4, 1, doubleBoxSize);
 	    systemCostBox.setWidth("106px");
-	    layout.setWidget(4, 0, systemCostLbl);
-	    layout.setWidget(4, 1, systemCostBox);
+	    layout.setWidget(5, 0, systemCostLbl);
+	    layout.setWidget(5, 1, systemCostBox);
 
 	    //	   set styles to labels and boxes
 	    roofLossLbl.setStyleName("gwt-Label-assumptions"); 	   
-	    roofLossBox.setStyleName("gwt-DoubleBox-assumptions");   
+	    efficiencyForDirectionAndAngle.setStyleName("gwt-DoubleBox-assumptions");   
 	    inverterLbl.setStyleName("gwt-Label-assumptions");	
 	    inverterBox.setStyleName("gwt-DoubleBox-assumptions");		
 		lblWiring.setStyleName("gwt-Label-assumptions");			
@@ -305,7 +323,7 @@ public class CalculationClient implements EntryPoint
 	    parameters.setCellSpacing(2);
 	    parameters.setWidth("500px");
 	    parameters.setWidget(1, 0, roofLossLbl);
-	    parameters.setWidget(1, 1, roofLossBox);
+	    parameters.setWidget(1, 1, efficiencyForDirectionAndAngle);
 	    parameters.setWidget(2, 0, inverterLbl);
 	    parameters.setWidget(2, 1, inverterBox);
 	    parameters.setWidget(3, 0, lblWiring);
@@ -328,9 +346,9 @@ public class CalculationClient implements EntryPoint
 	        "Advanced Controls");
 	    advancedDisclosure.setContent(parameters);
 	    advancedDisclosure.setAnimationEnabled(false);   
-	    layout.setWidget(5, 0, advancedDisclosure);
+	    layout.setWidget(6, 0, advancedDisclosure);
 	    advancedDisclosure.setWidth("516px");
-	    cellFormatter.setColSpan(5, 0, 2);
+	    cellFormatter.setColSpan(6, 0, 2);
 	    
 	    // Wrap the content in a DecoratorPanel
 	    DecoratorPanel decPanel = new DecoratorPanel();
@@ -339,26 +357,34 @@ public class CalculationClient implements EntryPoint
 	    return decPanel;
 	}
 	
-	
+	class DirectionAndAngleHandler implements ChangeHandler{
+
+		@Override
+		public void onChange(ChangeEvent event) {
+			getAngleDirectionEfficiency();
+			
+		}
+		
+	}
 	class PostcodeHandler implements MouseOutHandler {
 		@Override
 		public void onMouseOut(MouseOutEvent event) {
 			
-			if(Validator.isValidPostcode(txtBoxPostcode.getText())==false)
+			if(Validator.isValidPostcode(txtPostcode.getText())==false)
 			{
-				txtBoxPostcode.setStyleName("gwt-TextBox-Error", true);
-				txtBoxPostcode.setFocus(true);
+				txtPostcode.setStyleName("gwt-TextBox-Error", true);
+				txtPostcode.setFocus(true);
 				
 			}
 			else{
-				txtBoxPostcode.setStyleName("gwt-TextBox-Error", false);
+				txtPostcode.setStyleName("gwt-TextBox-Error", false);
 				selectCityOnPostcode();	
 			}
 			
 		}
 	
 		private void selectCityOnPostcode() {
-			 service.getCityIDFromPostcode(Integer.parseInt(txtBoxPostcode.getText()), new AsyncCallback<Integer> (){
+			 service.getCityIDFromPostcode(Integer.parseInt(txtPostcode.getText()), new AsyncCallback<Integer> (){
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -370,16 +396,33 @@ public class CalculationClient implements EntryPoint
 					if(result ==-1){
 						Window.alert("cannot find your postcode");							
 					}
-					citycomboBox.setSelectedIndex(result);
+					cityComboBox.setSelectedIndex(result);
 					getCityValues();						
 				}					
 			});
 		}		
 	}
-	
+	public void getAngleDirectionEfficiency() {
+		service.getEfficiencyForAngleAndDirection(roofDirectioncomboBox.getSelectedIndex(), angleComboBox.getSelectedIndex(), new AsyncCallback<Double>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());	
+				
+			}
+
+			@Override
+			public void onSuccess(Double result) {
+				
+				efficiencyForDirectionAndAngle.setText(result.toString());
+			}
+			
+		});
+		
+	}
 	private void getCityValues() {	
 	//		 final double solarIrradiance;
-		int selectedIndex = citycomboBox.getSelectedIndex();
+		int selectedIndex = cityComboBox.getSelectedIndex();
 		service.getCity(selectedIndex,new AsyncCallback<City>(){
 
 			@Override
@@ -393,10 +436,17 @@ public class CalculationClient implements EntryPoint
 				 doubleBoxTarrif.setValue(city.getFeedInTariff());
 				 doubleBoxPowerCost.setValue(city.getElectricityCost());
 				 dailyIrradianceInMonth = city.getMonthsIrradiance();
-				 avgProducePerkw = city.getAvgProduePerkw(); 
+				 avgProducePerkw = city.getAvgProduePerkw();
+				 zoneRating = city.getZoneRating();
+				 optimaYearRoundAngle = city.getOptimalYearDegree();
+				 bestWinterAngle = city.getBestWinterDegree();
+				 bestSummerAngle = city.getBestSummerDegree();
+				 txtPostcode.setText(Integer.toString(city.getPostcode()));
 			}			
 		});	
 	}
+
+	
 
 	private void loadAllUIControls() {
 
@@ -411,13 +461,14 @@ public class CalculationClient implements EntryPoint
 		txtPayBackYear.setText("");
 		btnCalculation.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				if(txtBoxPostcode.getStyleName().equals("gwt-TextBox gwt-TextBox-Error"))
+				if(txtPostcode.getStyleName().equals("gwt-TextBox gwt-TextBox-Error"))
 				{
 					Window.alert("Please check your input");
 					return;
 				}
 				doCalculation();
 				getSimilarSystemProduct();
+				getTotalSubsidy();
 				
 			}
 		});
@@ -432,17 +483,50 @@ public class CalculationClient implements EntryPoint
 		RootPanel.get("tdUsageType").add(rdbtnLight);
 		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);
 		RootPanel.get("tdSimilarSystem").add(txtSimilarSystem);
+		RootPanel.get("tdTotalSubsidy").add(txtTotalSubsidy);
 		txtPayBackYear.setSize("151", "26");
 		loadWorthInvesting();
 	}
 
+	protected void getTotalSubsidy() {
+		
+		if(zoneRating ==0){
+			txtTotalSubsidy.setText("no data in "+getSelectedCity());
+		}
+		else
+		{
+			service.doTotalSubsidy(zoneRating, new AsyncCallback<Double>(){
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert(caught.getMessage());	
+					
+				}
+
+				@Override
+				public void onSuccess(Double totalSubsidy) {
+					txtTotalSubsidy.setText(totalSubsidy.toString()+" dollars in "+getSelectedCity());
+					
+				}
+				
+			});
+		}
+		
+	}
+
+	private String getSelectedCity() {
+		int selectedIndex = cityComboBox.getSelectedIndex();
+		return cityComboBox.getItemText(selectedIndex);
+	}
+
 	protected void getSimilarSystemProduct() {
 		if(avgProducePerkw ==0)
-			txtSimilarSystem.setText("No data");
+			txtSimilarSystem.setText("No data in "+getSelectedCity());
 		else
 		{	double production = doubleBoxSize.getValue()/1000 *avgProducePerkw;
 			double twoDecimalResult = Math.round(production*100.00)/100.00;
-			txtSimilarSystem.setText(Double.toString(twoDecimalResult)+" kws");
+			
+			txtSimilarSystem.setText(Double.toString(twoDecimalResult)+" kws in "+getSelectedCity());
 		}
 		
 	}
@@ -457,7 +541,7 @@ public class CalculationClient implements EntryPoint
 
 	    if (geo == null) {
 	      Window.alert("Obtaining Geolocation FAILED!");
-	      loadCityList("43 Queen St,Brisbane QLD 4000,Australia");//if use decline ip tracking,use default address
+	      loadCityList(defaultAddress);//if use decline ip tracking,use default address
 	      return;
 	    }
 	    geo.getCurrentPosition(new PositionCallback() {
@@ -483,7 +567,7 @@ public class CalculationClient implements EntryPoint
 		              + error.getMessage() + "', code: " + error.getCode() + " ("
 		              + message + ")");
 	          loadMap(32.3456,141.4346);//load map using default Australia latitude and longtitude
-	          loadCityList("43 Queen St,Brisbane QLD 4000,Australia");//use default address
+	          loadCityList(defaultAddress);//use default address
 	        }      
 			@Override
 			public void onSuccess(
@@ -507,8 +591,10 @@ public class CalculationClient implements EntryPoint
 	      }, PositionOptions.getPositionOptions(true, 15000, 30000));	   	  
 	}
 	private void loadCityList(String fullAddress) {
-		int postcode = Integer.parseInt(getPostCode(fullAddress));
-		txtBoxPostcode.setText(Integer.toString(postcode));
+		int postcode = 4000;//initilise to brisbane city postcode
+		if(Validator.isValidPostcode(getPostCode(fullAddress)))
+		postcode = Integer.parseInt(getPostCode(fullAddress));//if valid use the input postcode
+		txtPostcode.setText(Integer.toString(postcode));
 		service.getCityList(postcode, new AsyncCallback<String[]>(){
 
 			@Override
@@ -518,7 +604,7 @@ public class CalculationClient implements EntryPoint
 			@Override
 			public void onSuccess(String[] result) {
 				for(String city:result){
-					citycomboBox.addItem(city);
+					cityComboBox.addItem(city);
 				}
 					service.getCityIndex(new AsyncCallback<Integer>(){
 						@Override
@@ -528,7 +614,7 @@ public class CalculationClient implements EntryPoint
 
 						@Override
 						public void onSuccess(Integer result) {							
-							citycomboBox.setSelectedIndex(result);
+							cityComboBox.setSelectedIndex(result);
 							getCityValues();//set all the values based on city	
 						}						
 					});
@@ -587,7 +673,7 @@ public class CalculationClient implements EntryPoint
 	protected void doCalculation(){		
 
         // calculate the generation for all months
-        service.doSolarGenerationForAllMonths(dailyIrradianceInMonth,doubleBoxSize.getValue(), roofLossBox.getValue(), 
+        service.doSolarGenerationForAllMonths(dailyIrradianceInMonth,doubleBoxSize.getValue(), efficiencyForDirectionAndAngle.getValue(), 
         		inverterBox.getValue(), doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), 
         		new AsyncCallback<double[]>() {
 			public void onFailure(Throwable caught) {
@@ -601,7 +687,7 @@ public class CalculationClient implements EntryPoint
 			}});
 
         // calculate the daily generation,  
-        service.doDailySolarGeneration(doubleBoxSize.getValue(), roofLossBox.getValue(), inverterBox.getValue(), 
+        service.doDailySolarGeneration(doubleBoxSize.getValue(), efficiencyForDirectionAndAngle.getValue(), inverterBox.getValue(), 
         		doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), 
         		doubleBoxIrradiance.getValue(), new AsyncCallback<Double>() {
 			public void onFailure(Throwable caught) {				
