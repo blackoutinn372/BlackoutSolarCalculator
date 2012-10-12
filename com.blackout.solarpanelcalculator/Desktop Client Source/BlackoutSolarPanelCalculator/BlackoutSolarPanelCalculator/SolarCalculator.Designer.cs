@@ -155,6 +155,7 @@
             this.txtAgeEff.Name = "txtAgeEff";
             this.txtAgeEff.Size = new System.Drawing.Size(100, 20);
             this.txtAgeEff.TabIndex = 38;
+            this.txtAgeEff.Text = "0.7";
             // 
             // txtPanelAge
             // 
@@ -162,6 +163,7 @@
             this.txtPanelAge.Name = "txtPanelAge";
             this.txtPanelAge.Size = new System.Drawing.Size(100, 20);
             this.txtPanelAge.TabIndex = 37;
+            this.txtPanelAge.Text = "25";
             // 
             // txtWiringEff
             // 
@@ -169,6 +171,7 @@
             this.txtWiringEff.Name = "txtWiringEff";
             this.txtWiringEff.Size = new System.Drawing.Size(100, 20);
             this.txtWiringEff.TabIndex = 36;
+            this.txtWiringEff.Text = "98";
             // 
             // txtInverterEff
             // 
@@ -176,6 +179,7 @@
             this.txtInverterEff.Name = "txtInverterEff";
             this.txtInverterEff.Size = new System.Drawing.Size(100, 20);
             this.txtInverterEff.TabIndex = 35;
+            this.txtInverterEff.Text = "96";
             // 
             // txtRoofEff
             // 
@@ -183,6 +187,7 @@
             this.txtRoofEff.Name = "txtRoofEff";
             this.txtRoofEff.Size = new System.Drawing.Size(100, 20);
             this.txtRoofEff.TabIndex = 34;
+            this.txtRoofEff.Text = "88.5";
             // 
             // lblAgeEff
             // 
@@ -235,6 +240,7 @@
             this.txtSystemSize.Name = "txtSystemSize";
             this.txtSystemSize.Size = new System.Drawing.Size(100, 20);
             this.txtSystemSize.TabIndex = 28;
+            this.txtSystemSize.Text = "4950";
             // 
             // cboRoofAngle
             // 
@@ -244,6 +250,7 @@
             this.cboRoofAngle.Name = "cboRoofAngle";
             this.cboRoofAngle.Size = new System.Drawing.Size(100, 21);
             this.cboRoofAngle.TabIndex = 27;
+            this.cboRoofAngle.SelectedIndexChanged += new System.EventHandler(this.cboRoofAngle_SelectedIndexChanged);
             // 
             // cboRoofDirection
             // 
@@ -253,6 +260,7 @@
             this.cboRoofDirection.Name = "cboRoofDirection";
             this.cboRoofDirection.Size = new System.Drawing.Size(100, 21);
             this.cboRoofDirection.TabIndex = 26;
+            this.cboRoofDirection.SelectedIndexChanged += new System.EventHandler(this.cboRoofDirection_SelectedIndexChanged);
             // 
             // lblSystemSize
             // 

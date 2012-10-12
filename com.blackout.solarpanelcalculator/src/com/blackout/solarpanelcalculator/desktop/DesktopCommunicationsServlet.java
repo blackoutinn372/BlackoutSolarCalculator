@@ -4,6 +4,8 @@ import java.io.IOException;
 import javax.servlet.http.*;
 
 import com.blackout.solarpanelcalculator.server.CalculationFormulas;
+import com.blackout.solarpanelcalculator.server.CityDAO;
+import com.blackout.solarpanelcalculator.client.City;
 
 @SuppressWarnings("serial")
 public class DesktopCommunicationsServlet extends HttpServlet {
