@@ -12,6 +12,9 @@ namespace BlackoutSolarPanelCalculator
 {
     public partial class SolarCalculator : Form
     {
+        private string appEngineUrl = "http://127.0.0.1:8888/";
+        //private string appEngineUrl = "http://blackoutsolarcalculator.appspot.com/";
+
         public SolarCalculator()
         {
             InitializeComponent();
@@ -20,11 +23,33 @@ namespace BlackoutSolarPanelCalculator
             splashThread.Start();
             Thread.Sleep(2000);
             splashThread.Abort();
+
+            cboRoofDirection.Items.AddRange(new String[] {"Soth West", "South East", "West", "North", "North West", "North East", "East"});
+            cboRoofDirection.SelectedIndex = 0;
+
+            cboRoofAngle.Items.AddRange(new String[] {"Optimal", "Very Flat", "Very Steep" });
+            cboRoofAngle.SelectedIndex = 0;
         }
 
         private void SplashForm()
         {
             Application.Run(new SplashScreen());
+        }
+
+        private void btnCalculate_Click(object sender, EventArgs e) {
+            try {
+                label2.Text = ServerComm.GetSolarGeneFormulaForAllMonths(appEngineUrl, new double[] { 6.19, 5.39, 4.95, 3.98, 3.23, 3.02, 3.22, 4.04, 5.12, 5.52, 6.07, 6.35 }, 4950, 88.5, 96, 98, 0, 0.7).ToString();
+            } catch (Exception exc) {
+                label2.Text = "Error communicating with server. Check server string in the File menu.";
+            }
+        }
+
+        private void serverStringToolStripMenuItem_Click(object sender, EventArgs e) {
+            ServerStringPopup popup = new ServerStringPopup(appEngineUrl);
+            DialogResult dialog = popup.ShowDialog(this);
+            if (dialog == DialogResult.OK) {
+                appEngineUrl = popup.Url;
+            }
         }
     }
 }

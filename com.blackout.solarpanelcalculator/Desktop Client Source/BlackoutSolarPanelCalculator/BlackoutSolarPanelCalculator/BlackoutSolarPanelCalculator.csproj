@@ -47,6 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ServerComm.cs" />
+    <Compile Include="ServerStringPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ServerStringPopup.Designer.cs">
+      <DependentUpon>ServerStringPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="SolarCalculator.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,6 +68,9 @@
     <Compile Include="SplashScreen.Designer.cs">
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ServerStringPopup.resx">
+      <DependentUpon>ServerStringPopup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SolarCalculator.resx">
       <DependentUpon>SolarCalculator.cs</DependentUpon>
     </EmbeddedResource>

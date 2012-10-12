@@ -13,6 +13,7 @@ public class DesktopCommunicationsServlet extends HttpServlet {
 		String method = req.getParameter("method");
 		String returnString = "Error";
 		
+		//getSolarGeneFormulaForAllMonths
 		if (method.equalsIgnoreCase("getSolarGeneFormulaForAllMonths")) {
 			double[] monthValueParams = new double[12];
 			double[] remainingParams = new double[6];
@@ -37,13 +38,25 @@ public class DesktopCommunicationsServlet extends HttpServlet {
 			remainingParams[4] = Double.parseDouble(req.getParameter("whatYear"));
 			remainingParams[5] = Double.parseDouble(req.getParameter("agingEfficiencyLoss"));
 			double[] returnArray = CalculationFormulas.getSolarGeneFormulaForAllMonths(monthValueParams,remainingParams[0],remainingParams[1],remainingParams[2],remainingParams[3],remainingParams[4],remainingParams[5]);
-			returnString="Values: ";
+			returnString="";
+			String sep = "";
 			for (int i=0;i<returnArray.length;i++) {
-				returnString += "[" + returnArray[i] + "]";
+				returnString += sep + returnArray[i];
+				sep = "~";
 			}
 		}
 		
-		resp.getWriter().write("Value returned: " + returnString);
+		//getEfficiencyForAngleAndDirection
+		if (method.equalsIgnoreCase("getEfficiencyForAngleAndDirection")) {
+			int directionIndex = Integer.parseInt(req.getParameter("directionIndex"));
+			int angleIndex = Integer.parseInt(req.getParameter("angleIndex"));
+			double efficiency = CalculationFormulas.getEfficiencyForAngleAndDirection(directionIndex, angleIndex);
+			
+			returnString = "";
+			returnString += efficiency;
+		}
+		
+		resp.getWriter().write(returnString);
 	}
 	
 }
