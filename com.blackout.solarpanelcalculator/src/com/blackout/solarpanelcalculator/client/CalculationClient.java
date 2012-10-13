@@ -236,7 +236,22 @@ public class CalculationClient implements EntryPoint
 		HTML cityLbl = new HTML("&nbsp or Select city:");	 
 		Label postcodeLbl = new Label("Postcode:");
 		Label angleLbl = new Label("Select your roof angle:");
+		
+		//Mouse Handler
 		txtPostcode.addMouseOutHandler(new PostcodeHandler());
+		doubleBoxSize.addMouseOutHandler(new systemSizeValidation());
+		systemCostBox.addMouseOutHandler(new systemCostValidation());
+		efficiencyForDirectionAndAngle.addMouseOutHandler(new directionAndAngleValidation());
+		inverterBox.addMouseOutHandler(new inverterValidation());
+		doubleBoxWiring.addMouseOutHandler(new wiringValidation());
+		integerBoxLifeSpan.addMouseOutHandler(new lifeSpanValidation());
+		doubleBoxPowerCost.addMouseOutHandler(new powerCostValidation());
+		doubleBoxTarrif.addMouseOutHandler(new tarrifValidation());
+		doubleBoxReplacePercent.addMouseOutHandler(new replacePercentValidation());
+		doubleBoxAgeLoss.addMouseOutHandler(new ageLossValidation());
+		doubleBoxIrradiance.addMouseOutHandler(new irradianceValidation());
+		
+		
 		cityComboBox.addChangeHandler(new ChangeHandler() {
 
 			@Override
@@ -366,6 +381,7 @@ public class CalculationClient implements EntryPoint
 		}
 		
 	}
+
 	class PostcodeHandler implements MouseOutHandler {
 		@Override
 		public void onMouseOut(MouseOutEvent event) {
@@ -374,14 +390,15 @@ public class CalculationClient implements EntryPoint
 			{
 				txtPostcode.setStyleName("gwt-TextBox-Error", true);
 				txtPostcode.setFocus(true);
-				
 			}
-			else{
+			else
+			{
 				txtPostcode.setStyleName("gwt-TextBox-Error", false);
 				selectCityOnPostcode();	
 			}
 			
 		}
+   
 	
 		private void selectCityOnPostcode() {
 			 service.getCityIDFromPostcode(Integer.parseInt(txtPostcode.getText()), new AsyncCallback<Integer> (){
@@ -402,6 +419,180 @@ public class CalculationClient implements EntryPoint
 			});
 		}		
 	}
+	
+	class systemSizeValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidBigNumber(doubleBoxSize.getText()) == false)
+			{
+				doubleBoxSize.setStyleName("gwt-TextBox-Error", true);
+				doubleBoxSize.setFocus(true);
+			}
+			else
+			{
+				doubleBoxSize.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+		
+	}
+	
+	class systemCostValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidBigNumber(systemCostBox.getText()) == false)
+			{
+				systemCostBox.setStyleName("gwt-TextBox-Error", true);
+				systemCostBox.setFocus(true);
+			}
+			else
+			{
+				systemCostBox.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+		
+	}
+	
+	class directionAndAngleValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidPercentage(efficiencyForDirectionAndAngle.getText()) == false)
+			{
+				efficiencyForDirectionAndAngle.setStyleName("gwt-TextBox-Error", true);
+				efficiencyForDirectionAndAngle.setFocus(true);
+			}
+			else
+			{
+				efficiencyForDirectionAndAngle.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+	}
+	
+	class inverterValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidPercentage(inverterBox.getText()) == false)
+			{
+				inverterBox.setStyleName("gwt-TextBox-Error", true);
+				inverterBox.setFocus(true);
+			}
+			else
+			{
+				inverterBox.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+	}
+	
+	class wiringValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidPercentage(doubleBoxWiring.getText()) == false)
+			{
+				doubleBoxWiring.setStyleName("gwt-TextBox-Error", true);
+				doubleBoxWiring.setFocus(true);
+			}
+			else
+			{
+				doubleBoxWiring.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+	}
+	class lifeSpanValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidNumber(integerBoxLifeSpan.getText()) == false)
+			{
+				integerBoxLifeSpan.setStyleName("gwt-TextBox-Error", true);
+				integerBoxLifeSpan.setFocus(true);
+			}
+			else
+			{
+				integerBoxLifeSpan.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+	}
+	class powerCostValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidCents(doubleBoxPowerCost.getText()) == false)
+			{
+				doubleBoxPowerCost.setStyleName("gwt-TextBox-Error", true);
+				doubleBoxPowerCost.setFocus(true);
+			}
+			else
+			{
+				doubleBoxPowerCost.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+	}
+	class tarrifValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidCents(doubleBoxTarrif.getText()) == false)
+			{
+				doubleBoxTarrif.setStyleName("gwt-TextBox-Error", true);
+				doubleBoxTarrif.setFocus(true);
+			}
+			else
+			{
+				doubleBoxTarrif.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+	}
+	class replacePercentValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidPercentage(doubleBoxReplacePercent.getText()) == false)
+			{
+				doubleBoxReplacePercent.setStyleName("gwt-TextBox-Error", true);
+				doubleBoxReplacePercent.setFocus(true);
+			}
+			else
+			{
+				doubleBoxReplacePercent.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+	}
+	class ageLossValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidPercentage(doubleBoxAgeLoss.getText()) == false)
+			{
+				doubleBoxAgeLoss.setStyleName("gwt-TextBox-Error", true);
+				doubleBoxAgeLoss.setFocus(true);
+			}
+			else
+			{
+				doubleBoxAgeLoss.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+	}
+	class irradianceValidation implements MouseOutHandler{
+		@Override
+		public void onMouseOut(MouseOutEvent event) {
+			
+			if(Validator.isValidIrradiance(doubleBoxIrradiance.getText()) == false)
+			{
+				doubleBoxIrradiance.setStyleName("gwt-TextBox-Error", true);
+				doubleBoxIrradiance.setFocus(true);
+			}
+			else
+			{
+				doubleBoxIrradiance.setStyleName("gwt-TextBox-Error", false);
+			}
+		}
+	}
+
+	
 	public void getAngleDirectionEfficiency() {
 		service.getEfficiencyForAngleAndDirection(roofDirectioncomboBox.getSelectedIndex(), angleComboBox.getSelectedIndex(), new AsyncCallback<Double>(){
 
@@ -461,7 +652,7 @@ public class CalculationClient implements EntryPoint
 		txtPayBackYear.setText("");
 		btnCalculation.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				if(txtPostcode.getStyleName().equals("gwt-TextBox gwt-TextBox-Error"))
+				if((txtPostcode.getStyleName().equals("gwt-TextBox gwt-TextBox-Error")) || (doubleBoxSize.getStyleName().equals("gwt-TextBox-Error")) || (systemCostBox.getStyleName().equals("gwt-TextBox-Error")) || (efficiencyForDirectionAndAngle.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (inverterBox.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxWiring.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error"))|| (integerBoxLifeSpan.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxPowerCost.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxTarrif.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxReplacePercent.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxAgeLoss.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxIrradiance.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")))
 				{
 					Window.alert("Please check your input");
 					return;
@@ -648,7 +839,35 @@ public class CalculationClient implements EntryPoint
 
 		btnWorthInvesting.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				getWorthInvestmentFromServer();
+			    final String dailySavings = txtDailySavings2.getText().toUpperCase().trim();
+			    final String payBackYear = txtPayBackYear2.getText().toUpperCase().trim();
+			    final String expectedDuration = txtExpectedDuration.getText().toUpperCase().trim();
+			    txtDailySavings2.setFocus(true);
+			    txtPayBackYear2.setFocus(true);
+			    txtExpectedDuration.setFocus(true);
+			    String onlyNumber = "^[0-9]+$";
+			    if (!dailySavings.matches(onlyNumber))
+			    {
+				    Window.alert("'" + dailySavings + "' is not a valid symbol.");
+				    txtDailySavings2.selectAll();
+				    return;
+			    }
+			    else if (!payBackYear.matches(onlyNumber))
+			    {
+			    	 Window.alert("'" + payBackYear + "' is not a valid symbol.");
+			    	 txtPayBackYear2.selectAll();
+					 return;
+			    }
+			    else if (!expectedDuration.matches(onlyNumber))
+			    {
+			    	 Window.alert("'" + expectedDuration + "' is not a valid symbol.");
+			    	 txtExpectedDuration.selectAll();
+					 return;
+			    }
+			    else
+			    {
+			    	getWorthInvestmentFromServer();
+			    }
 			}
 		});
 
