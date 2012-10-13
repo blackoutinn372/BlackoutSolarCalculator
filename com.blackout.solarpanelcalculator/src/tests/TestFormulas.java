@@ -48,6 +48,14 @@ public class TestFormulas
 	double expectedFirstPaybackYearProfit = 86.6;
 	double expectedSavings = 7.62;
 	
+	// WorthInvesting Items
+	double validSavings = 15;
+	double three = 3;
+	
+	// BankSaving Items
+	double bankAmt = 1000;
+	double tenPercent = .10;
+	
 	@Test
 	public void testDailyGeneration() {
 		assertEquals(expectedDailyGeneration1,CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, inverter1, wiring1, year, age1, solarIrradiance),
@@ -66,5 +74,81 @@ public class TestFormulas
 	@Test
 	public void testMonthlyGeneration(){
 		assertTrue(Arrays.equals(expectedMonthGeneration, CalculationFormulas.getSolarGeneFormulaForAllMonths(dailyIrradianceInMonth, systemSize1, roof1, inverter1, wiring1, year, age1)));
+	}
+	
+	/* Worth Investing tests */
+	@Test
+	public void worthwhileInvestment() {
+		assertEquals(validSavings*three, CalculationFormulas.isWorthInvesting(validSavings, three, three*2), DELTA);
+	}
+	
+	@Test
+	public void paysForItselfInvestment() {
+		assertEquals(0.0, CalculationFormulas.isWorthInvesting(validSavings, three, three), DELTA);
+	}
+	
+	@Test
+	public void notWorthInvesting() {
+		assertEquals(-15.0, CalculationFormulas.isWorthInvesting(validSavings, three+1, three), DELTA);
+	}
+	
+	@Test
+	public void nothingToInvest() {
+		assertEquals(0.0, CalculationFormulas.isWorthInvesting(0, 0, 0), DELTA);
+	}
+	
+	@Test
+	public void invalidInvestment() {
+		assertEquals(0, CalculationFormulas.isWorthInvesting(-validSavings, 0, 0), DELTA);
+	}
+	
+	@Test
+	public void unusualLifespanInvestment() {
+		assertEquals(0, CalculationFormulas.isWorthInvesting(validSavings, -three, three), DELTA);
+	}
+	
+	@Test
+	public void unusualDurationInvestment() {
+		assertEquals(0, CalculationFormulas.isWorthInvesting(validSavings, three, -three), DELTA);
+	}
+	
+	/* Bank Interest */
+	@Test
+	public void aBankTest() {
+		// 1000
+		// 1100 - 1 year
+		// 1210 - 2 year
+		// 1331 - 3 years cumulative interest
+		assertEquals(1331, CalculationFormulas.calculateBankSavings(three, bankAmt, tenPercent), DELTA);
+	}
+	
+	@Test
+	public void noInterestBank() {
+		assertEquals(bankAmt, CalculationFormulas.calculateBankSavings(three, bankAmt, 0), DELTA);
+	}
+	
+	@Test
+	public void noBaseAmountBank() {
+		assertEquals(0, CalculationFormulas.calculateBankSavings(three, 0, tenPercent), DELTA);
+	}
+	
+	@Test
+	public void noTimeBank() {
+		assertEquals(bankAmt, CalculationFormulas.calculateBankSavings(0, bankAmt, tenPercent), DELTA);
+	}
+	
+	@Test
+	public void invalidTimeBank() {
+		assertEquals(0, CalculationFormulas.calculateBankSavings(-three, bankAmt, tenPercent), DELTA);
+	}
+	
+	@Test
+	public void invalidBaseAmountBank() {
+		assertEquals(0, CalculationFormulas.calculateBankSavings(three, -bankAmt, tenPercent), DELTA);
+	}
+	
+	@Test
+	public void invalidInterestBank() {
+		assertEquals(0, CalculationFormulas.calculateBankSavings(three, bankAmt, -tenPercent), DELTA);
 	}
  }

@@ -132,6 +132,8 @@ public class CalculationClient implements EntryPoint
     private DoubleBox txtExpectedDuration = new DoubleBox();
     private Button btnWorthInvesting = new Button();
     private DoubleBox lblWorthInvesting = new DoubleBox();
+    private DoubleBox lblBankInterest = new DoubleBox();
+    private Label lblWorthText = new Label();
     
 	private CalculationServiceAsync service;
 	private double[] monthResults =null; 
@@ -644,7 +646,9 @@ public class CalculationClient implements EntryPoint
 		txtPayBackYear2.setText("3");
 		txtExpectedDuration.setText("5");
 		btnWorthInvesting.setText("Worth it?");
+		lblWorthText.setText("");
 		lblWorthInvesting.setText("");
+		lblBankInterest.setText("0");
 
 		btnWorthInvesting.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -656,7 +660,9 @@ public class CalculationClient implements EntryPoint
 		RootPanel.get("tdFinalPayback").add(txtPayBackYear2);
 		RootPanel.get("tdExpectedDuration").add(txtExpectedDuration);
 		RootPanel.get("tdWorthInvestingCalculate").add(btnWorthInvesting);
+		RootPanel.get("tdWorthInvestingResultLabel").add(lblWorthText);
 		RootPanel.get("tdWorthInvestingResult").add(lblWorthInvesting);
+		RootPanel.get("tdBankInterest").add(lblBankInterest);
 	}
 
 	/* Send "worth investing" to the server */
@@ -665,7 +671,7 @@ public class CalculationClient implements EntryPoint
         ServiceDefTarget serviceDef = (ServiceDefTarget) service;
         serviceDef.setServiceEntryPoint(GWT.getModuleBaseURL()
             + "calculationService");
-        WorthInvestingCallback callback = new WorthInvestingCallback(lblWorthInvesting);
+        WorthInvestingCallback callback = new WorthInvestingCallback(lblWorthInvesting, lblWorthText);
         service.doWorthInvestment(txtDailySavings2.getValue(), txtPayBackYear2.getValue(), txtExpectedDuration.getValue(), callback);
 	}
 
@@ -735,6 +741,7 @@ public class CalculationClient implements EntryPoint
         	if (entry.getKey() >0){
         		
         		txtPayBackYear.setText(entry.getValue());
+        		txtPayBackYear2.setText(entry.getValue()); // Automatically bring down
         		return;
         	}
        			

@@ -246,8 +246,29 @@ public class CalculationFormulas
 	  * 			(or how much they lose, should the paybackyear be higher than the duration)
 	  */
 	public static double isWorthInvesting(double savings, double paybackYear, double duration) {
-		 double yearsSaved = duration - paybackYear;
-		 return savings * yearsSaved;
+		if (paybackYear < 0 || duration <= 0) { return 0; }
+		try {
+			double yearsSaved = duration - paybackYear;
+			return twoDecimals(savings * yearsSaved);
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+	
+	/**
+	 * How much interest can a bank account acquire over time?
+	 * @param years			
+	 * @param startingBank	Amount of money starting in the bank account
+	 * @param interest		Additional % of interest (eg .15 will become 1.15)
+	 * @return				
+	 */
+	public static double calculateBankSavings(double years, double startingBank, double interest) {
+		if (years < 0 || startingBank < 0 || interest < 0) return 0;
+		double amount = startingBank;
+		for (int i = 0; i < years; i++) {
+			amount = amount*(1+interest);
+		}
+		return twoDecimals(amount);
 	}
 	
 	public static double compareSystems() {
