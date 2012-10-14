@@ -16,7 +16,7 @@ import com.blackout.solarpanelcalculator.client.CalculationService;
 import com.blackout.solarpanelcalculator.client.City;
 
 public class CalculationServiceImpl extends RemoteServiceServlet implements CalculationService {
-
+	private static double daysInYear = 365;
 	private static final long serialVersionUID = -1314136203142788858L;
 	
 	@Override
@@ -62,7 +62,7 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	@Override
 	public double doWorthInvestment(double dailySavings, double paybackYear, double lifetime, double interest) {
 		double earnings = CalculationFormulas.isWorthInvesting(dailySavings, paybackYear, lifetime);
-		double totalInterest = CalculationFormulas.calculateBankSavings(lifetime, dailySavings*paybackYear, interest);
+		double totalInterest = CalculationFormulas.calculateBankSavings(lifetime, (dailySavings*daysInYear)*paybackYear, interest);
 		return earnings-totalInterest;
 	}
 

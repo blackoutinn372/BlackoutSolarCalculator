@@ -334,7 +334,7 @@ public class CalculationClient implements EntryPoint
 		lblAssumeSolarPanel.setStyleName("gwt-Label-assumptions");	
 		doubleBoxAgeLoss.setStyleName("gwt-DoubleBox-assumptions");		
 		doubleBoxIrradiance.setStyleName("gwt-DoubleBox-assumptions");		
-		lblAssumeSolarIrradiance.setStyleName("gwt-Label-assumptions");
+		lblAssumeSolarIrradiance.setStyleName("gwt-Label-assumptions");	
 	    
 	    FlexTable parameters = new FlexTable();
 	    parameters.setCellSpacing(2);
@@ -839,7 +839,7 @@ public class CalculationClient implements EntryPoint
 		btnWorthInvesting.setText("Worth it?");
 		lblWorthText.setText("");
 		lblWorthInvesting.setText("");
-		lblBankInterest.setText("0.0");
+		lblBankInterest.setText("5");
 
 		btnWorthInvesting.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -897,7 +897,7 @@ public class CalculationClient implements EntryPoint
             + "calculationService");
         WorthInvestingCallback callback = new WorthInvestingCallback(lblWorthInvesting, lblWorthText);
         service.doWorthInvestment(txtDailySavings2.getValue(), Validator.parseYears(txtPayBackYear2.getText()), 
-        		Validator.parseYears(txtExpectedDuration.getText()), lblBankInterest.getValue(), callback);
+        		Validator.parseYears(txtExpectedDuration.getText()), lblBankInterest.getValue()/100, callback);
 	}
 
 	/* The main calculation */

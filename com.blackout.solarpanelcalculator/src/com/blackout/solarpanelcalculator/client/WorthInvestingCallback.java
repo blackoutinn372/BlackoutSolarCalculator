@@ -30,6 +30,8 @@ public class WorthInvestingCallback implements AsyncCallback<Double> {
  			result *= -1;
  			message = losing;
  		}
+ 		result = Math.round(result*100.00)/100.00;
+ 		
  		lblText.setText(message);
  		lblResults.setText("$" + result.toString());
     }

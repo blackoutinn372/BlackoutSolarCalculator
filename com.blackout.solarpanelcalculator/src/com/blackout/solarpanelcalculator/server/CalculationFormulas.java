@@ -24,6 +24,8 @@ public class CalculationFormulas
 	public static final double defaultExportPercent = 0.76;
 	public static final double defaultReplacePercent = 0.24;
 	public static final double defaultLifeSpan = 25;
+	public static double daysInYear = 365;
+	public static final double defaultDailyGeneration = 20; // in watts
 	
 	/**
 	 * calculate daily solar generation in a given year
@@ -38,33 +40,35 @@ public class CalculationFormulas
 	 * @return daily solar generation	
 	 */
 	public static double getDailySolarGeneFormula(double systemSize,double roofEfficiency,double inverterEfficiency,
-											  double wiringEfficiency,double whatYear, double agingEfficiencyLoss,double solarIrradiance) {
-		systemSize = systemSize /1000;//convert to kws
-		//convert to %
-		roofEfficiency = roofEfficiency /100;
-		inverterEfficiency = inverterEfficiency/100;
-		wiringEfficiency = wiringEfficiency/100;
-		agingEfficiencyLoss = agingEfficiencyLoss/100;
-//		if values invalid , use default values instead
-	if(chkInput(systemSize))
-		systemSize = defaultSystemSize;
-	if(chkEfficiency(roofEfficiency))	
+											  double wiringEfficiency,double whatYear, double agingEfficiencyLoss,double solarIrradiance) {	
+	systemSize = systemSize /1000; //convert to kws
+	//convert to %
+	roofEfficiency = roofEfficiency /100;
+	inverterEfficiency = inverterEfficiency/100;
+	wiringEfficiency = wiringEfficiency/100;
+	agingEfficiencyLoss = agingEfficiencyLoss/100;
+		
+	// if values invalid, use default values instead 
+	if(negativeInput(systemSize))
+		systemSize = CalculationFormulas.defaultSystemSize;
+	if(invalidEfficiency(roofEfficiency))	
 		roofEfficiency = defaultRoofEfficiency;
-	if (chkEfficiency(inverterEfficiency))
+	if (invalidEfficiency(inverterEfficiency))
 		inverterEfficiency = defaultInverterEfficiency;
-	if (chkEfficiency(wiringEfficiency))
+	if (invalidEfficiency(wiringEfficiency))
 		wiringEfficiency = defaultWiringEfficiency;
-	if (chkInput(whatYear))
+	if (negativeInput(whatYear))
 		whatYear = defaultYear;
-	if (chkEfficiency(agingEfficiencyLoss))
+	if (invalidEfficiency(agingEfficiencyLoss))
 		agingEfficiencyLoss = defaultPanelAgeEfficiencyLoss;
-	if (chkInput(solarIrradiance))
+	if (negativeInput(solarIrradiance))
 		solarIrradiance = defaultSolarIrradiance;
-
-	double panelEfficiency = Math.pow((1 - agingEfficiencyLoss)	,whatYear);
 	
-//	assume no efficiency loss in the first year	
-	double generation = systemSize*roofEfficiency*inverterEfficiency*wiringEfficiency*solarIrradiance;
+	double panelEfficiency = Math.pow((1 - agingEfficiencyLoss), whatYear);
+	
+	//	assume no efficiency loss in the first year	
+	double generation = systemSize * roofEfficiency * inverterEfficiency * 
+			wiringEfficiency * solarIrradiance;
 	
 	double resultInGivenYear = generation * panelEfficiency;
 	
@@ -137,14 +141,15 @@ public class CalculationFormulas
 		 
 		 double exportPercent = 1-replacePercent;
 	
-		 if (chkEfficiency(exportPercent))
+		 if (negativeInput(dailyGeneration)) dailyGeneration = defaultDailyGeneration;
+		 if (invalidEfficiency(exportPercent))
 			 exportPercent = defaultExportPercent;
-		 if (chkEfficiency(replacePercent)){
+		 if (invalidEfficiency(replacePercent)){
 			 replacePercent = defaultReplacePercent;
 		 }
-		 if (chkInput(feedInTariff))
+		 if (negativeInput(feedInTariff))
 			 feedInTariff = defaultFeedInFee;
-		 if(chkInput(powerCost))
+		 if(negativeInput(powerCost))
 			 powerCost = defaultPowerCost;
 		double result = dailyGeneration * (exportPercent *feedInTariff + replacePercent*powerCost);
 		return twoDecimals(result);
@@ -166,7 +171,9 @@ public class CalculationFormulas
 			 double powerCost, double dailyGeneration , double agingEfficiencyLoss,double yearsToCalculate) {
 		agingEfficiencyLoss = agingEfficiencyLoss/100;
 		if (panelLifeSpan < yearsToCalculate)
-			yearsToCalculate = panelLifeSpan;//use panel life span if number of calculate years is greater	 
+			yearsToCalculate = Math.max(panelLifeSpan,0);//use panel life span if number of calculate years is greater	 
+		systemCost = Math.max(systemCost, 0);
+		
 		TreeMap<Double,String> resultsMap = new TreeMap<Double, String>();
 		
 		String yearMonth = null;
@@ -249,7 +256,7 @@ public class CalculationFormulas
 		if (paybackYear < 0 || duration <= 0) { return 0; }
 		try {
 			double yearsSaved = duration - paybackYear;
-			return twoDecimals(savings * yearsSaved);
+			return twoDecimals((savings*daysInYear) * yearsSaved);
 		} catch (Exception e) {
 			return 0;
 		}
@@ -280,12 +287,12 @@ public class CalculationFormulas
 		return Math.round(number*100.00)/100.00;
 	}
 	
-	private static boolean chkInput(double input) {
-	    return  !(input>0);
+	private static boolean negativeInput(double input) {
+	    return  (input <= 0);
 	}
 	
-	private static boolean chkEfficiency(double input) {
-		return !(input>0&&input<1);
+	private static boolean invalidEfficiency(double input) {
+		return (input < 0 || input > 1);
 	}
 
 }

@@ -20,12 +20,15 @@ public class TestFormulas
 	//	1st set of values for solar generation
 	private final double systemSize1 = 4950; // watts
 	private final double roof1 = 88.5; // in percentage
-	double inverter1 = 96; // in percentage
-	double wiring1 = 98;// in percentage
-	double solarIrradiance = 5.1;// in percentage
-	double year = 0;
-	double age1 =0.7;// in percentage
-	double expectedDailyGeneration1 = 21.02;
+	double inverter1 = 96;   // in percentage
+	double wiring1 = 98;  // in percentage
+	double solarIrradiance = 5.1;  // in percentage
+	double year = 2;
+	double age1 = 0.7;				// in percentage
+	double expectedDailyGeneration1 = 20.73;
+	
+	//	Invalid Values
+	private final double invalidNumber = -999999999; 
 	
 	//	1st set of values for daily savings
 	double dailyGeneration1 = 21.02;
@@ -56,30 +59,226 @@ public class TestFormulas
 	double bankAmt = 1000;
 	double tenPercent = .10;
 	
+	/* Testing the Daily Generation */
 	@Test
 	public void testDailyGeneration() {
-		assertEquals(expectedDailyGeneration1,CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, inverter1, wiring1, year, age1, solarIrradiance),
+		assertEquals(expectedDailyGeneration1,
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, inverter1, 
+						wiring1, year, age1, solarIrradiance),
 					DELTA);
 	}
+	
+	@Test
+	public void badSizeDailyGeneration() {
+		assertEquals(
+				CalculationFormulas.getDailySolarGeneFormula(CalculationFormulas.defaultSystemSize*1000, 
+						roof1, inverter1, wiring1, year, age1, solarIrradiance),
+				CalculationFormulas.getDailySolarGeneFormula(invalidNumber, roof1, inverter1, 
+						wiring1, year, age1, solarIrradiance),
+					DELTA);
+	}
+	
+	@Test
+	public void badRoofDailyGeneration() {
+		assertEquals(
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, CalculationFormulas.defaultRoofEfficiency*100, 
+						inverter1, wiring1, year, age1, solarIrradiance),
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, invalidNumber, inverter1, 
+						wiring1, year, age1, solarIrradiance),
+					DELTA);
+	}
+	
+	@Test
+	public void badInverterDailyGeneration() {
+		assertEquals(
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, 
+						CalculationFormulas.defaultInverterEfficiency*100, wiring1, year, age1, solarIrradiance),
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, invalidNumber, 
+						wiring1, year, age1, solarIrradiance),
+					DELTA);
+	}
+	
+	@Test
+	public void badWiringDailyGeneration() {
+		assertEquals(
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1,inverter1, 
+						CalculationFormulas.defaultWiringEfficiency*100, year, age1, solarIrradiance),
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, inverter1, 
+						invalidNumber, year, age1, solarIrradiance),
+					DELTA);
+	}
+	
+	@Test
+	public void badYearDailyGeneration() {
+		assertEquals(
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1,inverter1, 
+						wiring1, CalculationFormulas.defaultYear, age1, solarIrradiance),
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, inverter1, 
+						wiring1, invalidNumber, age1, solarIrradiance),
+					DELTA);
+	}
+	
+	@Test
+	public void badAgeDailyGeneration() {
+		assertEquals(
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1,inverter1, 
+						wiring1, year, CalculationFormulas.defaultPanelAgeEfficiencyLoss*100, solarIrradiance),
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, inverter1, 
+						wiring1, year, invalidNumber, solarIrradiance),
+					DELTA);
+	}
+	
+	@Test
+	public void badIrradianceDailyGeneration() {
+		assertEquals(
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1,inverter1, 
+						wiring1, year, age1, 
+						CalculationFormulas.defaultSolarIrradiance),
+				CalculationFormulas.getDailySolarGeneFormula(systemSize1, roof1, inverter1, 
+						wiring1, year, age1, invalidNumber),
+					DELTA);
+	}
+	
+	/* Testing Daily Savings */
 	@Test
 	public void testDailySavings(){
-		assertEquals(expectedSavings,CalculationFormulas.getDailySavingsFormula(dailyGeneration, replacement1, tarrif1, powerCost1),DELTA);
+		assertEquals(expectedSavings, CalculationFormulas.getDailySavingsFormula(dailyGeneration, 
+				replacement1, tarrif1, powerCost1), DELTA);
 	}
+	
 	@Test
-	public void testPaybackYear(){
-		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1
-				, lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+	public void badDailyGenerationDailySavings() {
+		assertEquals(CalculationFormulas.getDailySavingsFormula(CalculationFormulas.defaultDailyGeneration, 
+				replacement1, tarrif1, powerCost1),
+				CalculationFormulas.getDailySavingsFormula(invalidNumber, replacement1, tarrif1, powerCost1),
+				DELTA);
+	}
+	
+	@Test
+	public void badReplacePercentDailySavings() {
+		assertEquals(CalculationFormulas.getDailySavingsFormula(dailyGeneration, CalculationFormulas.defaultReplacePercent*100, 
+				tarrif1, powerCost1),
+				CalculationFormulas.getDailySavingsFormula(dailyGeneration, invalidNumber, tarrif1, powerCost1),
+				DELTA);
+	}
+	
+	@Test
+	public void badTariffDailySavings() {
+		assertEquals(CalculationFormulas.getDailySavingsFormula(dailyGeneration, replacement1, 
+				CalculationFormulas.defaultFeedInFee*100, powerCost1),
+				CalculationFormulas.getDailySavingsFormula(dailyGeneration, replacement1, invalidNumber, powerCost1),
+				DELTA);
+	}
+	
+	@Test
+	public void badPowerCostDailySavings() {
+		assertEquals(CalculationFormulas.getDailySavingsFormula(dailyGeneration, replacement1, 
+				tarrif1, CalculationFormulas.defaultPowerCost*100),
+				CalculationFormulas.getDailySavingsFormula(dailyGeneration, replacement1, tarrif1, invalidNumber),
+				DELTA);
+	}
+	
+	/* Test Payback year */
+	@Test
+	public void testPaybackYear() {
+		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
 		assertEquals(expectedPaybackTime,resultsMap.get(expectedFirstPaybackYearProfit));
 	}
+	
 	@Test
-	public void testMonthlyGeneration(){
-		assertTrue(Arrays.equals(expectedMonthGeneration, CalculationFormulas.getSolarGeneFormulaForAllMonths(dailyIrradianceInMonth, systemSize1, roof1, inverter1, wiring1, year, age1)));
+	public void invalidCostPaybackYear() {
+		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(0,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		TreeMap<Double,String> invalidResultsMap = CalculationFormulas.getPayBackTime(invalidNumber,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		assertEquals(resultsMap.get(expectedFirstPaybackYearProfit),
+				invalidResultsMap.get(expectedFirstPaybackYearProfit));
+	}
+	
+	@Test
+	public void invalidLifespanPaybackYear() {
+		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				yearsToCalculate, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		TreeMap<Double,String> invalidResultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				invalidNumber, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		assertEquals(resultsMap.get(expectedFirstPaybackYearProfit),
+				invalidResultsMap.get(expectedFirstPaybackYearProfit));
+	}
+	
+	@Test
+	public void invalidReplacementPaybackYear() {
+		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		TreeMap<Double,String> invalidResultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, invalidNumber, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		assertEquals(resultsMap.get(expectedFirstPaybackYearProfit),
+				invalidResultsMap.get(expectedFirstPaybackYearProfit));
+	}
+	
+	@Test
+	public void invalidTariffPaybackYear() {
+		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		TreeMap<Double,String> invalidResultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, invalidNumber, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		assertEquals(resultsMap.get(expectedFirstPaybackYearProfit),
+				invalidResultsMap.get(expectedFirstPaybackYearProfit));
+	}
+	
+	@Test
+	public void invalidPowerCostPaybackYear() {
+		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		TreeMap<Double,String> invalidResultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		assertEquals(resultsMap.get(expectedFirstPaybackYearProfit),
+				invalidResultsMap.get(expectedFirstPaybackYearProfit));
+	}
+	
+	@Test
+	public void invalidDailyGenPaybackYear() {
+		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		TreeMap<Double,String> invalidResultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		assertEquals(resultsMap.get(expectedFirstPaybackYearProfit),
+				invalidResultsMap.get(expectedFirstPaybackYearProfit));
+	}
+	
+	@Test
+	public void invalidAgePaybackYear() {
+		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		TreeMap<Double,String> invalidResultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		assertEquals(resultsMap.get(expectedFirstPaybackYearProfit),
+				invalidResultsMap.get(expectedFirstPaybackYearProfit));
+	}
+	
+	@Test
+	public void invalidYearsPaybackYear() {
+		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		TreeMap<Double,String> invalidResultsMap = CalculationFormulas.getPayBackTime(systemCost1,
+				lifeSpan1, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
+		assertEquals(resultsMap.get(expectedFirstPaybackYearProfit),
+				invalidResultsMap.get(expectedFirstPaybackYearProfit));
+	}
+	
+	/* Monthly Gen tests */
+	@Test
+	public void testMonthlyGeneration() {
+		assertEquals(true, 
+				Arrays.equals(expectedMonthGeneration, 
+						CalculationFormulas.getSolarGeneFormulaForAllMonths(dailyIrradianceInMonth, 
+								systemSize1, roof1, inverter1, wiring1, year, age1)));
 	}
 	
 	/* Worth Investing tests */
 	@Test
 	public void worthwhileInvestment() {
-		assertEquals(validSavings*three, CalculationFormulas.isWorthInvesting(validSavings, three, three*2), DELTA);
+		assertEquals((validSavings*365)*three, CalculationFormulas.isWorthInvesting(validSavings, three, three*2), DELTA);
 	}
 	
 	@Test
@@ -89,7 +288,7 @@ public class TestFormulas
 	
 	@Test
 	public void notWorthInvesting() {
-		assertEquals(-15.0, CalculationFormulas.isWorthInvesting(validSavings, three+1, three), DELTA);
+		assertEquals((validSavings*365)*-(three-2), CalculationFormulas.isWorthInvesting(validSavings, three+1, three), DELTA);
 	}
 	
 	@Test
