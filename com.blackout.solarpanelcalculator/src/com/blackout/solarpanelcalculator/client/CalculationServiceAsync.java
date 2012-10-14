@@ -11,8 +11,8 @@ public interface CalculationServiceAsync {
 	void doDailySavings(double dailyGeneration, double replacePercent,
 			double feedInTarrif, double powerCost,
 			AsyncCallback<Double> callback);
-	void doWorthInvestment(double savings, double paybackYear, double duration,
-			AsyncCallback<Double> callback);
+	void doWorthInvestment(double savings, double paybackYear, double lifetime, 
+			double bankInterest, AsyncCallback<Double> callback);
 	void getPayBackTime(double systemCost, double lifeSpan,
 			double replacePercent, double feedInTarrif, double powerCost,
 			double dailyGeneration, double agingEfficiencyLoss,

@@ -6,10 +6,11 @@ import org.junit.Test;
 import com.blackout.solarpanelcalculator.client.Validator;
 /**
  * tests user inputs
- * @author Sen
  *
  */
 public class ValidatorTests {
+	private static final double DELTA = 1e-10;
+	
 	String randomText = "random text";
 	String emptyString = "";
 	String zero = "0";			
@@ -204,5 +205,36 @@ public class ValidatorTests {
 	@Test
 	public void noIrradiance() {
 		assertEquals(false,Validator.isValidIrradiance(emptyString));
+	}
+	
+	/* Test year conversion */
+	@Test
+	public void parseYearsAndMonths() {
+		assertEquals(6.25,Validator.parseYears("6y 3m"), DELTA);
+	}
+	
+	@Test
+	public void parseYears() {
+		assertEquals(6,Validator.parseYears("6y 0m"), DELTA);
+	}
+	
+	@Test
+	public void parseMonths() {
+		assertEquals(.25,Validator.parseYears("0y 3m"), DELTA);
+	}
+	
+	@Test
+	public void noDurationParsed() {
+		assertEquals(0.0,Validator.parseYears("0y 0m"), DELTA);
+	}
+	
+	@Test
+	public void technicallyCorrectYears() {
+		assertEquals(5.0,Validator.parseYears("4y 12m"), DELTA);
+	}
+	
+	@Test
+	public void noYearsParsed() {
+		assertEquals(0.0 ,Validator.parseYears(emptyString), DELTA);
 	}
 }

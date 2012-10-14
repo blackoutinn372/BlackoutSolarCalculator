@@ -1,4 +1,7 @@
 package com.blackout.solarpanelcalculator.client;
+
+import java_cup.internal_error;
+
 /**
  * This class contains methods to test user input
  * @author Sen
@@ -77,6 +80,25 @@ public class Validator {
 			catch (Exception e) {
 				return false;
 			}
+	}
+	
+	static public double parseYears(String str) {
+		double noMonths = 12;
+		double number;
+		String[] temp;
+		temp = str.split(" ");
+		try {
+			temp[0] = temp[0].replaceFirst("y", "");
+			number = Double.parseDouble(temp[0]);
+		} catch (Exception ex) {
+			number = 0.0;
+		}
+		try {
+			temp[1] = temp[1].replaceFirst("m", "");
+			number += Double.parseDouble(temp[1])/noMonths;
+		} catch (Exception ex) {
+		}
+		return number;
 	}
 	
 	

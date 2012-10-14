@@ -59,10 +59,11 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	}
 
 
-
+	@Override
 	public double doWorthInvestment(double dailySavings, double paybackYear, double lifetime, double interest) {
-		CalculationFormulas.isWorthInvesting(dailySavings, paybackYear, lifetime);
-		return CalculationFormulas.isWorthInvesting(dailySavings, paybackYear, lifetime);
+		double earnings = CalculationFormulas.isWorthInvesting(dailySavings, paybackYear, lifetime);
+		double totalInterest = CalculationFormulas.calculateBankSavings(lifetime, dailySavings*paybackYear, interest);
+		return earnings-totalInterest;
 	}
 
 

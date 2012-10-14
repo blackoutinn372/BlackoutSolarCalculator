@@ -21,7 +21,8 @@ public interface CalculationService extends RemoteService
 	
 	double doDailySavings(double dailyGeneration, double replacePercent, double feedInTarrif, double powerCost);
 	
-	double doWorthInvestment(double savings, double paybackYear, double duration);
+	double doWorthInvestment(double savings, double paybackYear, double lifetime, double bankInterest);
+	
 	TreeMap<Double,String> getPayBackTime(double systemCost, double lifeSpan, double replacePercent,double feedInTarrif,
 			 double powerCost, double dailyGeneration , double agingEfficiencyLoss,double yearsToCalculate);
 	

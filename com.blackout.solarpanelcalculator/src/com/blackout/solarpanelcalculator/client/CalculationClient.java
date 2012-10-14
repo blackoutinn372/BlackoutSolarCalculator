@@ -833,13 +833,13 @@ public class CalculationClient implements EntryPoint
 	
 	/* WorthInvestment method */
 	private void loadWorthInvesting() {
-		txtDailySavings2.setText("0");
-		txtPayBackYear2.setText("3");
-		txtExpectedDuration.setText("5");
+		txtDailySavings2.setText("5000");
+		txtPayBackYear2.setText("5y 6m");
+		txtExpectedDuration.setText("25y 6m");
 		btnWorthInvesting.setText("Worth it?");
 		lblWorthText.setText("");
 		lblWorthInvesting.setText("");
-		lblBankInterest.setText("0");
+		lblBankInterest.setText("0.0");
 
 		btnWorthInvesting.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -855,7 +855,7 @@ public class CalculationClient implements EntryPoint
 				    Window.alert("'" + dailySavings + "' is not a valid symbol.");
 				    txtDailySavings2.selectAll();
 				    return;
-			    }
+			    }/*
 			    else if (!payBackYear.matches(onlyNumber))
 			    {
 			    	 Window.alert("'" + payBackYear + "' is not a valid symbol.");
@@ -867,7 +867,7 @@ public class CalculationClient implements EntryPoint
 			    	 Window.alert("'" + expectedDuration + "' is not a valid symbol.");
 			    	 txtExpectedDuration.selectAll();
 					 return;
-			    }
+			    }*/
 			    else
 			    {
 			    	getWorthInvestmentFromServer();
@@ -883,6 +883,11 @@ public class CalculationClient implements EntryPoint
 		RootPanel.get("tdWorthInvestingResult").add(lblWorthInvesting);
 		RootPanel.get("tdBankInterest").add(lblBankInterest);
 	}
+	
+	protected void getWorthInvestmentValues() {
+		
+		txtPayBackYear2.setText(txtPayBackYear.getValue()); // Need to parse...
+	}
 
 	/* Send "worth investing" to the server */
 	protected void getWorthInvestmentFromServer() {
@@ -891,11 +896,12 @@ public class CalculationClient implements EntryPoint
         serviceDef.setServiceEntryPoint(GWT.getModuleBaseURL()
             + "calculationService");
         WorthInvestingCallback callback = new WorthInvestingCallback(lblWorthInvesting, lblWorthText);
-        service.doWorthInvestment(txtDailySavings2.getValue(), txtPayBackYear2.getValue(), txtExpectedDuration.getValue(), callback);
+        service.doWorthInvestment(txtDailySavings2.getValue(), Validator.parseYears(txtPayBackYear2.getText()), 
+        		Validator.parseYears(txtExpectedDuration.getText()), lblBankInterest.getValue(), callback);
 	}
 
 	/* The main calculation */
-	protected void doCalculation(){		
+	protected void doCalculation() {		
 
         // calculate the generation for all months
         service.doSolarGenerationForAllMonths(dailyIrradianceInMonth,doubleBoxSize.getValue(), efficiencyForDirectionAndAngle.getValue(), 
@@ -960,7 +966,6 @@ public class CalculationClient implements EntryPoint
         	if (entry.getKey() >0){
         		
         		txtPayBackYear.setText(entry.getValue());
-        		txtPayBackYear2.setText(entry.getValue()); // Automatically bring down
         		return;
         	}
        			
