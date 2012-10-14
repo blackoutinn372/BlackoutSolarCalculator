@@ -28,19 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SolarCalculator));
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabGeneration = new System.Windows.Forms.TabPage();
             this.grpPowerGenerationInstruct = new System.Windows.Forms.GroupBox();
             this.grpPowerGenerationResult = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblError = new System.Windows.Forms.Label();
             this.grpPowerGenerationInput = new System.Windows.Forms.GroupBox();
             this.txtAgeEff = new System.Windows.Forms.TextBox();
-            this.txtPanelAge = new System.Windows.Forms.TextBox();
             this.txtWiringEff = new System.Windows.Forms.TextBox();
             this.txtInverterEff = new System.Windows.Forms.TextBox();
             this.txtRoofEff = new System.Windows.Forms.TextBox();
             this.lblAgeEff = new System.Windows.Forms.Label();
-            this.lblPanelAge = new System.Windows.Forms.Label();
             this.lblWiringEff = new System.Windows.Forms.Label();
             this.lblInverterEff = new System.Windows.Forms.Label();
             this.lblRoofEff = new System.Windows.Forms.Label();
@@ -61,12 +62,17 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serverStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chtMonthlyPowerGenerated = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.lblResults = new System.Windows.Forms.Label();
+            this.lblInstructions = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabGeneration.SuspendLayout();
+            this.grpPowerGenerationInstruct.SuspendLayout();
             this.grpPowerGenerationResult.SuspendLayout();
             this.grpPowerGenerationInput.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chtMonthlyPowerGenerated)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -95,6 +101,7 @@
             // 
             // grpPowerGenerationInstruct
             // 
+            this.grpPowerGenerationInstruct.Controls.Add(this.lblInstructions);
             this.grpPowerGenerationInstruct.Location = new System.Drawing.Point(612, 6);
             this.grpPowerGenerationInstruct.Name = "grpPowerGenerationInstruct";
             this.grpPowerGenerationInstruct.Size = new System.Drawing.Size(334, 450);
@@ -104,7 +111,8 @@
             // 
             // grpPowerGenerationResult
             // 
-            this.grpPowerGenerationResult.Controls.Add(this.label2);
+            this.grpPowerGenerationResult.Controls.Add(this.lblResults);
+            this.grpPowerGenerationResult.Controls.Add(this.chtMonthlyPowerGenerated);
             this.grpPowerGenerationResult.Location = new System.Drawing.Point(6, 234);
             this.grpPowerGenerationResult.Name = "grpPowerGenerationResult";
             this.grpPowerGenerationResult.Size = new System.Drawing.Size(600, 222);
@@ -112,23 +120,23 @@
             this.grpPowerGenerationResult.TabStop = false;
             this.grpPowerGenerationResult.Text = "Results";
             // 
-            // label2
+            // lblError
             // 
-            this.label2.Location = new System.Drawing.Point(87, 94);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(145, 21);
-            this.label2.TabIndex = 17;
-            this.label2.Text = "Answers and stuff go here";
+            this.lblError.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblError.ForeColor = System.Drawing.Color.Red;
+            this.lblError.Location = new System.Drawing.Point(6, 169);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(588, 21);
+            this.lblError.TabIndex = 17;
             // 
             // grpPowerGenerationInput
             // 
+            this.grpPowerGenerationInput.Controls.Add(this.lblError);
             this.grpPowerGenerationInput.Controls.Add(this.txtAgeEff);
-            this.grpPowerGenerationInput.Controls.Add(this.txtPanelAge);
             this.grpPowerGenerationInput.Controls.Add(this.txtWiringEff);
             this.grpPowerGenerationInput.Controls.Add(this.txtInverterEff);
             this.grpPowerGenerationInput.Controls.Add(this.txtRoofEff);
             this.grpPowerGenerationInput.Controls.Add(this.lblAgeEff);
-            this.grpPowerGenerationInput.Controls.Add(this.lblPanelAge);
             this.grpPowerGenerationInput.Controls.Add(this.lblWiringEff);
             this.grpPowerGenerationInput.Controls.Add(this.lblInverterEff);
             this.grpPowerGenerationInput.Controls.Add(this.lblRoofEff);
@@ -151,19 +159,12 @@
             // 
             // txtAgeEff
             // 
-            this.txtAgeEff.Location = new System.Drawing.Point(377, 133);
+            this.txtAgeEff.Location = new System.Drawing.Point(377, 103);
             this.txtAgeEff.Name = "txtAgeEff";
             this.txtAgeEff.Size = new System.Drawing.Size(100, 20);
             this.txtAgeEff.TabIndex = 38;
             this.txtAgeEff.Text = "0.7";
-            // 
-            // txtPanelAge
-            // 
-            this.txtPanelAge.Location = new System.Drawing.Point(377, 103);
-            this.txtPanelAge.Name = "txtPanelAge";
-            this.txtPanelAge.Size = new System.Drawing.Size(100, 20);
-            this.txtPanelAge.TabIndex = 37;
-            this.txtPanelAge.Text = "25";
+            this.txtAgeEff.TextChanged += new System.EventHandler(this.txtAgeEff_TextChanged);
             // 
             // txtWiringEff
             // 
@@ -172,6 +173,7 @@
             this.txtWiringEff.Size = new System.Drawing.Size(100, 20);
             this.txtWiringEff.TabIndex = 36;
             this.txtWiringEff.Text = "98";
+            this.txtWiringEff.TextChanged += new System.EventHandler(this.txtWiringEff_TextChanged);
             // 
             // txtInverterEff
             // 
@@ -180,6 +182,7 @@
             this.txtInverterEff.Size = new System.Drawing.Size(100, 20);
             this.txtInverterEff.TabIndex = 35;
             this.txtInverterEff.Text = "96";
+            this.txtInverterEff.TextChanged += new System.EventHandler(this.txtInverterEff_TextChanged);
             // 
             // txtRoofEff
             // 
@@ -187,25 +190,17 @@
             this.txtRoofEff.Name = "txtRoofEff";
             this.txtRoofEff.Size = new System.Drawing.Size(100, 20);
             this.txtRoofEff.TabIndex = 34;
-            this.txtRoofEff.Text = "88.5";
+            this.txtRoofEff.Text = "asasd";
+            this.txtRoofEff.TextChanged += new System.EventHandler(this.txtRoofEff_TextChanged);
             // 
             // lblAgeEff
             // 
-            this.lblAgeEff.Location = new System.Drawing.Point(254, 136);
+            this.lblAgeEff.Location = new System.Drawing.Point(254, 106);
             this.lblAgeEff.Margin = new System.Windows.Forms.Padding(0);
             this.lblAgeEff.Name = "lblAgeEff";
             this.lblAgeEff.Size = new System.Drawing.Size(120, 30);
             this.lblAgeEff.TabIndex = 33;
             this.lblAgeEff.Text = "Age Efficiency (%)";
-            // 
-            // lblPanelAge
-            // 
-            this.lblPanelAge.Location = new System.Drawing.Point(254, 106);
-            this.lblPanelAge.Margin = new System.Windows.Forms.Padding(0);
-            this.lblPanelAge.Name = "lblPanelAge";
-            this.lblPanelAge.Size = new System.Drawing.Size(120, 30);
-            this.lblPanelAge.TabIndex = 32;
-            this.lblPanelAge.Text = "Panel Age (yrs)";
             // 
             // lblWiringEff
             // 
@@ -241,6 +236,7 @@
             this.txtSystemSize.Size = new System.Drawing.Size(100, 20);
             this.txtSystemSize.TabIndex = 28;
             this.txtSystemSize.Text = "4950";
+            this.txtSystemSize.TextChanged += new System.EventHandler(this.txtSystemSize_TextChanged);
             // 
             // cboRoofAngle
             // 
@@ -306,6 +302,7 @@
             this.cboCity.Name = "cboCity";
             this.cboCity.Size = new System.Drawing.Size(100, 21);
             this.cboCity.TabIndex = 20;
+            this.cboCity.SelectedIndexChanged += new System.EventHandler(this.cboCity_SelectedIndexChanged);
             // 
             // btnReset
             // 
@@ -315,6 +312,7 @@
             this.btnReset.TabIndex = 16;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // btnCalculate
             // 
@@ -393,6 +391,38 @@
             this.serverStringToolStripMenuItem.Text = "Server String";
             this.serverStringToolStripMenuItem.Click += new System.EventHandler(this.serverStringToolStripMenuItem_Click);
             // 
+            // chtMonthlyPowerGenerated
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.chtMonthlyPowerGenerated.ChartAreas.Add(chartArea2);
+            this.chtMonthlyPowerGenerated.Location = new System.Drawing.Point(289, 19);
+            this.chtMonthlyPowerGenerated.Name = "chtMonthlyPowerGenerated";
+            series2.ChartArea = "ChartArea1";
+            series2.Name = "srsMonthValues";
+            this.chtMonthlyPowerGenerated.Series.Add(series2);
+            this.chtMonthlyPowerGenerated.Size = new System.Drawing.Size(305, 197);
+            this.chtMonthlyPowerGenerated.TabIndex = 0;
+            this.chtMonthlyPowerGenerated.Visible = false;
+            // 
+            // lblResults
+            // 
+            this.lblResults.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblResults.Location = new System.Drawing.Point(6, 19);
+            this.lblResults.Margin = new System.Windows.Forms.Padding(0);
+            this.lblResults.Name = "lblResults";
+            this.lblResults.Size = new System.Drawing.Size(277, 197);
+            this.lblResults.TabIndex = 39;
+            // 
+            // lblInstructions
+            // 
+            this.lblInstructions.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInstructions.Location = new System.Drawing.Point(3, 16);
+            this.lblInstructions.Margin = new System.Windows.Forms.Padding(0);
+            this.lblInstructions.Name = "lblInstructions";
+            this.lblInstructions.Size = new System.Drawing.Size(328, 389);
+            this.lblInstructions.TabIndex = 39;
+            this.lblInstructions.Text = resources.GetString("lblInstructions.Text");
+            // 
             // SolarCalculator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -409,12 +439,14 @@
             this.Text = "Solar Calculator";
             this.tabControl.ResumeLayout(false);
             this.tabGeneration.ResumeLayout(false);
+            this.grpPowerGenerationInstruct.ResumeLayout(false);
             this.grpPowerGenerationResult.ResumeLayout(false);
             this.grpPowerGenerationInput.ResumeLayout(false);
             this.grpPowerGenerationInput.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chtMonthlyPowerGenerated)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -430,7 +462,7 @@
         private System.Windows.Forms.GroupBox grpPowerGenerationInstruct;
         private System.Windows.Forms.GroupBox grpPowerGenerationResult;
         private System.Windows.Forms.GroupBox grpPowerGenerationInput;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblError;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnCalculate;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -438,12 +470,10 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem serverStringToolStripMenuItem;
         private System.Windows.Forms.TextBox txtAgeEff;
-        private System.Windows.Forms.TextBox txtPanelAge;
         private System.Windows.Forms.TextBox txtWiringEff;
         private System.Windows.Forms.TextBox txtInverterEff;
         private System.Windows.Forms.TextBox txtRoofEff;
         private System.Windows.Forms.Label lblAgeEff;
-        private System.Windows.Forms.Label lblPanelAge;
         private System.Windows.Forms.Label lblWiringEff;
         private System.Windows.Forms.Label lblInverterEff;
         private System.Windows.Forms.Label lblRoofEff;
@@ -455,6 +485,9 @@
         private System.Windows.Forms.Label lblRoofDirection;
         private System.Windows.Forms.Label lblCity;
         private System.Windows.Forms.ComboBox cboCity;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chtMonthlyPowerGenerated;
+        private System.Windows.Forms.Label lblResults;
+        private System.Windows.Forms.Label lblInstructions;
     }
 }
 

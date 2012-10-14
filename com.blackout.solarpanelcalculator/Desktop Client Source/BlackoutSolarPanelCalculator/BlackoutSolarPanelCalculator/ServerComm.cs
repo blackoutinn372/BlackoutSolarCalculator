@@ -41,7 +41,7 @@ namespace BlackoutSolarPanelCalculator {
             }
 
             string[] responseStringArray = responseString.Split('~');
-            double[] valueArray = new double[11];
+            double[] valueArray = new double[12];
             for (int i = 0; i < valueArray.Length; i++) {
                 valueArray[i] = double.Parse(responseStringArray[i]);
             }
@@ -66,6 +66,72 @@ namespace BlackoutSolarPanelCalculator {
             }
 
             return double.Parse(responseString);
+        }
+
+        public static string[] GetCityList(string url, int postcode) {
+
+            const string methodParameter = "desktop?method=getCityList";
+            string valueParameters = "";
+
+            valueParameters += "&postcode=" +postcode.ToString();
+
+            WebRequest webReq = WebRequest.Create(url + methodParameter + valueParameters);
+            Stream respStream = webReq.GetResponse().GetResponseStream();
+            string responseString;
+
+            using (StreamReader reader = new StreamReader(respStream)) {
+                responseString = reader.ReadToEnd();
+            }
+
+            string[] responseStringArray = responseString.Split('~');
+
+            return responseStringArray;
+        }
+
+        public static double[] GetCity(string url, int cityIndex) {
+
+            const string methodParameter = "desktop?method=getCity";
+            string valueParameters = "";
+
+            valueParameters += "&cityIndex=" + cityIndex.ToString();
+
+            WebRequest webReq = WebRequest.Create(url + methodParameter + valueParameters);
+            Stream respStream = webReq.GetResponse().GetResponseStream();
+            string responseString;
+
+            using (StreamReader reader = new StreamReader(respStream)) {
+                responseString = reader.ReadToEnd();
+            }
+
+            string[] responseStringArray = responseString.Split('~');
+            double[] valueArray = new double[19];
+            for (int i = 0; i < valueArray.Length; i++) {
+                valueArray[i] = double.Parse(responseStringArray[i]);
+            }
+
+            /*
+             * 0 FeedInTariff
+             * 1 ElectricityCost
+             * 2 Postcode
+             * 3 OptimalYearDegree
+             * 4 BestWinterDegree
+             * 5 BestSummerDegree
+             * 6 JanIrr
+             * 7 FebIrr
+             * 8 MarIrr
+             * 9 AprIrr
+             * 10 MayIrr
+             * 11 JunIrr
+             * 12 JulIrr
+             * 13 AugIrr
+             * 14 SepIrr
+             * 15 OctIrr
+             * 16 NovIrr
+             * 17 DecIrr
+             * 18 AvgIrr
+            */
+
+            return valueArray;
         }
     }
 }
