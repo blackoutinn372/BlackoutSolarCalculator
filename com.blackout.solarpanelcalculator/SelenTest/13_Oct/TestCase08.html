@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://blackoutsolarcalculator.appspot.com/" />
+<title>TestCase08</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestCase08</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>css=select.gwt-ListBox</td>
+	<td>label=Sydney</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//td[@id='tdMainPanel']/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td[2]/select</td>
+	<td>label=North West</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//td[@id='tdMainPanel']/table/tbody/tr[2]/td[2]/div/table/tbody/tr[4]/td[2]/select</td>
+	<td>label=Close to steep</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[3]</td>
+	<td>9000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[4]</td>
+	<td>50000</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=gwt-uid-3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdHouseholdSize &gt; input[type=&quot;text&quot;]</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#tdDailySolarGenerationCalculate &gt; button.gwt-Button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdDailySolarGenerationResult &gt; input.gwt-TextBox</td>
+	<td>26.02 kws</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdPayBackYearResult &gt; input.gwt-TextBox</td>
+	<td>cannot pay back</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdDailySavingsResult &gt; input.gwt-TextBox</td>
+	<td>2.6 dollars</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdPowerEstimateResult &gt; input.gwt-TextBox</td>
+	<td>60 kws</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdSimilarSystem &gt; input.gwt-TextBox</td>
+	<td>35.1 kws in Sydney</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdTotalSubsidy &gt; input.gwt-TextBox</td>
+	<td>1243.8 dollars in Sydney</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
