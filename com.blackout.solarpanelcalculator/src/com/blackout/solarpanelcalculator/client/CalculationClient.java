@@ -20,6 +20,8 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapType;
 import com.google.gwt.maps.client.MapWidget;
@@ -34,6 +36,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
@@ -100,6 +103,8 @@ public class CalculationClient implements EntryPoint
 	private ListBox cityComboBox = new ListBox();	
 	private ListBox roofDirectioncomboBox = new ListBox();
 	private ListBox angleComboBox = new ListBox();
+	private ListBox roofDirectioncomboBox2 = new ListBox();
+	private ListBox angleComboBox2 = new ListBox();
 	private DoubleBox systemCostBox = new DoubleBox();		
 	private DoubleBox doubleBoxSize = new DoubleBox();	
 	private DoubleBox efficiencyForDirectionAndAngle = new DoubleBox();	              
@@ -136,8 +141,11 @@ public class CalculationClient implements EntryPoint
     private Label lblWorthText = new Label();
     
 	private CalculationServiceAsync service;
-	private double[] monthResults =null; 
-
+	private double[] monthResults =null;
+	private CheckBox secondBank = new CheckBox("click to add a second Bank");
+	private TextBox txtSecondBank = new TextBox();
+	private TextBox secondBankEfficiency = new TextBox();
+	private double secondBankGeneration = 0;
 	public void onModuleLoad() {
 		RootPanel.get("tdMainPanel").add(loadAllControlsNew());		 
 		service= (CalculationServiceAsync) GWT.create(CalculationService.class);
@@ -241,17 +249,17 @@ public class CalculationClient implements EntryPoint
 		
 		//Mouse Handler
 		txtPostcode.addMouseOutHandler(new PostcodeHandler());
-		doubleBoxSize.addMouseOutHandler(new systemSizeValidation());
-		systemCostBox.addMouseOutHandler(new systemCostValidation());
-		efficiencyForDirectionAndAngle.addMouseOutHandler(new directionAndAngleValidation());
-		inverterBox.addMouseOutHandler(new inverterValidation());
-		doubleBoxWiring.addMouseOutHandler(new wiringValidation());
-		integerBoxLifeSpan.addMouseOutHandler(new lifeSpanValidation());
-		doubleBoxPowerCost.addMouseOutHandler(new powerCostValidation());
-		doubleBoxTarrif.addMouseOutHandler(new tarrifValidation());
-		doubleBoxReplacePercent.addMouseOutHandler(new replacePercentValidation());
-		doubleBoxAgeLoss.addMouseOutHandler(new ageLossValidation());
-		doubleBoxIrradiance.addMouseOutHandler(new irradianceValidation());
+//		doubleBoxSize.addMouseOutHandler(new systemSizeValidation());
+//		systemCostBox.addMouseOutHandler(new systemCostValidation());
+//		efficiencyForDirectionAndAngle.addMouseOutHandler(new directionAndAngleValidation());
+//		inverterBox.addMouseOutHandler(new inverterValidation());
+//		doubleBoxWiring.addMouseOutHandler(new wiringValidation());
+//		integerBoxLifeSpan.addMouseOutHandler(new lifeSpanValidation());
+//		doubleBoxPowerCost.addMouseOutHandler(new powerCostValidation());
+//		doubleBoxTarrif.addMouseOutHandler(new tarrifValidation());
+//		doubleBoxReplacePercent.addMouseOutHandler(new replacePercentValidation());
+//		doubleBoxAgeLoss.addMouseOutHandler(new ageLossValidation());
+//		doubleBoxIrradiance.addMouseOutHandler(new irradianceValidation());
 		
 		
 		cityComboBox.addChangeHandler(new ChangeHandler() {
@@ -336,9 +344,10 @@ public class CalculationClient implements EntryPoint
 		doubleBoxIrradiance.setStyleName("gwt-DoubleBox-assumptions");		
 		lblAssumeSolarIrradiance.setStyleName("gwt-Label-assumptions");	
 	    
-	    FlexTable parameters = new FlexTable();
+	    final FlexTable parameters = new FlexTable();
 	    parameters.setCellSpacing(2);
 	    parameters.setWidth("500px");
+	    
 	    parameters.setWidget(1, 0, roofLossLbl);
 	    parameters.setWidget(1, 1, efficiencyForDirectionAndAngle);
 	    parameters.setWidget(2, 0, inverterLbl);
@@ -357,7 +366,54 @@ public class CalculationClient implements EntryPoint
 	    parameters.setWidget(8, 1,doubleBoxAgeLoss);
 	    parameters.setWidget(9, 0,lblAssumeSolarIrradiance);
 	    parameters.setWidget(9, 1,doubleBoxIrradiance);    
+	    parameters.setWidget(10,0,secondBank);
 	    
+	    /*controls for second bank*/
+	    secondBank.addClickHandler(new ClickHandler(){
+
+	    	@Override
+			public void onClick(ClickEvent event) {
+				if(secondBank.getValue())
+					loadSecondBankUI();
+				
+			}
+
+			private void loadSecondBankUI() {
+				roofDirectioncomboBox2.addItem("South");
+				roofDirectioncomboBox2.addItem("South West");
+				roofDirectioncomboBox2.addItem("South East");
+				roofDirectioncomboBox2.addItem("West");
+				roofDirectioncomboBox2.addItem("North");
+				roofDirectioncomboBox2.addItem("North West");
+				roofDirectioncomboBox2.addItem("North East");
+				roofDirectioncomboBox2.addItem("East");
+				roofDirectioncomboBox2.setSelectedIndex(0);
+				roofDirectioncomboBox2.addChangeHandler(new DirectionAndAngleHandler());
+				angleComboBox2.addItem("Adjusted to best performance");
+				angleComboBox2.addItem("Close to flat");		
+				angleComboBox2.addItem("Close to steep");
+				angleComboBox2.setSelectedIndex(0);
+				angleComboBox2.addChangeHandler(new DirectionAndAngleHandler());
+				txtSecondBank.setStyleName("gwt-DoubleBox-assumptions");
+				txtSecondBank.setText(Double.toString(50));
+				secondBankEfficiency.setText(Double.toString(defaultRoofLossPercent));
+				secondBankEfficiency.setStyleName("gwt-DoubleBox-assumptions");
+				secondBankEfficiency.setText(Double.toString(defaultRoofLossPercent));
+				parameters.setWidget(11, 0, new HTML("<b>Second bank roof direction:</b>"));
+				parameters.setWidget(11,1,roofDirectioncomboBox2);
+				parameters.setWidget(12, 0, new HTML("<b>Second bank roof angle:</b>"));
+				parameters.setWidget(12, 1, angleComboBox2);
+				parameters.setWidget(13, 0,new HTML("<b>Enter the percentage of second bank(%)</b>"));
+				parameters.setWidget(13, 1, txtSecondBank);
+				parameters.setWidget(14, 0, new HTML("<b>Second bank angle and direction efficiency is(%)</b>"));
+				parameters.setWidget(14,1,secondBankEfficiency);
+				
+			}
+
+		
+	    	
+	    });
+	
 	    // Add advanced options to form in a disclosure panel
 	    DisclosurePanel advancedDisclosure = new DisclosurePanel(
 	        "Advanced Controls");
@@ -596,6 +652,23 @@ public class CalculationClient implements EntryPoint
 
 	
 	public void getAngleDirectionEfficiency() {
+		if(secondBank.getValue())
+			service.getEfficiencyForAngleAndDirection(roofDirectioncomboBox2.getSelectedIndex(), angleComboBox2.getSelectedIndex(), new AsyncCallback<Double>(){
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert(caught.getMessage());	
+					
+				}
+
+				@Override
+				public void onSuccess(Double result) {
+					
+					secondBankEfficiency.setText(result.toString());
+				}
+				
+			});
+		
 		service.getEfficiencyForAngleAndDirection(roofDirectioncomboBox.getSelectedIndex(), angleComboBox.getSelectedIndex(), new AsyncCallback<Double>(){
 
 			@Override
@@ -901,8 +974,25 @@ public class CalculationClient implements EntryPoint
 	}
 
 	/* The main calculation */
-	protected void doCalculation() {		
+	protected void doCalculation() {
+		double firstBankPercent = 1;
+		 
+		if(secondBank.getValue())
+		{	double secondBankPercent = Double.parseDouble(txtSecondBank.getValue())/100;
+			firstBankPercent = 1- secondBankPercent ;
+			
+			 service.doDailySolarGeneration(doubleBoxSize.getValue()*secondBankPercent, Double.parseDouble(secondBankEfficiency.getText()), inverterBox.getValue(), 
+		        		doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), 
+		        		doubleBoxIrradiance.getValue(), new AsyncCallback<Double>() {
+					public void onFailure(Throwable caught) {				
+						Window.alert(caught.getMessage());				
+					}
 
+					public void onSuccess(Double result) {
+						 secondBankGeneration = result;
+					}});
+			
+		}
         // calculate the generation for all months
         service.doSolarGenerationForAllMonths(dailyIrradianceInMonth,doubleBoxSize.getValue(), efficiencyForDirectionAndAngle.getValue(), 
         		inverterBox.getValue(), doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), 
@@ -918,7 +1008,7 @@ public class CalculationClient implements EntryPoint
 			}});
 
         // calculate the daily generation,  
-        service.doDailySolarGeneration(doubleBoxSize.getValue(), efficiencyForDirectionAndAngle.getValue(), inverterBox.getValue(), 
+        service.doDailySolarGeneration(doubleBoxSize.getValue()*firstBankPercent, efficiencyForDirectionAndAngle.getValue(), inverterBox.getValue(), 
         		doubleBoxWiring.getValue(), txtWhatYear.getValue(), doubleBoxAgeLoss.getValue(), 
         		doubleBoxIrradiance.getValue(), new AsyncCallback<Double>() {
 			public void onFailure(Throwable caught) {				
@@ -926,9 +1016,10 @@ public class CalculationClient implements EntryPoint
 			}
 
 			public void onSuccess(Double result) {
-				txtDailySolarGeneration.setText(result.toString()+" kws");
-				getDailySaving(result);//use dailyCalculation result for dailySavingCalculation
-				getPaybackTime(result);
+				double dailyGeneration = secondBankGeneration +result;
+				txtDailySolarGeneration.setText(Double.toString(dailyGeneration)+" kws");
+				getDailySaving(dailyGeneration);//use dailyCalculation result for dailySavingCalculation
+				getPaybackTime(dailyGeneration);
 			}});
         
         //calculate power consumption
