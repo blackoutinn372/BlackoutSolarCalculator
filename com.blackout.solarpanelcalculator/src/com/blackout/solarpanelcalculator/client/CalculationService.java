@@ -36,5 +36,8 @@ public interface CalculationService extends RemoteService
 	String[] getCityList(int postcode);
 	int getCityIndex();
 	int getCityIDFromPostcode(int postcode);
+	//Product getProdcut();
+	//int getProductRows();
+
 	
 }

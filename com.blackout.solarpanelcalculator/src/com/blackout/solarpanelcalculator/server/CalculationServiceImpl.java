@@ -14,8 +14,10 @@ import org.w3c.dom.NodeList;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.blackout.solarpanelcalculator.client.CalculationService;
 import com.blackout.solarpanelcalculator.client.City;
+import com.blackout.solarpanelcalculator.client.Product;
 
 public class CalculationServiceImpl extends RemoteServiceServlet implements CalculationService {
+	
 	private static double daysInYear = 365;
 	private static final long serialVersionUID = -1314136203142788858L;
 	
@@ -97,7 +99,7 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 	}
 
 }
-
+	
 
 	@Override
 	public City getCity(int cityIndex) {
@@ -140,9 +142,15 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 		// TODO Auto-generated method stub
 		return CalculationFormulas.getEfficiencyForAngleAndDirection(directionIndex, angleIndex);
 	}
-
-
 	
+//	public Product getPorduct(){
+//		return ProductDAO.getProduct();
+//	}
+//
+//	
+//	public int getProductRows(){
+//		return ProductDAO.getProductRows();
+//	}
 	
 
 }

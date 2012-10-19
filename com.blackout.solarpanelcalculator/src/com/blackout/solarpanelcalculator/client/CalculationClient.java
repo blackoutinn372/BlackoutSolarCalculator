@@ -2,6 +2,7 @@ package com.blackout.solarpanelcalculator.client;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import com.blackout.solarpanelcalculator.server.ProductDAO;
 import com.google.code.gwt.geolocation.client.Coordinates;
 import com.google.code.gwt.geolocation.client.Geolocation;
 import com.google.code.gwt.geolocation.client.Position;
@@ -1242,25 +1243,46 @@ public class CalculationClient implements EntryPoint
 	 }
 	 /* dataset for inverter need to be refactored by using datastore data*/
 	protected AbstractDataTable createInverterData() {
-		DataTable data = DataTable.create();
-		data.addColumn(ColumnType.STRING, "Brand");
-		data.addColumn(ColumnType.STRING, "Descriptions","desc");
-		data.addColumn(ColumnType.NUMBER,"Power(watts)");
-		data.addColumn(ColumnType.NUMBER, "Efficiency(%)");
-		data.addColumn(ColumnType.NUMBER, "Price($)");
-
-		data.addRows(2);
-		data.setValue(0, 0, "Aurora");
-		data.setValue(0, 1, "PVI-2000-AU Outdoor 2kW Grid Connect Inverter IP65 rated");
-		data.setValue(0, 2, 2000);
-		data.setValue(0, 3, 96);
-		data.setValue(0, 4, 1174);
-		data.setValue(1, 0, "Aurora");
-		data.setValue(1, 1, "PVI-4.2-AU Outdoor 4.2kW Grid Connect Inverter IP65 rated (transformerless)");
-		data.setValue(1, 2, 4200);
-		data.setValue(1, 3, 96);
+//		ProductDAO pd = new ProductDAO();
+//		int rows = pd.getProductRows();
+//		
+//		
+//		DataTable data = DataTable.create();
+//		data.addColumn(ColumnType.STRING, "Type");
+//		data.addColumn(ColumnType.STRING, "Brand");
+//		data.addColumn(ColumnType.STRING, "Descriptions","desc");
+//		data.addColumn(ColumnType.NUMBER,"Power(watts)");
+//		data.addColumn(ColumnType.NUMBER, "Efficiency(%)");
+//		data.addColumn(ColumnType.NUMBER, "Price($)");
+//
+//		
+//		data.addRows(rows);
+//		for(int i=0 ; i<rows-1; i++){
+//			data.setValue(i, 0, pd.getProduct().getType());
+//			data.setValue(i, 1, pd.getProduct().getBrand());
+//			data.setValue(i, 2, pd.getProduct().getDescriptions());
+//			data.setValue(i, 3, pd.getProduct().getPower());
+//			data.setValue(i, 4, pd.getProduct().getEfficiency());
+//			data.setValue(i, 5, pd.getProduct().getPrice());			
+//		}
+		DataTable data = DataTable.create();	
+		data.addColumn(ColumnType.STRING, "Brand");		
+		data.addColumn(ColumnType.STRING, "Descriptions","desc");		
+		data.addColumn(ColumnType.NUMBER,"Power(watts)");		
+		data.addColumn(ColumnType.NUMBER, "Efficiency(%)");		
+		data.addColumn(ColumnType.NUMBER, "Price($)");	
+		
+		data.addRows(2);		
+		data.setValue(0, 0, "Aurora");		
+		data.setValue(0, 1, "PVI-2000-AU Outdoor 2kW Grid Connect Inverter IP65 rated");		
+		data.setValue(0, 2, 2000);		
+		data.setValue(0, 3, 96);		
+		data.setValue(0, 4, 1174);		
+		data.setValue(1, 0, "Aurora");		
+		data.setValue(1, 1, "PVI-4.2-AU Outdoor 4.2kW Grid Connect Inverter IP65 rated (transformerless)");		
+		data.setValue(1, 2, 4200);		
+		data.setValue(1, 3, 96);		
 		data.setValue(1, 4, 2376);
-
 
 		return data;
 	}
@@ -1288,7 +1310,7 @@ public class CalculationClient implements EntryPoint
 		data.setValue(0, 3, 412.50);	
 
 		return data;
-	}
+	}  
 
 	/*load the map*/
 	private void loadMap(final double latitude,final double longitude){
