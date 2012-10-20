@@ -99,8 +99,8 @@ public class CalculationClient implements EntryPoint
 	private TreeMap<Double,String> payBackTime = null;	
 	private Label lblAddressInput = new Label();
 	private TextBox txtBoxAddressInput = new TextBox();
-	private Button btnAddressInput = new Button();
-	private Label lblNotFound = new Label();
+		private Button btnAddressInput = new Button();
+		private Label lblNotFound = new Label();
 	private ListBox cityComboBox = new ListBox();	
 	private ListBox roofDirectioncomboBox = new ListBox();
 	private ListBox angleComboBox = new ListBox();
@@ -1290,56 +1290,56 @@ public class CalculationClient implements EntryPoint
 			
 			data.setValue(2, 0, "Solar panels");
 			data.setValue(2, 1, "SolarOne");		
-			data.setValue(2, 2, "PVI-3.6-AU Outdoor Grid Connect IIP65 rated");		
+			data.setValue(2, 2, "24V, 5 inch cell Monocrystalline Cell Solar Module");		
 			data.setValue(2, 3, 195);		
 			data.setValue(2, 4, 0.1512);
 			data.setValue(2, 5, 418);	
 			
 			data.setValue(3, 0, "Inverters");
 			data.setValue(3, 1, "Fronius");		
-			data.setValue(3, 2, "PVI-3.6-AU Outdoor Grid Connect IIP65 rated");		
+			data.setValue(3, 2, "IG TL 3.0 Indoor and Outdoor -");		
 			data.setValue(3, 3, 3313);		
 			data.setValue(3, 4, 0.98);
 			data.setValue(3, 5, 2046);
 			
 			data.setValue(4, 0, "Inverters");
 			data.setValue(4, 1, "Aurora");		
-			data.setValue(4, 2, "PVI-3.6-AU Outdoor Grid Connect IIP65 rated");		
+			data.setValue(4, 2, "PVI-2000-AU Outdoor Grid Connect IP65 rated");		
 			data.setValue(4, 3, 2000);		
 			data.setValue(4, 4, 0.96);
 			data.setValue(4, 5, 1174);
 			
 			data.setValue(5, 0, "Solar panels");
 			data.setValue(5, 1, "REC Solar");		
-			data.setValue(5, 2, "PVI-3.6-AU Outdoor Grid Connect IIP65 rated");		
+			data.setValue(5, 2, "Peak Energy Series, polycrystalline cell Black Frame");		
 			data.setValue(5, 3, 250);		
 			data.setValue(5, 4, 0.151);
 			data.setValue(5, 5, 412);
 			
 			data.setValue(6, 0, "Inverters");
 			data.setValue(6, 1, "Fronius");		
-			data.setValue(6, 2, "PVI-3.6-AU Outdoor Grid Connect IIP65 rated");		
+			data.setValue(6, 2, "IG15 Outdoor - Grid Connect");		
 			data.setValue(6, 3, 1500);		
 			data.setValue(6, 4, 0.94);
 			data.setValue(6, 5, 1575);
 			
 			data.setValue(7, 0, "Solar panels");
 			data.setValue(7, 1, "Sharp");		
-			data.setValue(7, 2, "PVI-3.6-AU Outdoor Grid Connect IIP65 rated");		
+			data.setValue(7, 2, "12V Polycrystalline");		
 			data.setValue(7, 3, 130);		
 			data.setValue(7, 4, 0.1599);
 			data.setValue(7, 5, 554);
 			
 			data.setValue(8, 0, "Solar panels");
 			data.setValue(8, 1, "Panasonic");		
-			data.setValue(8, 2, "PVI-3.6-AU Outdoor Grid Connect IIP65 rated");		
+			data.setValue(8, 2, "HIT Solar Module");		
 			data.setValue(8, 3, 235);		
 			data.setValue(8, 4, 0.186);
 			data.setValue(8, 5, 882);
 			
 			data.setValue(9, 0, "Solar panels");
 			data.setValue(9, 1, "Suntech");		
-			data.setValue(9, 2, "PVI-3.6-AU Outdoor Grid Connect IIP65 rated");		
+			data.setValue(9, 2, "HIT Solar Module");		
 			data.setValue(9, 3, 140);		
 			data.setValue(9, 4, 0.151);
 			data.setValue(9, 5, 421);
