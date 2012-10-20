@@ -13,9 +13,9 @@ import com.blackout.solarpanelcalculator.client.Product;
 
 public class ProductDAO {
 		
-	
+	private static final int rows=0; 
 
-	public Product getProduct(){
+	public static Product getProduct(){
 		
 		Product pt = new Product();
 		Connection connect = null;
@@ -72,62 +72,6 @@ public class ProductDAO {
 				
 	}
 	
-	public int getProductRows(){
-		int rows = 0;
-		Connection connect = null;
-		String sql = "select * from solarproducts";
-		PreparedStatement ps = null;
-		try {
-			connect = DriverManager.getConnection("jdbc:google:rdbms://solarcalculator372:solarcalculator/solar");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		ResultSet rs = null;
-				
-		try {
-			ps = connect.prepareStatement(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			rs = ps.executeQuery();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try {
-			rs.last(); //move rs point to last element 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			rows = rs.getRow();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try {
-			if (ps != null) {
-				ps.close();
-			}
-
-			if (connect != null) {
-				connect.close();
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return rows;
-		
-	}
+	
 
 }

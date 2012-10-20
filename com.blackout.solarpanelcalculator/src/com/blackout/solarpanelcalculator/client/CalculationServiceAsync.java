@@ -29,7 +29,7 @@ public interface CalculationServiceAsync {
 	void doTotalSubsidy(double zoneRating, AsyncCallback<Double> callback);
 	void getEfficiencyForAngleAndDirection(int directionIndex, int angleIndex,
 			AsyncCallback<Double> callback);
-	//void getProdcut(AsyncCallback<Product> callback);
+	void getProduct(AsyncCallback<Product> callback);
 	//void getProductRows(AsyncCallback<Integer> callback);
 
 }
