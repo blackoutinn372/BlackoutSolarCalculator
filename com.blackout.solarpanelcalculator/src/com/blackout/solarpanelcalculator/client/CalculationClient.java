@@ -124,6 +124,9 @@ public class CalculationClient implements EntryPoint
 	private TextBox txtDailySavings = new TextBox();	
 	private TextBox txtPayBackYear = new TextBox();
     private TextBox txtPowerEstimate = new TextBox();
+    private TextBox txtOptimalYearAngle = new TextBox();
+    private TextBox txtOptimalWinterAngle = new TextBox();
+    private TextBox txtOptimalSummerAngle = new TextBox();
     private TextBox txtTotalSubsidy = new TextBox();
     
     private IntegerBox txtHouseholdSize = new IntegerBox();
@@ -709,6 +712,10 @@ public class CalculationClient implements EntryPoint
 				 bestWinterAngle = city.getBestWinterDegree();
 				 bestSummerAngle = city.getBestSummerDegree();
 				 txtPostcode.setText(Integer.toString(city.getPostcode()));
+				 // TODO OPTIMAL DEGRESS
+				 txtOptimalYearAngle.setText(Double.toString(city.getOptimalYearDegree()));
+				 txtOptimalSummerAngle.setText(Double.toString(city.getBestSummerDegree()));
+				 txtOptimalWinterAngle.setText(Double.toString(city.getBestWinterDegree()));
 			}			
 		});	
 	}
@@ -751,6 +758,10 @@ public class CalculationClient implements EntryPoint
 		RootPanel.get("tdPayBackYearResult").add(txtPayBackYear);
 		RootPanel.get("tdSimilarSystem").add(txtSimilarSystem);
 		RootPanel.get("tdTotalSubsidy").add(txtTotalSubsidy);
+		RootPanel.get("tdOptimalYearAngle").add(txtOptimalYearAngle);
+		RootPanel.get("tdSummerAngle").add(txtOptimalSummerAngle);
+		//RootPanel.get("tdSeasonAngle").add("<br/>");
+		RootPanel.get("tdWinterAngle").add(txtOptimalWinterAngle);
 		txtPayBackYear.setSize("151", "26");
 		loadWorthInvesting();
 	}
@@ -907,7 +918,7 @@ public class CalculationClient implements EntryPoint
 	
 	/* WorthInvestment method */
 	private void loadWorthInvesting() {
-		txtDailySavings2.setText("5000");
+		txtDailySavings2.setText("25");
 		txtPayBackYear2.setText("5y 6m");
 		txtExpectedDuration.setText("25y 6m");
 		btnWorthInvesting.setText("Worth it?");
@@ -929,19 +940,7 @@ public class CalculationClient implements EntryPoint
 				    Window.alert("'" + dailySavings + "' is not a valid symbol.");
 				    txtDailySavings2.selectAll();
 				    return;
-			    }/*
-			    else if (!payBackYear.matches(onlyNumber))
-			    {
-			    	 Window.alert("'" + payBackYear + "' is not a valid symbol.");
-			    	 txtPayBackYear2.selectAll();
-					 return;
 			    }
-			    else if (!expectedDuration.matches(onlyNumber))
-			    {
-			    	 Window.alert("'" + expectedDuration + "' is not a valid symbol.");
-			    	 txtExpectedDuration.selectAll();
-					 return;
-			    }*/
 			    else
 			    {
 			    	getWorthInvestmentFromServer();
