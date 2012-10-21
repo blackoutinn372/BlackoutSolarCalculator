@@ -133,5 +133,24 @@ namespace BlackoutSolarPanelCalculator {
 
             return valueArray;
         }
+
+        public static double GetPowerConsumption(string url, string usageType, int householdSize) {
+
+            const string methodParameter = "desktop?method=getPowerConsumption";
+            string valueParameters = "";
+
+            valueParameters += "&householdSize=" + householdSize.ToString();
+            valueParameters += "&usageType=" + usageType;
+
+            WebRequest webReq = WebRequest.Create(url + methodParameter + valueParameters);
+            Stream respStream = webReq.GetResponse().GetResponseStream();
+            string responseString;
+
+            using (StreamReader reader = new StreamReader(respStream)) {
+                responseString = reader.ReadToEnd();
+            }
+
+            return double.Parse(responseString);
+        }
     }
 }

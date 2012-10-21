@@ -15,6 +15,12 @@ namespace BlackoutSolarPanelCalculator {
         //private string appEngineUrl = "http://127.0.0.1:8888/";
         private string appEngineUrl = "http://blackoutsolarcalculator.appspot.com/";
 
+        private const string defaultSystemSize = "4950";
+        private const string defaultInverterEff = "96";
+        private const string defaultWiringEff = "98";
+        private const string defaultAgeEff = "0.7";
+        private const string defaultHouseholdSize = "2";
+
         public SolarCalculator() {
             InitializeComponent();
 
@@ -23,29 +29,39 @@ namespace BlackoutSolarPanelCalculator {
             Thread.Sleep(2000);
             splashThread.Abort();
 
-            LoadComboBoxes();          
+            LoadComboBoxes();
+            ResetValues();
         }
 
         private void SplashForm() {
             Application.Run(new SplashScreen());
         }
 
+        private void ResetValues() {
+            txtSystemSize.Text = defaultSystemSize;
+            txtInverterEff.Text = defaultInverterEff;
+            txtWiringEff.Text = defaultWiringEff;
+            txtAgeEff.Text = defaultAgeEff;
+            txtHouseholdSize.Text = defaultHouseholdSize;
+
+            cboCity.SelectedIndex = cboCity.Items.IndexOf("Brisbane");
+            cboRoofDirection.SelectedIndex = 0;
+            cboRoofAngle.SelectedIndex = 0;
+            cboUsageType.SelectedIndex = 0;
+        }
+
         private void LoadComboBoxes() {
             try {
                 cboCity.Items.AddRange(ServerComm.GetCityList(appEngineUrl, 4000));
             } catch (Exception exc) {
-                lblError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
+                lblPGError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
             }
-            cboCity.SelectedIndex = cboCity.Items.IndexOf("Brisbane");
-
             cboRoofDirection.Items.AddRange(new String[] { "South West", "South East", "West", "North", "North West", "North East", "East" });
-            cboRoofDirection.SelectedIndex = 0;
-
             cboRoofAngle.Items.AddRange(new String[] { "Optimal", "Very Flat", "Very Steep" });
-            cboRoofAngle.SelectedIndex = 0;
+            cboUsageType.Items.AddRange(new String[] { "Heavy", "Medium", "Light" });
         }
 
-        private void DoValidate() {
+        private void DoPGValidate() {
             bool validFlag = true;
 
             if (cboCity.SelectedItem == null) {
@@ -75,21 +91,37 @@ namespace BlackoutSolarPanelCalculator {
             }
 
             if (validFlag) {
-                btnCalculate.Enabled = true;
+                btnPGCalculate.Enabled = true;
             } else {
-                btnCalculate.Enabled = false;
+                btnPGCalculate.Enabled = false;
             }
         }
 
-        private void GenerateChart(double[] monthVals) {
+        private void DoPCValidate() {
+            bool validFlag = true;
+
+            int trash;
+            if (!int.TryParse(txtHouseholdSize.Text, out trash)) {
+                validFlag = false;
+            }
+
+            if (validFlag) {
+                btnPCCalculate.Enabled = true;
+            } else {
+                btnPCCalculate.Enabled = false;
+            }
+        }
+
+        private void GeneratePGChart(double[] monthVals) {
             chtMonthlyPowerGenerated.Visible = true;
+            chtMonthlyPowerGenerated.Series.Clear();
             Series series = chtMonthlyPowerGenerated.Series.Add("Power Generated");
             for (int i = 0; i < 12; i++) {
                 series.Points.AddY(monthVals[i]);
             }
         }
 
-        private void GenerateResults(double[] monthVals) {
+        private void GeneratePGResults(double[] monthVals) {
             double totalYearPower = 0;
             double highPower = 0;
             double lowPower = 9999;
@@ -108,13 +140,13 @@ namespace BlackoutSolarPanelCalculator {
                 }
             }
 
-            lblResults.Text = "Avg. Daily Power Generated: " + (totalYearPower / 365.25).ToString("0.00") + "kW\n\n";
-            lblResults.Text += "Avg. Monthly Power Generated: " + (totalYearPower / 12).ToString("0.00") + "kW\n\n";
-            lblResults.Text += "Highest Month: " + CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(highPowerIndex + 1) + ", " + highPower.ToString("0.00") + "kW\n\n";
-            lblResults.Text += "Lowest Month: " + CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(lowPowerIndex + 1) + ", " + lowPower.ToString("0.00") + "kW\n\n";
+            lblPGResults.Text = "Avg. Daily Power Generated: " + (totalYearPower / 365.25).ToString("0.00") + "kW\n\n";
+            lblPGResults.Text += "Avg. Monthly Power Generated: " + (totalYearPower / 12).ToString("0.00") + "kW\n\n";
+            lblPGResults.Text += "Highest Month: " + CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(highPowerIndex + 1) + ", " + highPower.ToString("0.00") + "kW\n\n";
+            lblPGResults.Text += "Lowest Month: " + CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(lowPowerIndex + 1) + ", " + lowPower.ToString("0.00") + "kW\n\n";
         }
 
-        private void btnCalculate_Click(object sender, EventArgs e) {
+        private void btnPGCalculate_Click(object sender, EventArgs e) {
             try {
                 double[] cityVals = ServerComm.GetCity(appEngineUrl, cboCity.SelectedIndex);
                 double[] monthIrradianceVals = new double[12];
@@ -122,10 +154,10 @@ namespace BlackoutSolarPanelCalculator {
                     monthIrradianceVals[i] = cityVals[i + 6];
                 }
                 double[] monthlyPowerVals = ServerComm.GetSolarGeneFormulaForAllMonths(appEngineUrl, monthIrradianceVals, double.Parse(txtSystemSize.Text), double.Parse(txtRoofEff.Text), double.Parse(txtInverterEff.Text), double.Parse(txtWiringEff.Text), 0, double.Parse(txtAgeEff.Text));
-                GenerateChart(monthlyPowerVals);
-                GenerateResults(monthlyPowerVals);
+                GeneratePGChart(monthlyPowerVals);
+                GeneratePGResults(monthlyPowerVals);
             } catch (Exception exc) {
-                lblError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
+                lblPGError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
             }
         }
 
@@ -138,55 +170,73 @@ namespace BlackoutSolarPanelCalculator {
         }
 
         private void cboCity_SelectedIndexChanged(object sender, EventArgs e) {
-            DoValidate();
+            DoPGValidate();
         }
 
         private void cboRoofDirection_SelectedIndexChanged(object sender, EventArgs e) {
             try {
                 txtRoofEff.Text = ServerComm.GetEfficiencyForAngleAndDirection(appEngineUrl, cboRoofDirection.SelectedIndex, cboRoofAngle.SelectedIndex).ToString();
             } catch (Exception exc) {
-                lblError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
+                lblPGError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
             }
-            DoValidate();
+            DoPGValidate();
         }
 
         private void cboRoofAngle_SelectedIndexChanged(object sender, EventArgs e) {
             try {
                 txtRoofEff.Text = ServerComm.GetEfficiencyForAngleAndDirection(appEngineUrl, cboRoofDirection.SelectedIndex, cboRoofAngle.SelectedIndex).ToString();
             } catch (Exception exc) {
-                lblError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
+                lblPGError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
             }
-            DoValidate();
+            DoPGValidate();
         }
 
         private void txtSystemSize_TextChanged(object sender, EventArgs e) {
-            DoValidate();
+            DoPGValidate();
         }
 
         private void txtRoofEff_TextChanged(object sender, EventArgs e) {
-            DoValidate();
+            DoPGValidate();
         }
 
         private void txtInverterEff_TextChanged(object sender, EventArgs e) {
-            DoValidate();
+            DoPGValidate();
         }
 
         private void txtWiringEff_TextChanged(object sender, EventArgs e) {
-            DoValidate();
+            DoPGValidate();
         }
 
         private void txtPanelAge_TextChanged(object sender, EventArgs e) {
-            DoValidate();
+            DoPGValidate();
         }
 
         private void txtAgeEff_TextChanged(object sender, EventArgs e) {
-            DoValidate();
+            DoPGValidate();
         }
 
-        private void btnReset_Click(object sender, EventArgs e) {
-
+        private void btnPGReset_Click(object sender, EventArgs e) {
+            ResetValues();
+            chtMonthlyPowerGenerated.Visible = false;
+            lblPGResults.Visible = false;
         }
 
+        private void txtHouseholdSize_TextChanged(object sender, EventArgs e) {
+            DoPCValidate();
+        }
+
+        private void btnPCCalculate_Click(object sender, EventArgs e) {
+            try {
+                double powerConsumption = ServerComm.GetPowerConsumption(appEngineUrl, cboUsageType.SelectedValue.ToString(), int.Parse(txtHouseholdSize.Text));
+                GeneratePCResults(powerConsumption);
+            } catch (Exception exc) {
+                lblPCError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
+            }
+        }
+
+        private void GeneratePCResults(double powerConsumption) {
+            lblPCResults.Text = "Estimated Avgerage Daily Power Consumed: " + powerConsumption.ToString("0.00") + "kW\n\n";
+        }
         
     }
 }
