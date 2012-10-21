@@ -256,17 +256,17 @@ public class CalculationClient implements EntryPoint
 		
 		//Mouse Handler
 		txtPostcode.addMouseOutHandler(new PostcodeHandler());
-//		doubleBoxSize.addMouseOutHandler(new systemSizeValidation());
-//		systemCostBox.addMouseOutHandler(new systemCostValidation());
-//		efficiencyForDirectionAndAngle.addMouseOutHandler(new directionAndAngleValidation());
-//		inverterBox.addMouseOutHandler(new inverterValidation());
-//		doubleBoxWiring.addMouseOutHandler(new wiringValidation());
-//		integerBoxLifeSpan.addMouseOutHandler(new lifeSpanValidation());
-//		doubleBoxPowerCost.addMouseOutHandler(new powerCostValidation());
-//		doubleBoxTarrif.addMouseOutHandler(new tarrifValidation());
-//		doubleBoxReplacePercent.addMouseOutHandler(new replacePercentValidation());
-//		doubleBoxAgeLoss.addMouseOutHandler(new ageLossValidation());
-//		doubleBoxIrradiance.addMouseOutHandler(new irradianceValidation());
+		doubleBoxSize.addMouseOutHandler(new systemSizeValidation());
+		systemCostBox.addMouseOutHandler(new systemCostValidation());
+		efficiencyForDirectionAndAngle.addMouseOutHandler(new directionAndAngleValidation());
+		inverterBox.addMouseOutHandler(new inverterValidation());
+		doubleBoxWiring.addMouseOutHandler(new wiringValidation());
+		integerBoxLifeSpan.addMouseOutHandler(new lifeSpanValidation());
+		doubleBoxPowerCost.addMouseOutHandler(new powerCostValidation());
+		doubleBoxTarrif.addMouseOutHandler(new tarrifValidation());
+		doubleBoxReplacePercent.addMouseOutHandler(new replacePercentValidation());
+		doubleBoxAgeLoss.addMouseOutHandler(new ageLossValidation());
+		doubleBoxIrradiance.addMouseOutHandler(new irradianceValidation());
 		
 		
 		cityComboBox.addChangeHandler(new ChangeHandler() {
@@ -488,8 +488,8 @@ public class CalculationClient implements EntryPoint
 	class systemSizeValidation implements MouseOutHandler{
 		@Override
 		public void onMouseOut(MouseOutEvent event) {
-			
-			if(Validator.isValidBigNumber(doubleBoxSize.getText()) == false)
+			String validFormat ="^([-+] ?)?[0-9]+(,[0-9]+)?$";
+			if((Validator.isValidBigNumber(doubleBoxSize.getText()) == false) && (!doubleBoxSize.getText().matches(validFormat)))
 			{
 				doubleBoxSize.setStyleName("gwt-TextBox-Error", true);
 				doubleBoxSize.setFocus(true);
@@ -505,8 +505,8 @@ public class CalculationClient implements EntryPoint
 	class systemCostValidation implements MouseOutHandler{
 		@Override
 		public void onMouseOut(MouseOutEvent event) {
-			
-			if(Validator.isValidBigNumber(systemCostBox.getText()) == false)
+			String validFormat ="^([-+] ?)?[0-9]+(,[0-9]+)?$";
+			if((Validator.isValidBigNumber(systemCostBox.getText()) == false) && (!systemCostBox.getText().matches(validFormat)))
 			{
 				systemCostBox.setStyleName("gwt-TextBox-Error", true);
 				systemCostBox.setFocus(true);
@@ -656,7 +656,7 @@ public class CalculationClient implements EntryPoint
 			}
 		}
 	}
-
+	
 	
 	public void getAngleDirectionEfficiency() {
 		if(secondBank.getValue())
@@ -733,14 +733,21 @@ public class CalculationClient implements EntryPoint
 		txtHouseholdSize.setValue(0);
 
 		btnCalculation.setText("Calculate");
-
+      
 		txtDailySavings.setText("0");
 		txtPayBackYear.setText("");
+		
 		btnCalculation.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				String onlyNumber = "^[0-9]+$";
 				if((txtPostcode.getStyleName().equals("gwt-TextBox gwt-TextBox-Error")) || (doubleBoxSize.getStyleName().equals("gwt-TextBox-Error")) || (systemCostBox.getStyleName().equals("gwt-TextBox-Error")) || (efficiencyForDirectionAndAngle.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (inverterBox.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxWiring.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error"))|| (integerBoxLifeSpan.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxPowerCost.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxTarrif.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxReplacePercent.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxAgeLoss.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")) || (doubleBoxIrradiance.getStyleName().equals("gwt-DoubleBox-assumptions gwt-TextBox-Error")))
 				{
 					Window.alert("Please check your input");
+					return;
+				}
+				else if (!txtHouseholdSize.getText().matches(onlyNumber) )
+				{
+					Window.alert("Please check household input size");
 					return;
 				}
 				doCalculation();
@@ -932,15 +939,19 @@ public class CalculationClient implements EntryPoint
 		btnWorthInvesting.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 			    final String dailySavings = txtDailySavings2.getText().toUpperCase().trim();
-			    final String payBackYear = txtPayBackYear2.getText().toUpperCase().trim();
-			    final String expectedDuration = txtExpectedDuration.getText().toUpperCase().trim();
 			    txtDailySavings2.setFocus(true);
 			    txtPayBackYear2.setFocus(true);
 			    txtExpectedDuration.setFocus(true);
-			    String onlyNumber = "^[0-9]+$";
+			    String onlyNumber = "^[0-9]{1,2}([,.][0-9]{1,2})?$";
 			    if (!dailySavings.matches(onlyNumber))
 			    {
 				    Window.alert("'" + dailySavings + "' is not a valid symbol.");
+				    txtDailySavings2.selectAll();
+				    return;
+			    }
+			    else if(!lblBankInterest.getText().matches(onlyNumber))
+			    {
+				    Window.alert("'" + lblBankInterest.getText() + "' is not a valid symbol.");
 				    txtDailySavings2.selectAll();
 				    return;
 			    }
