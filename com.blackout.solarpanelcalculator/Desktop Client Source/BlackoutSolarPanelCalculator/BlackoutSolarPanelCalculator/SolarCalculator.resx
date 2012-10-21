@@ -131,11 +131,11 @@ Also note that changing your roof angle and roof direction will alter the 'Roof 
 
 Prepopulated in the input fields are typical values, in the event that the specific values are unknown to you. If you know values more specific to your situation, override these prepopulated values.
 
-Please note that changing your city has a bearing on the underlying power generated throughout the year, based on our rich database for irradiance values.
+Note that a light user uses around 10kWhs in a typical day, while a medium user uses 19kWhs, and a heavy user uses 28kWhs.
 
-Also note that changing your roof angle and roof direction will alter the 'Roof Efficiency' value accordingly.</value>
+Household size refers to the typical number of people that reside in the house or dwelling.</value>
   </data>
-  <data name="label12.Text" xml:space="preserve">
+  <data name="lblDSInstructions.Text" xml:space="preserve">
     <value>Enter the values specific to your situation in the Input box to the left.
 
 Prepopulated in the input fields are typical values, in the event that the specific values are unknown to you. If you know values more specific to your situation, override these prepopulated values.

@@ -152,5 +152,36 @@ namespace BlackoutSolarPanelCalculator {
 
             return double.Parse(responseString);
         }
+
+        public static string[] GetAggregateSavingsData(string url, double systemCost, double dailyGeneration, int cityIndex, double replacePercent, double agingEfficiencyLoss, double lifeSpan, double yearsToCalculate) {
+
+            const string methodParameter = "desktop?method=getAggregateSavingsData";
+            string valueParameters = "";
+
+            valueParameters += "&systemCost=" + systemCost.ToString();
+            valueParameters += "&dailyGeneration=" + dailyGeneration.ToString();
+            valueParameters += "&cityIndex=" + cityIndex.ToString();
+            valueParameters += "&replacePercent=" + replacePercent.ToString();
+            valueParameters += "&agingEfficiencyloss=" + agingEfficiencyLoss.ToString();
+            valueParameters += "&lifeSpan=" + lifeSpan.ToString();
+            valueParameters += "&yearsToCalculate=" + yearsToCalculate.ToString();
+
+            WebRequest webReq = WebRequest.Create(url + methodParameter + valueParameters);
+            Stream respStream = webReq.GetResponse().GetResponseStream();
+            string responseString;
+
+            using (StreamReader reader = new StreamReader(respStream)) {
+                responseString = reader.ReadToEnd();
+            }
+
+            string[] responseStringArray = responseString.Split('~');
+
+            /*
+             * 0 Estimated Daily Savings
+             * 1-n Chart data
+            */
+
+            return responseStringArray;
+        }
     }
 }

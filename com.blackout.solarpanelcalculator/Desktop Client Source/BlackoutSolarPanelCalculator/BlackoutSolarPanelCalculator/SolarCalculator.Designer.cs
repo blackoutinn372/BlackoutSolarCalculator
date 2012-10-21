@@ -42,11 +42,11 @@
             this.chtMonthlyPowerGenerated = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.grpPGInput = new System.Windows.Forms.GroupBox();
             this.lblPGError = new System.Windows.Forms.Label();
-            this.txtAgeEff = new System.Windows.Forms.TextBox();
+            this.txtPGAgingEff = new System.Windows.Forms.TextBox();
             this.txtWiringEff = new System.Windows.Forms.TextBox();
             this.txtInverterEff = new System.Windows.Forms.TextBox();
             this.txtRoofEff = new System.Windows.Forms.TextBox();
-            this.lblAgeEff = new System.Windows.Forms.Label();
+            this.lblPGAgingEff = new System.Windows.Forms.Label();
             this.lblWiringEff = new System.Windows.Forms.Label();
             this.lblInverterEff = new System.Windows.Forms.Label();
             this.lblRoofEff = new System.Windows.Forms.Label();
@@ -56,8 +56,8 @@
             this.lblSystemSize = new System.Windows.Forms.Label();
             this.lblRoofAngle = new System.Windows.Forms.Label();
             this.lblRoofDirection = new System.Windows.Forms.Label();
-            this.lblCity = new System.Windows.Forms.Label();
-            this.cboCity = new System.Windows.Forms.ComboBox();
+            this.lblPGCity = new System.Windows.Forms.Label();
+            this.cboPGCity = new System.Windows.Forms.ComboBox();
             this.btnPGReset = new System.Windows.Forms.Button();
             this.btnPGCalculate = new System.Windows.Forms.Button();
             this.tabConsumption = new System.Windows.Forms.TabPage();
@@ -71,39 +71,37 @@
             this.lblHouseholdSize = new System.Windows.Forms.Label();
             this.lblUsageType = new System.Windows.Forms.Label();
             this.cboUsageType = new System.Windows.Forms.ComboBox();
-            this.lblPCReset = new System.Windows.Forms.Button();
+            this.btnPCReset = new System.Windows.Forms.Button();
             this.btnPCCalculate = new System.Windows.Forms.Button();
             this.tabSavings = new System.Windows.Forms.TabPage();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.comboBox6 = new System.Windows.Forms.ComboBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.grpDSInstructions = new System.Windows.Forms.GroupBox();
+            this.lblDSInstructions = new System.Windows.Forms.Label();
+            this.grpDSResults = new System.Windows.Forms.GroupBox();
+            this.lblDSResults = new System.Windows.Forms.Label();
+            this.chtPayBack = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.grpDSInput = new System.Windows.Forms.GroupBox();
+            this.txtDailyGeneration = new System.Windows.Forms.TextBox();
+            this.lblDailyGeneration = new System.Windows.Forms.Label();
+            this.txtSystemCost = new System.Windows.Forms.TextBox();
+            this.lblSystemCost = new System.Windows.Forms.Label();
+            this.lblDSError = new System.Windows.Forms.Label();
+            this.txtLifeSpan = new System.Windows.Forms.TextBox();
+            this.txtDSAgingEff = new System.Windows.Forms.TextBox();
+            this.lblLifeSpan = new System.Windows.Forms.Label();
+            this.lblDSAgingEff = new System.Windows.Forms.Label();
+            this.txtDailyConsumption = new System.Windows.Forms.TextBox();
+            this.lblDailyConsumption = new System.Windows.Forms.Label();
+            this.lblDSCity = new System.Windows.Forms.Label();
+            this.cboDSCity = new System.Windows.Forms.ComboBox();
+            this.btnDSReset = new System.Windows.Forms.Button();
+            this.btnDSCalculate = new System.Windows.Forms.Button();
             this.lblBanner = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serverStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtReplacePercent = new System.Windows.Forms.TextBox();
+            this.lblReplacePercent = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabGeneration.SuspendLayout();
             this.grpPGInstructions.SuspendLayout();
@@ -115,10 +113,10 @@
             this.grpPCResults.SuspendLayout();
             this.grpPCInput.SuspendLayout();
             this.tabSavings.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
-            this.groupBox6.SuspendLayout();
+            this.grpDSInstructions.SuspendLayout();
+            this.grpDSResults.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chtPayBack)).BeginInit();
+            this.grpDSInput.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -203,11 +201,11 @@
             // grpPGInput
             // 
             this.grpPGInput.Controls.Add(this.lblPGError);
-            this.grpPGInput.Controls.Add(this.txtAgeEff);
+            this.grpPGInput.Controls.Add(this.txtPGAgingEff);
             this.grpPGInput.Controls.Add(this.txtWiringEff);
             this.grpPGInput.Controls.Add(this.txtInverterEff);
             this.grpPGInput.Controls.Add(this.txtRoofEff);
-            this.grpPGInput.Controls.Add(this.lblAgeEff);
+            this.grpPGInput.Controls.Add(this.lblPGAgingEff);
             this.grpPGInput.Controls.Add(this.lblWiringEff);
             this.grpPGInput.Controls.Add(this.lblInverterEff);
             this.grpPGInput.Controls.Add(this.lblRoofEff);
@@ -217,8 +215,8 @@
             this.grpPGInput.Controls.Add(this.lblSystemSize);
             this.grpPGInput.Controls.Add(this.lblRoofAngle);
             this.grpPGInput.Controls.Add(this.lblRoofDirection);
-            this.grpPGInput.Controls.Add(this.lblCity);
-            this.grpPGInput.Controls.Add(this.cboCity);
+            this.grpPGInput.Controls.Add(this.lblPGCity);
+            this.grpPGInput.Controls.Add(this.cboPGCity);
             this.grpPGInput.Controls.Add(this.btnPGReset);
             this.grpPGInput.Controls.Add(this.btnPGCalculate);
             this.grpPGInput.Location = new System.Drawing.Point(6, 6);
@@ -237,13 +235,13 @@
             this.lblPGError.Size = new System.Drawing.Size(588, 21);
             this.lblPGError.TabIndex = 17;
             // 
-            // txtAgeEff
+            // txtPGAgingEff
             // 
-            this.txtAgeEff.Location = new System.Drawing.Point(377, 103);
-            this.txtAgeEff.Name = "txtAgeEff";
-            this.txtAgeEff.Size = new System.Drawing.Size(100, 20);
-            this.txtAgeEff.TabIndex = 38;
-            this.txtAgeEff.TextChanged += new System.EventHandler(this.txtAgeEff_TextChanged);
+            this.txtPGAgingEff.Location = new System.Drawing.Point(377, 103);
+            this.txtPGAgingEff.Name = "txtPGAgingEff";
+            this.txtPGAgingEff.Size = new System.Drawing.Size(100, 20);
+            this.txtPGAgingEff.TabIndex = 38;
+            this.txtPGAgingEff.TextChanged += new System.EventHandler(this.txtPGAgingEff_TextChanged);
             // 
             // txtWiringEff
             // 
@@ -269,14 +267,14 @@
             this.txtRoofEff.TabIndex = 34;
             this.txtRoofEff.TextChanged += new System.EventHandler(this.txtRoofEff_TextChanged);
             // 
-            // lblAgeEff
+            // lblPGAgingEff
             // 
-            this.lblAgeEff.Location = new System.Drawing.Point(254, 106);
-            this.lblAgeEff.Margin = new System.Windows.Forms.Padding(0);
-            this.lblAgeEff.Name = "lblAgeEff";
-            this.lblAgeEff.Size = new System.Drawing.Size(120, 30);
-            this.lblAgeEff.TabIndex = 33;
-            this.lblAgeEff.Text = "Age Efficiency (%)";
+            this.lblPGAgingEff.Location = new System.Drawing.Point(254, 106);
+            this.lblPGAgingEff.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPGAgingEff.Name = "lblPGAgingEff";
+            this.lblPGAgingEff.Size = new System.Drawing.Size(120, 30);
+            this.lblPGAgingEff.TabIndex = 33;
+            this.lblPGAgingEff.Text = "Age Efficiency (%)";
             // 
             // lblWiringEff
             // 
@@ -360,24 +358,24 @@
             this.lblRoofDirection.TabIndex = 23;
             this.lblRoofDirection.Text = "Roof Direction";
             // 
-            // lblCity
+            // lblPGCity
             // 
-            this.lblCity.Location = new System.Drawing.Point(6, 16);
-            this.lblCity.Margin = new System.Windows.Forms.Padding(0);
-            this.lblCity.Name = "lblCity";
-            this.lblCity.Size = new System.Drawing.Size(100, 30);
-            this.lblCity.TabIndex = 22;
-            this.lblCity.Text = "City";
+            this.lblPGCity.Location = new System.Drawing.Point(6, 16);
+            this.lblPGCity.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPGCity.Name = "lblPGCity";
+            this.lblPGCity.Size = new System.Drawing.Size(100, 30);
+            this.lblPGCity.TabIndex = 22;
+            this.lblPGCity.Text = "City";
             // 
-            // cboCity
+            // cboPGCity
             // 
-            this.cboCity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboCity.FormattingEnabled = true;
-            this.cboCity.Location = new System.Drawing.Point(109, 13);
-            this.cboCity.Name = "cboCity";
-            this.cboCity.Size = new System.Drawing.Size(100, 21);
-            this.cboCity.TabIndex = 20;
-            this.cboCity.SelectedIndexChanged += new System.EventHandler(this.cboCity_SelectedIndexChanged);
+            this.cboPGCity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboPGCity.FormattingEnabled = true;
+            this.cboPGCity.Location = new System.Drawing.Point(109, 13);
+            this.cboPGCity.Name = "cboPGCity";
+            this.cboPGCity.Size = new System.Drawing.Size(100, 21);
+            this.cboPGCity.TabIndex = 20;
+            this.cboPGCity.SelectedIndexChanged += new System.EventHandler(this.cboPGCity_SelectedIndexChanged);
             // 
             // btnPGReset
             // 
@@ -458,7 +456,7 @@
             this.grpPCInput.Controls.Add(this.lblHouseholdSize);
             this.grpPCInput.Controls.Add(this.lblUsageType);
             this.grpPCInput.Controls.Add(this.cboUsageType);
-            this.grpPCInput.Controls.Add(this.lblPCReset);
+            this.grpPCInput.Controls.Add(this.btnPCReset);
             this.grpPCInput.Controls.Add(this.btnPCCalculate);
             this.grpPCInput.Location = new System.Drawing.Point(6, 6);
             this.grpPCInput.Name = "grpPCInput";
@@ -511,14 +509,15 @@
             this.cboUsageType.Size = new System.Drawing.Size(100, 21);
             this.cboUsageType.TabIndex = 20;
             // 
-            // lblPCReset
+            // btnPCReset
             // 
-            this.lblPCReset.Location = new System.Drawing.Point(289, 193);
-            this.lblPCReset.Name = "lblPCReset";
-            this.lblPCReset.Size = new System.Drawing.Size(75, 23);
-            this.lblPCReset.TabIndex = 16;
-            this.lblPCReset.Text = "Reset";
-            this.lblPCReset.UseVisualStyleBackColor = true;
+            this.btnPCReset.Location = new System.Drawing.Point(289, 193);
+            this.btnPCReset.Name = "btnPCReset";
+            this.btnPCReset.Size = new System.Drawing.Size(75, 23);
+            this.btnPCReset.TabIndex = 16;
+            this.btnPCReset.Text = "Reset";
+            this.btnPCReset.UseVisualStyleBackColor = true;
+            this.btnPCReset.Click += new System.EventHandler(this.btnPCReset_Click);
             // 
             // btnPCCalculate
             // 
@@ -532,9 +531,9 @@
             // 
             // tabSavings
             // 
-            this.tabSavings.Controls.Add(this.groupBox4);
-            this.tabSavings.Controls.Add(this.groupBox5);
-            this.tabSavings.Controls.Add(this.groupBox6);
+            this.tabSavings.Controls.Add(this.grpDSInstructions);
+            this.tabSavings.Controls.Add(this.grpDSResults);
+            this.tabSavings.Controls.Add(this.grpDSInput);
             this.tabSavings.Location = new System.Drawing.Point(4, 22);
             this.tabSavings.Name = "tabSavings";
             this.tabSavings.Size = new System.Drawing.Size(952, 462);
@@ -542,247 +541,217 @@
             this.tabSavings.Text = "Dollar Savings";
             this.tabSavings.UseVisualStyleBackColor = true;
             // 
-            // groupBox4
+            // grpDSInstructions
             // 
-            this.groupBox4.Controls.Add(this.label12);
-            this.groupBox4.Location = new System.Drawing.Point(612, 6);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(334, 450);
-            this.groupBox4.TabIndex = 5;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Instructions";
+            this.grpDSInstructions.Controls.Add(this.lblDSInstructions);
+            this.grpDSInstructions.Location = new System.Drawing.Point(612, 6);
+            this.grpDSInstructions.Name = "grpDSInstructions";
+            this.grpDSInstructions.Size = new System.Drawing.Size(334, 450);
+            this.grpDSInstructions.TabIndex = 5;
+            this.grpDSInstructions.TabStop = false;
+            this.grpDSInstructions.Text = "Instructions";
             // 
-            // label12
+            // lblDSInstructions
             // 
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(3, 16);
-            this.label12.Margin = new System.Windows.Forms.Padding(0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(328, 389);
-            this.label12.TabIndex = 39;
-            this.label12.Text = resources.GetString("label12.Text");
+            this.lblDSInstructions.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDSInstructions.Location = new System.Drawing.Point(3, 16);
+            this.lblDSInstructions.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDSInstructions.Name = "lblDSInstructions";
+            this.lblDSInstructions.Size = new System.Drawing.Size(328, 389);
+            this.lblDSInstructions.TabIndex = 39;
+            this.lblDSInstructions.Text = resources.GetString("lblDSInstructions.Text");
             // 
-            // groupBox5
+            // grpDSResults
             // 
-            this.groupBox5.Controls.Add(this.label13);
-            this.groupBox5.Controls.Add(this.chart2);
-            this.groupBox5.Location = new System.Drawing.Point(6, 234);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(600, 222);
-            this.groupBox5.TabIndex = 4;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Results";
+            this.grpDSResults.Controls.Add(this.lblDSResults);
+            this.grpDSResults.Controls.Add(this.chtPayBack);
+            this.grpDSResults.Location = new System.Drawing.Point(6, 234);
+            this.grpDSResults.Name = "grpDSResults";
+            this.grpDSResults.Size = new System.Drawing.Size(600, 222);
+            this.grpDSResults.TabIndex = 4;
+            this.grpDSResults.TabStop = false;
+            this.grpDSResults.Text = "Results";
             // 
-            // label13
+            // lblDSResults
             // 
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(6, 19);
-            this.label13.Margin = new System.Windows.Forms.Padding(0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(277, 197);
-            this.label13.TabIndex = 39;
+            this.lblDSResults.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDSResults.Location = new System.Drawing.Point(6, 19);
+            this.lblDSResults.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDSResults.Name = "lblDSResults";
+            this.lblDSResults.Size = new System.Drawing.Size(277, 197);
+            this.lblDSResults.TabIndex = 39;
             // 
-            // chart2
+            // chtPayBack
             // 
             chartArea4.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea4);
-            this.chart2.Location = new System.Drawing.Point(289, 19);
-            this.chart2.Name = "chart2";
+            this.chtPayBack.ChartAreas.Add(chartArea4);
+            this.chtPayBack.Location = new System.Drawing.Point(289, 19);
+            this.chtPayBack.Name = "chtPayBack";
             series4.ChartArea = "ChartArea1";
             series4.Name = "srsMonthValues";
-            this.chart2.Series.Add(series4);
-            this.chart2.Size = new System.Drawing.Size(305, 197);
-            this.chart2.TabIndex = 0;
-            this.chart2.Visible = false;
+            this.chtPayBack.Series.Add(series4);
+            this.chtPayBack.Size = new System.Drawing.Size(305, 197);
+            this.chtPayBack.TabIndex = 0;
+            this.chtPayBack.Visible = false;
             // 
-            // groupBox6
+            // grpDSInput
             // 
-            this.groupBox6.Controls.Add(this.label14);
-            this.groupBox6.Controls.Add(this.textBox6);
-            this.groupBox6.Controls.Add(this.textBox7);
-            this.groupBox6.Controls.Add(this.textBox8);
-            this.groupBox6.Controls.Add(this.textBox9);
-            this.groupBox6.Controls.Add(this.label15);
-            this.groupBox6.Controls.Add(this.label16);
-            this.groupBox6.Controls.Add(this.label17);
-            this.groupBox6.Controls.Add(this.label18);
-            this.groupBox6.Controls.Add(this.textBox10);
-            this.groupBox6.Controls.Add(this.comboBox4);
-            this.groupBox6.Controls.Add(this.comboBox5);
-            this.groupBox6.Controls.Add(this.label19);
-            this.groupBox6.Controls.Add(this.label20);
-            this.groupBox6.Controls.Add(this.label21);
-            this.groupBox6.Controls.Add(this.label22);
-            this.groupBox6.Controls.Add(this.comboBox6);
-            this.groupBox6.Controls.Add(this.button3);
-            this.groupBox6.Controls.Add(this.button4);
-            this.groupBox6.Location = new System.Drawing.Point(6, 6);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(600, 222);
-            this.groupBox6.TabIndex = 3;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Input";
+            this.grpDSInput.Controls.Add(this.txtReplacePercent);
+            this.grpDSInput.Controls.Add(this.lblReplacePercent);
+            this.grpDSInput.Controls.Add(this.txtDailyGeneration);
+            this.grpDSInput.Controls.Add(this.lblDailyGeneration);
+            this.grpDSInput.Controls.Add(this.txtSystemCost);
+            this.grpDSInput.Controls.Add(this.lblSystemCost);
+            this.grpDSInput.Controls.Add(this.lblDSError);
+            this.grpDSInput.Controls.Add(this.txtLifeSpan);
+            this.grpDSInput.Controls.Add(this.txtDSAgingEff);
+            this.grpDSInput.Controls.Add(this.lblLifeSpan);
+            this.grpDSInput.Controls.Add(this.lblDSAgingEff);
+            this.grpDSInput.Controls.Add(this.txtDailyConsumption);
+            this.grpDSInput.Controls.Add(this.lblDailyConsumption);
+            this.grpDSInput.Controls.Add(this.lblDSCity);
+            this.grpDSInput.Controls.Add(this.cboDSCity);
+            this.grpDSInput.Controls.Add(this.btnDSReset);
+            this.grpDSInput.Controls.Add(this.btnDSCalculate);
+            this.grpDSInput.Location = new System.Drawing.Point(6, 6);
+            this.grpDSInput.Name = "grpDSInput";
+            this.grpDSInput.Size = new System.Drawing.Size(600, 222);
+            this.grpDSInput.TabIndex = 3;
+            this.grpDSInput.TabStop = false;
+            this.grpDSInput.Text = "Input";
             // 
-            // label14
+            // txtDailyGeneration
             // 
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.Red;
-            this.label14.Location = new System.Drawing.Point(6, 169);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(588, 21);
-            this.label14.TabIndex = 17;
+            this.txtDailyGeneration.Location = new System.Drawing.Point(141, 73);
+            this.txtDailyGeneration.Name = "txtDailyGeneration";
+            this.txtDailyGeneration.Size = new System.Drawing.Size(100, 20);
+            this.txtDailyGeneration.TabIndex = 42;
+            this.txtDailyGeneration.TextChanged += new System.EventHandler(this.txtDailyGeneration_TextChanged);
             // 
-            // textBox6
+            // lblDailyGeneration
             // 
-            this.textBox6.Location = new System.Drawing.Point(377, 103);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(100, 20);
-            this.textBox6.TabIndex = 38;
+            this.lblDailyGeneration.Location = new System.Drawing.Point(6, 76);
+            this.lblDailyGeneration.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDailyGeneration.Name = "lblDailyGeneration";
+            this.lblDailyGeneration.Size = new System.Drawing.Size(132, 30);
+            this.lblDailyGeneration.TabIndex = 41;
+            this.lblDailyGeneration.Text = "Daily Generation (kWh)";
             // 
-            // textBox7
+            // txtSystemCost
             // 
-            this.textBox7.Location = new System.Drawing.Point(377, 73);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(100, 20);
-            this.textBox7.TabIndex = 36;
+            this.txtSystemCost.Location = new System.Drawing.Point(141, 43);
+            this.txtSystemCost.Name = "txtSystemCost";
+            this.txtSystemCost.Size = new System.Drawing.Size(100, 20);
+            this.txtSystemCost.TabIndex = 38;
+            this.txtSystemCost.TextChanged += new System.EventHandler(this.txtSystemCost_TextChanged);
             // 
-            // textBox8
+            // lblSystemCost
             // 
-            this.textBox8.Location = new System.Drawing.Point(377, 43);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(100, 20);
-            this.textBox8.TabIndex = 35;
+            this.lblSystemCost.Location = new System.Drawing.Point(6, 46);
+            this.lblSystemCost.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSystemCost.Name = "lblSystemCost";
+            this.lblSystemCost.Size = new System.Drawing.Size(132, 30);
+            this.lblSystemCost.TabIndex = 37;
+            this.lblSystemCost.Text = "System Cost ($)";
             // 
-            // textBox9
+            // lblDSError
             // 
-            this.textBox9.Location = new System.Drawing.Point(377, 13);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(100, 20);
-            this.textBox9.TabIndex = 34;
+            this.lblDSError.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDSError.ForeColor = System.Drawing.Color.Red;
+            this.lblDSError.Location = new System.Drawing.Point(6, 169);
+            this.lblDSError.Name = "lblDSError";
+            this.lblDSError.Size = new System.Drawing.Size(588, 21);
+            this.lblDSError.TabIndex = 17;
             // 
-            // label15
+            // txtLifeSpan
             // 
-            this.label15.Location = new System.Drawing.Point(254, 106);
-            this.label15.Margin = new System.Windows.Forms.Padding(0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(120, 30);
-            this.label15.TabIndex = 33;
-            this.label15.Text = "Age Efficiency (%)";
+            this.txtLifeSpan.Location = new System.Drawing.Point(377, 43);
+            this.txtLifeSpan.Name = "txtLifeSpan";
+            this.txtLifeSpan.Size = new System.Drawing.Size(100, 20);
+            this.txtLifeSpan.TabIndex = 35;
+            this.txtLifeSpan.TextChanged += new System.EventHandler(this.txtLifeSpan_TextChanged);
             // 
-            // label16
+            // txtDSAgingEff
             // 
-            this.label16.Location = new System.Drawing.Point(254, 76);
-            this.label16.Margin = new System.Windows.Forms.Padding(0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(120, 30);
-            this.label16.TabIndex = 31;
-            this.label16.Text = "Wiring Efficiency (%)";
+            this.txtDSAgingEff.Location = new System.Drawing.Point(377, 13);
+            this.txtDSAgingEff.Name = "txtDSAgingEff";
+            this.txtDSAgingEff.Size = new System.Drawing.Size(100, 20);
+            this.txtDSAgingEff.TabIndex = 34;
+            this.txtDSAgingEff.TextChanged += new System.EventHandler(this.txtDSAgingEff_TextChanged);
             // 
-            // label17
+            // lblLifeSpan
             // 
-            this.label17.Location = new System.Drawing.Point(254, 46);
-            this.label17.Margin = new System.Windows.Forms.Padding(0);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(120, 30);
-            this.label17.TabIndex = 30;
-            this.label17.Text = "Inverter Efficiency (%)";
+            this.lblLifeSpan.Location = new System.Drawing.Point(254, 46);
+            this.lblLifeSpan.Margin = new System.Windows.Forms.Padding(0);
+            this.lblLifeSpan.Name = "lblLifeSpan";
+            this.lblLifeSpan.Size = new System.Drawing.Size(120, 30);
+            this.lblLifeSpan.TabIndex = 30;
+            this.lblLifeSpan.Text = "Life Span (yrs)";
             // 
-            // label18
+            // lblDSAgingEff
             // 
-            this.label18.Location = new System.Drawing.Point(254, 16);
-            this.label18.Margin = new System.Windows.Forms.Padding(0);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(120, 30);
-            this.label18.TabIndex = 29;
-            this.label18.Text = "Roof Efficiency (%)";
+            this.lblDSAgingEff.Location = new System.Drawing.Point(254, 16);
+            this.lblDSAgingEff.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDSAgingEff.Name = "lblDSAgingEff";
+            this.lblDSAgingEff.Size = new System.Drawing.Size(120, 30);
+            this.lblDSAgingEff.TabIndex = 29;
+            this.lblDSAgingEff.Text = "Aging Efficiency (%)";
             // 
-            // textBox10
+            // txtDailyConsumption
             // 
-            this.textBox10.Location = new System.Drawing.Point(109, 103);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(100, 20);
-            this.textBox10.TabIndex = 28;
+            this.txtDailyConsumption.Location = new System.Drawing.Point(141, 103);
+            this.txtDailyConsumption.Name = "txtDailyConsumption";
+            this.txtDailyConsumption.Size = new System.Drawing.Size(100, 20);
+            this.txtDailyConsumption.TabIndex = 28;
+            this.txtDailyConsumption.TextChanged += new System.EventHandler(this.txtDailyConsumption_TextChanged);
             // 
-            // comboBox4
+            // lblDailyConsumption
             // 
-            this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(109, 73);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(100, 21);
-            this.comboBox4.TabIndex = 27;
+            this.lblDailyConsumption.Location = new System.Drawing.Point(6, 106);
+            this.lblDailyConsumption.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDailyConsumption.Name = "lblDailyConsumption";
+            this.lblDailyConsumption.Size = new System.Drawing.Size(132, 30);
+            this.lblDailyConsumption.TabIndex = 25;
+            this.lblDailyConsumption.Text = "Daily Consumption (kWh)";
             // 
-            // comboBox5
+            // lblDSCity
             // 
-            this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(109, 43);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(100, 21);
-            this.comboBox5.TabIndex = 26;
+            this.lblDSCity.Location = new System.Drawing.Point(6, 16);
+            this.lblDSCity.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDSCity.Name = "lblDSCity";
+            this.lblDSCity.Size = new System.Drawing.Size(132, 30);
+            this.lblDSCity.TabIndex = 22;
+            this.lblDSCity.Text = "City";
             // 
-            // label19
+            // cboDSCity
             // 
-            this.label19.Location = new System.Drawing.Point(6, 106);
-            this.label19.Margin = new System.Windows.Forms.Padding(0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(100, 30);
-            this.label19.TabIndex = 25;
-            this.label19.Text = "System Size (W)";
+            this.cboDSCity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboDSCity.FormattingEnabled = true;
+            this.cboDSCity.Location = new System.Drawing.Point(141, 13);
+            this.cboDSCity.Name = "cboDSCity";
+            this.cboDSCity.Size = new System.Drawing.Size(100, 21);
+            this.cboDSCity.TabIndex = 20;
+            this.cboDSCity.SelectedIndexChanged += new System.EventHandler(this.cboDSCity_SelectedIndexChanged);
             // 
-            // label20
+            // btnDSReset
             // 
-            this.label20.Location = new System.Drawing.Point(6, 76);
-            this.label20.Margin = new System.Windows.Forms.Padding(0);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(100, 30);
-            this.label20.TabIndex = 24;
-            this.label20.Text = "Roof Angle";
+            this.btnDSReset.Location = new System.Drawing.Point(289, 193);
+            this.btnDSReset.Name = "btnDSReset";
+            this.btnDSReset.Size = new System.Drawing.Size(75, 23);
+            this.btnDSReset.TabIndex = 16;
+            this.btnDSReset.Text = "Reset";
+            this.btnDSReset.UseVisualStyleBackColor = true;
+            this.btnDSReset.Click += new System.EventHandler(this.btnDSReset_Click);
             // 
-            // label21
+            // btnDSCalculate
             // 
-            this.label21.Location = new System.Drawing.Point(6, 46);
-            this.label21.Margin = new System.Windows.Forms.Padding(0);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(100, 30);
-            this.label21.TabIndex = 23;
-            this.label21.Text = "Roof Direction";
-            // 
-            // label22
-            // 
-            this.label22.Location = new System.Drawing.Point(6, 16);
-            this.label22.Margin = new System.Windows.Forms.Padding(0);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(100, 30);
-            this.label22.TabIndex = 22;
-            this.label22.Text = "City";
-            // 
-            // comboBox6
-            // 
-            this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Location = new System.Drawing.Point(109, 13);
-            this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(100, 21);
-            this.comboBox6.TabIndex = 20;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(289, 193);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 16;
-            this.button3.Text = "Reset";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(208, 193);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 15;
-            this.button4.Text = "Calculate";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnDSCalculate.Location = new System.Drawing.Point(208, 193);
+            this.btnDSCalculate.Name = "btnDSCalculate";
+            this.btnDSCalculate.Size = new System.Drawing.Size(75, 23);
+            this.btnDSCalculate.TabIndex = 15;
+            this.btnDSCalculate.Text = "Calculate";
+            this.btnDSCalculate.UseVisualStyleBackColor = true;
+            this.btnDSCalculate.Click += new System.EventHandler(this.btnDSCalculate_Click);
             // 
             // lblBanner
             // 
@@ -832,6 +801,23 @@
             this.serverStringToolStripMenuItem.Text = "Server String";
             this.serverStringToolStripMenuItem.Click += new System.EventHandler(this.serverStringToolStripMenuItem_Click);
             // 
+            // txtReplacePercent
+            // 
+            this.txtReplacePercent.Location = new System.Drawing.Point(377, 103);
+            this.txtReplacePercent.Name = "txtReplacePercent";
+            this.txtReplacePercent.Size = new System.Drawing.Size(100, 20);
+            this.txtReplacePercent.TabIndex = 44;
+            this.txtReplacePercent.TextChanged += new System.EventHandler(this.txtReplacePercent_TextChanged);
+            // 
+            // lblReplacePercent
+            // 
+            this.lblReplacePercent.Location = new System.Drawing.Point(254, 76);
+            this.lblReplacePercent.Margin = new System.Windows.Forms.Padding(0);
+            this.lblReplacePercent.Name = "lblReplacePercent";
+            this.lblReplacePercent.Size = new System.Drawing.Size(223, 47);
+            this.lblReplacePercent.TabIndex = 43;
+            this.lblReplacePercent.Text = "Power Generated that is used back in the home (%)";
+            // 
             // SolarCalculator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -859,11 +845,11 @@
             this.grpPCInput.ResumeLayout(false);
             this.grpPCInput.PerformLayout();
             this.tabSavings.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
+            this.grpDSInstructions.ResumeLayout(false);
+            this.grpDSResults.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chtPayBack)).EndInit();
+            this.grpDSInput.ResumeLayout(false);
+            this.grpDSInput.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -889,11 +875,11 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem serverStringToolStripMenuItem;
-        private System.Windows.Forms.TextBox txtAgeEff;
+        private System.Windows.Forms.TextBox txtPGAgingEff;
         private System.Windows.Forms.TextBox txtWiringEff;
         private System.Windows.Forms.TextBox txtInverterEff;
         private System.Windows.Forms.TextBox txtRoofEff;
-        private System.Windows.Forms.Label lblAgeEff;
+        private System.Windows.Forms.Label lblPGAgingEff;
         private System.Windows.Forms.Label lblWiringEff;
         private System.Windows.Forms.Label lblInverterEff;
         private System.Windows.Forms.Label lblRoofEff;
@@ -903,8 +889,8 @@
         private System.Windows.Forms.Label lblSystemSize;
         private System.Windows.Forms.Label lblRoofAngle;
         private System.Windows.Forms.Label lblRoofDirection;
-        private System.Windows.Forms.Label lblCity;
-        private System.Windows.Forms.ComboBox cboCity;
+        private System.Windows.Forms.Label lblPGCity;
+        private System.Windows.Forms.ComboBox cboPGCity;
         private System.Windows.Forms.DataVisualization.Charting.Chart chtMonthlyPowerGenerated;
         private System.Windows.Forms.Label lblPGResults;
         private System.Windows.Forms.Label lblPGInstructions;
@@ -918,33 +904,31 @@
         private System.Windows.Forms.Label lblHouseholdSize;
         private System.Windows.Forms.Label lblUsageType;
         private System.Windows.Forms.ComboBox cboUsageType;
-        private System.Windows.Forms.Button lblPCReset;
+        private System.Windows.Forms.Button btnPCReset;
         private System.Windows.Forms.Button btnPCCalculate;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
-        private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.TextBox textBox8;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.TextBox textBox10;
-        private System.Windows.Forms.ComboBox comboBox4;
-        private System.Windows.Forms.ComboBox comboBox5;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.ComboBox comboBox6;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.GroupBox grpDSInstructions;
+        private System.Windows.Forms.Label lblDSInstructions;
+        private System.Windows.Forms.GroupBox grpDSResults;
+        private System.Windows.Forms.Label lblDSResults;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chtPayBack;
+        private System.Windows.Forms.GroupBox grpDSInput;
+        private System.Windows.Forms.Label lblDSError;
+        private System.Windows.Forms.TextBox txtLifeSpan;
+        private System.Windows.Forms.TextBox txtDSAgingEff;
+        private System.Windows.Forms.Label lblLifeSpan;
+        private System.Windows.Forms.Label lblDSAgingEff;
+        private System.Windows.Forms.TextBox txtDailyConsumption;
+        private System.Windows.Forms.Label lblDailyConsumption;
+        private System.Windows.Forms.Label lblDSCity;
+        private System.Windows.Forms.ComboBox cboDSCity;
+        private System.Windows.Forms.Button btnDSReset;
+        private System.Windows.Forms.Button btnDSCalculate;
+        private System.Windows.Forms.TextBox txtDailyGeneration;
+        private System.Windows.Forms.Label lblDailyGeneration;
+        private System.Windows.Forms.TextBox txtSystemCost;
+        private System.Windows.Forms.Label lblSystemCost;
+        private System.Windows.Forms.TextBox txtReplacePercent;
+        private System.Windows.Forms.Label lblReplacePercent;
     }
 }
 
