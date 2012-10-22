@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SolarCalculator));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabGeneration = new System.Windows.Forms.TabPage();
             this.grpPGInstructions = new System.Windows.Forms.GroupBox();
@@ -80,6 +80,8 @@
             this.lblDSResults = new System.Windows.Forms.Label();
             this.chtPayBack = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.grpDSInput = new System.Windows.Forms.GroupBox();
+            this.txtReplacePercent = new System.Windows.Forms.TextBox();
+            this.lblReplacePercent = new System.Windows.Forms.Label();
             this.txtDailyGeneration = new System.Windows.Forms.TextBox();
             this.lblDailyGeneration = new System.Windows.Forms.Label();
             this.txtSystemCost = new System.Windows.Forms.TextBox();
@@ -100,8 +102,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serverStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtReplacePercent = new System.Windows.Forms.TextBox();
-            this.lblReplacePercent = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabGeneration.SuspendLayout();
             this.grpPGInstructions.SuspendLayout();
@@ -187,13 +187,13 @@
             // 
             // chtMonthlyPowerGenerated
             // 
-            chartArea3.Name = "ChartArea1";
-            this.chtMonthlyPowerGenerated.ChartAreas.Add(chartArea3);
+            chartArea1.Name = "ChartArea1";
+            this.chtMonthlyPowerGenerated.ChartAreas.Add(chartArea1);
             this.chtMonthlyPowerGenerated.Location = new System.Drawing.Point(289, 19);
             this.chtMonthlyPowerGenerated.Name = "chtMonthlyPowerGenerated";
-            series3.ChartArea = "ChartArea1";
-            series3.Name = "srsMonthValues";
-            this.chtMonthlyPowerGenerated.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.Name = "srsMonthValues";
+            this.chtMonthlyPowerGenerated.Series.Add(series1);
             this.chtMonthlyPowerGenerated.Size = new System.Drawing.Size(305, 197);
             this.chtMonthlyPowerGenerated.TabIndex = 0;
             this.chtMonthlyPowerGenerated.Visible = false;
@@ -583,13 +583,13 @@
             // 
             // chtPayBack
             // 
-            chartArea4.Name = "ChartArea1";
-            this.chtPayBack.ChartAreas.Add(chartArea4);
+            chartArea2.Name = "ChartArea1";
+            this.chtPayBack.ChartAreas.Add(chartArea2);
             this.chtPayBack.Location = new System.Drawing.Point(289, 19);
             this.chtPayBack.Name = "chtPayBack";
-            series4.ChartArea = "ChartArea1";
-            series4.Name = "srsMonthValues";
-            this.chtPayBack.Series.Add(series4);
+            series2.ChartArea = "ChartArea1";
+            series2.Name = "srsMonthValues";
+            this.chtPayBack.Series.Add(series2);
             this.chtPayBack.Size = new System.Drawing.Size(305, 197);
             this.chtPayBack.TabIndex = 0;
             this.chtPayBack.Visible = false;
@@ -619,6 +619,23 @@
             this.grpDSInput.TabIndex = 3;
             this.grpDSInput.TabStop = false;
             this.grpDSInput.Text = "Input";
+            // 
+            // txtReplacePercent
+            // 
+            this.txtReplacePercent.Location = new System.Drawing.Point(377, 103);
+            this.txtReplacePercent.Name = "txtReplacePercent";
+            this.txtReplacePercent.Size = new System.Drawing.Size(100, 20);
+            this.txtReplacePercent.TabIndex = 44;
+            this.txtReplacePercent.TextChanged += new System.EventHandler(this.txtReplacePercent_TextChanged);
+            // 
+            // lblReplacePercent
+            // 
+            this.lblReplacePercent.Location = new System.Drawing.Point(254, 76);
+            this.lblReplacePercent.Margin = new System.Windows.Forms.Padding(0);
+            this.lblReplacePercent.Name = "lblReplacePercent";
+            this.lblReplacePercent.Size = new System.Drawing.Size(223, 47);
+            this.lblReplacePercent.TabIndex = 43;
+            this.lblReplacePercent.Text = "Power Generated that is used back in the home (%)";
             // 
             // txtDailyGeneration
             // 
@@ -800,23 +817,6 @@
             this.serverStringToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.serverStringToolStripMenuItem.Text = "Server String";
             this.serverStringToolStripMenuItem.Click += new System.EventHandler(this.serverStringToolStripMenuItem_Click);
-            // 
-            // txtReplacePercent
-            // 
-            this.txtReplacePercent.Location = new System.Drawing.Point(377, 103);
-            this.txtReplacePercent.Name = "txtReplacePercent";
-            this.txtReplacePercent.Size = new System.Drawing.Size(100, 20);
-            this.txtReplacePercent.TabIndex = 44;
-            this.txtReplacePercent.TextChanged += new System.EventHandler(this.txtReplacePercent_TextChanged);
-            // 
-            // lblReplacePercent
-            // 
-            this.lblReplacePercent.Location = new System.Drawing.Point(254, 76);
-            this.lblReplacePercent.Margin = new System.Windows.Forms.Padding(0);
-            this.lblReplacePercent.Name = "lblReplacePercent";
-            this.lblReplacePercent.Size = new System.Drawing.Size(223, 47);
-            this.lblReplacePercent.TabIndex = 43;
-            this.lblReplacePercent.Text = "Power Generated that is used back in the home (%)";
             // 
             // SolarCalculator
             // 

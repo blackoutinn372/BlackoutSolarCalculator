@@ -325,6 +325,7 @@ namespace BlackoutSolarPanelCalculator {
         private void btnDSReset_Click(object sender, EventArgs e) {
             ResetValues();
             lblDSResults.Text = "";
+            chtPayBack.Visible = false;
         }
 
         private void txtReplacePercent_TextChanged(object sender, EventArgs e) {
@@ -334,24 +335,35 @@ namespace BlackoutSolarPanelCalculator {
         private void btnDSCalculate_Click(object sender, EventArgs e) {
             try {
                 string[] savingsValues = ServerComm.GetAggregateSavingsData(appEngineUrl, double.Parse(txtSystemCost.Text), double.Parse(txtDailyGeneration.Text), cboDSCity.SelectedIndex, double.Parse(txtReplacePercent.Text), double.Parse(txtDSAgingEff.Text), double.Parse(txtLifeSpan.Text), 25);
-                GenerateDSChart(savingsValues);
-                GenerateDSResults(savingsValues);
+                GenerateDSChartPlusResults(savingsValues);
             } catch (Exception exc) {
                 lblPCError.Text = "Could not communicate with server: " + appEngineUrl.ToString() + ". Error Code: " + exc.Message;
             }
         }
 
-        private void GenerateDSResults(string[] savingsVals) {
+        private void GenerateDSChartPlusResults(string[] savingsVals) {
+            lblDSResults.Text = "Estimated Avgerage Daily Savings: $" + savingsVals[0] + "\n\n";
 
-        }
+            chtPayBack.Visible = true;
+            chtPayBack.Series.Clear();
+            Series series = chtPayBack.Series.Add("Power Generated");
+            bool breakEvenFlag = false;
+            for (int i = 1; i < savingsVals.Length; i++) {
+                string[] xComponents = savingsVals[i].Split('|')[1].Split(' ');
+                double xComponent = double.Parse(xComponents[0].Substring(0, xComponents[0].Length - 1));
+                if (xComponents.Length > 1) {
+                    xComponent += (double.Parse(xComponents[1].Substring(0, xComponents[1].Length - 1)))/12;
+                }
+                double yComponent = double.Parse(savingsVals[i].Split('|')[0]);
+                series.Points.AddXY(Math.Round(xComponent, 2), yComponent);
 
-        private void GenerateDSChart(string[] savingsVals) {
-            //chtMonthlyPowerGenerated.Visible = true;
-            //chtMonthlyPowerGenerated.Series.Clear();
-            //Series series = chtMonthlyPowerGenerated.Series.Add("Power Generated");
-            //for (int i = 0; i < 12; i++) {
-            //    series.Points.AddY(monthVals[i]);
-            //}
+                if (!breakEvenFlag && yComponent > 0) {
+                    lblDSResults.Text += "You will break even at: " + xComponent.ToString("0.00") + " Years\n\n";
+                    breakEvenFlag = true;
+                }
+            }
+
+            lblDSResults.Text += "After " + series.Points[series.Points.Count - 1].XValue.ToString("0.00") + " years you will be expected to have a profit of: $" + series.Points[series.Points.Count - 1].YValues[0].ToString("0.00") + "\n\n";
         }
     }
 }
