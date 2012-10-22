@@ -170,6 +170,7 @@ public class CalculationFormulas
 	 public static TreeMap<Double,String> getPayBackTime (double systemCost, double panelLifeSpan, double replacePercent,double feedInTarrif,
 			 double powerCost, double dailyGeneration , double agingEfficiencyLoss,double yearsToCalculate) {
 		agingEfficiencyLoss = agingEfficiencyLoss/100;
+		if (yearsToCalculate <= 0) return null;
 		if (panelLifeSpan < yearsToCalculate)
 			yearsToCalculate = Math.max(panelLifeSpan,0);//use panel life span if number of calculate years is greater	 
 		systemCost = Math.max(systemCost, 0);
@@ -203,42 +204,46 @@ public class CalculationFormulas
 	 }
 	 /**
 	  * calculate total subsidy
-	  * @param zoneRating
-	  * @return totalSubsidy
+	  * @param zoneRating		
+	  * @return totalSubsidy	
 	  */
-	 public static double getTotalSubsidy(double zoneRating){
-		 double totalSubsidy = zoneRating * rateForRecs *ratedPowerOutput*deemingPeriod;
+	 public static double getTotalSubsidy(double zoneRating) {
+		 zoneRating = Math.max(0, zoneRating);
+		 double totalSubsidy = zoneRating * rateForRecs * ratedPowerOutput * deemingPeriod;
 		 return twoDecimals(totalSubsidy);
 	 }
 	 public static double getEfficiencyForAngleAndDirection(int directionIndex, int angleIndex){
-		 double directionEfficiency =0;
+		 double directionEfficiency = 0;
 		 double angleEfficiency = 0;
-		 switch(directionIndex){
-		 case 0:directionEfficiency = 0.98;
-		 break;
-		 case 1:directionEfficiency = 0.975;
-		 break;
-		 case 2: directionEfficiency = 0.955;
-		 break;
-		 case 3: directionEfficiency = 0.783;
-		 break;
-		 case 4: directionEfficiency = 0.95;
-		 break;
-		 case 5: directionEfficiency = 0.9;
-		 break;
-		 case 6: directionEfficiency = 0.9;
-		 break;
-		 case 7: directionEfficiency = 0.783;
-		 break;
+		 
+		 switch(directionIndex) {
+			 case 0: directionEfficiency = 0.98;
+			 break;
+			 case 1: directionEfficiency = 0.975;
+			 break;
+			 case 2: directionEfficiency = 0.955;
+			 break;
+			 case 3: directionEfficiency = 0.783;
+			 break;
+			 case 4: directionEfficiency = 0.95;
+			 break;
+			 case 5: directionEfficiency = 0.9;
+			 break;
+			 case 6: directionEfficiency = 0.9;
+			 break;
+			 case 7: directionEfficiency = 0.783;
+			 break;
+			 default: directionEfficiency = 0;
 		 }
 		 
 		 switch(angleIndex){
-		 case 0:angleEfficiency = 0.903;
-		 break;
-		 case 1:angleEfficiency = 0.81;
-		 break;
-		 case 2:angleEfficiency = 0.78;
-		 break;
+			 case 0:angleEfficiency = 0.903;
+			 break;
+			 case 1:angleEfficiency = 0.81;
+			 break;
+			 case 2:angleEfficiency = 0.78;
+			 break;
+			 default: angleEfficiency = 0;
 		 }
 		 return twoDecimals(directionEfficiency*angleEfficiency)*100; 
 	 }

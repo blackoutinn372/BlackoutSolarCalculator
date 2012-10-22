@@ -29,6 +29,7 @@ public class TestFormulas
 	
 	//	Invalid Values
 	private final double invalidNumber = -999999999; 
+	private final int invalidInt = -1;
 	
 	//	1st set of values for daily savings
 	double dailyGeneration1 = 21.02;
@@ -44,7 +45,7 @@ public class TestFormulas
 	double dailySavings1 = 8.01;
 	double[] dailyIrradianceInMonth = {6.19,5.39,4.95,3.98,3.23,3.02,3.22,4.04,5.12,5.52,6.07,6.35};
 	
-	double[] expectedMonthGeneration ={790.81,621.88,632.4,492,412.61,373.5,411.37,516.15,633,705.25,750.6,811.27};
+	double[] expectedMonthGeneration ={779.96,613.2,623.72,485.1,407.03,368.1,405.79,509.02,624.3,695.33,740.1,800.11};
 	double dailyGeneration = 20.0;//in kws
 	double yearsToCalculate = 25;
 	String expectedPaybackTime ="6y 8m";
@@ -198,11 +199,9 @@ public class TestFormulas
 	
 	@Test
 	public void invalidLifespanPaybackYear() {
-		TreeMap<Double,String> resultsMap = CalculationFormulas.getPayBackTime(systemCost1,
-				yearsToCalculate, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
 		TreeMap<Double,String> invalidResultsMap = CalculationFormulas.getPayBackTime(systemCost1,
 				invalidNumber, replacement1, tarrif1, powerCost1, dailyGeneration, age1, yearsToCalculate);
-		assertEquals(resultsMap.get(expectedFirstPaybackYearProfit),
+		assertEquals(null,
 				invalidResultsMap.get(expectedFirstPaybackYearProfit));
 	}
 	
@@ -269,10 +268,29 @@ public class TestFormulas
 	/* Monthly Gen tests */
 	@Test
 	public void testMonthlyGeneration() {
-		assertEquals(true, 
-				Arrays.equals(expectedMonthGeneration, 
-						CalculationFormulas.getSolarGeneFormulaForAllMonths(dailyIrradianceInMonth, 
-								systemSize1, roof1, inverter1, wiring1, year, age1)));
+		double[] months = CalculationFormulas.getSolarGeneFormulaForAllMonths(dailyIrradianceInMonth, 
+				systemSize1, roof1, inverter1, wiring1, year, age1);
+		
+		for (int index = 0; index < 12; index++) {
+			assertEquals(expectedMonthGeneration[index],months[index], DELTA);
+		}
+		assertEquals(true, Arrays.equals(expectedMonthGeneration, months));
+	}
+	
+	/* Get efficiency tests (Angle and Direction) */
+	@Test
+	public void testGetEfficiency() {
+		assertNotNull(CalculationFormulas.getEfficiencyForAngleAndDirection(0,0));
+	}
+	
+	@Test
+	public void invalidAngleForEfficiency() {
+		assertEquals(0.0, CalculationFormulas.getEfficiencyForAngleAndDirection(invalidInt,0),DELTA);
+	}
+	
+	@Test
+	public void invalidDirectionForEfficiency() {
+		assertEquals(0.0, CalculationFormulas.getEfficiencyForAngleAndDirection(0,invalidInt),DELTA);
 	}
 	
 	/* Worth Investing tests */
@@ -311,13 +329,25 @@ public class TestFormulas
 		assertEquals(0, CalculationFormulas.isWorthInvesting(validSavings, three, -three), DELTA);
 	}
 	
+	/* Test Subsidy */
+	@Test
+	public void testSubsidy() {
+		assertEquals(900, CalculationFormulas.getTotalSubsidy(1), DELTA);
+	}
+	
+	@Test
+	public void noSubsidy() {
+		assertEquals(0, CalculationFormulas.getTotalSubsidy(0), DELTA);
+	}
+	
+	@Test
+	public void invalidSubsidy() {
+		assertEquals(0, CalculationFormulas.getTotalSubsidy(invalidNumber), DELTA);
+	}
+	
 	/* Bank Interest */
 	@Test
 	public void aBankTest() {
-		// 1000
-		// 1100 - 1 year
-		// 1210 - 2 year
-		// 1331 - 3 years cumulative interest
 		assertEquals(1331, CalculationFormulas.calculateBankSavings(three, bankAmt, tenPercent), DELTA);
 	}
 	
