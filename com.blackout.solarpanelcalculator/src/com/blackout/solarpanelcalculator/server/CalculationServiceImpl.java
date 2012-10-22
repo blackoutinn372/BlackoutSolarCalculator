@@ -143,9 +143,14 @@ public class CalculationServiceImpl extends RemoteServiceServlet implements Calc
 		return CalculationFormulas.getEfficiencyForAngleAndDirection(directionIndex, angleIndex);
 	}
 	
-//	public Product getPorduct(){
-//		return ProductDAO.getProduct();
-//	}
+	public Product getPorduct(){
+		return ProductDAO.getProduct();
+	}
+	
+	@Override
+	public Product getProduct(){
+		return ProductDAO.getProduct();
+	}
 //
 //	
 //	public int getProductRows(){

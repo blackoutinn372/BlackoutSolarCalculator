@@ -39,5 +39,5 @@ public interface CalculationService extends RemoteService
 	//Product getProdcut();
 	//int getProductRows();
 
-	
+	Product getProduct();
 }

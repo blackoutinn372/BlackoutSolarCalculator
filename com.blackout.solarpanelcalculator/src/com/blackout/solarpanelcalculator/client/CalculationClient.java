@@ -150,6 +150,9 @@ public class CalculationClient implements EntryPoint
 	private TextBox txtSecondBank = new TextBox();
 	private TextBox secondBankEfficiency = new TextBox();
 	private double secondBankGeneration = 0;
+	
+	private DataTable pt;
+	
 	public void onModuleLoad() {
 		RootPanel.get("tdMainPanel").add(loadAllControlsNew());		 
 		service= (CalculationServiceAsync) GWT.create(CalculationService.class);
@@ -159,6 +162,8 @@ public class CalculationClient implements EntryPoint
         loadUserLocationOnMap();	
         createTable();
 	}
+	
+	
 
 	private Widget loadAllControlsNew() {
 		// Pop up message
@@ -1260,17 +1265,36 @@ public class CalculationClient implements EntryPoint
 	    options.setEnableTooltip(true);
 	    return options;
 	  }
+	
+	private void getProductValues() {	
+		// final double solarIrradiance;
+		service.getProduct(new AsyncCallback<Product>(){
+
+		@Override
+		public void onFailure(Throwable caught) {
+		Window.alert(caught.getMessage());	
+
+		}
+
+		@Override
+		public void onSuccess(Product result) {
+		// TODO Auto-generated method stub
+
+		}	
+		});	
+	}
+	
 	 private void createTable(){
 		 Runnable onLoadCallback = new Runnable() {
 	          public void run() {
 	            Panel panel = RootPanel.get("idPanelTable");
-	            Panel panelInverter = RootPanel.get("idInverterTable");
+	            //Panel panelInverter = RootPanel.get("idInverterTable");
 	            // Create a table visualization.	           
 	            Table table= new Table(createTableData(),createTableOptions());
-	            Table tableInverter = new Table(createInverterData(),createTableOptions());
+	            //Table tableInverter = new Table(createInverterData(),createTableOptions());
 
 	            panel.add(table);
-	            panelInverter.add(tableInverter);
+	            //panelInverter.add(tableInverter);
 
 	          }
 	        };
@@ -1280,51 +1304,92 @@ public class CalculationClient implements EntryPoint
 	        VisualizationUtils.loadVisualizationApi(onLoadCallback, Table.PACKAGE);
 
 	 }
-	 /* dataset for inverter need to be refactored by using datastore data*/
-	protected AbstractDataTable createInverterData() {
-//		ProductDAO pd = new ProductDAO();
-//		int rows = pd.getProductRows();
-//		
-//		
-//		DataTable data = DataTable.create();
-//		data.addColumn(ColumnType.STRING, "Type");
-//		data.addColumn(ColumnType.STRING, "Brand");
-//		data.addColumn(ColumnType.STRING, "Descriptions","desc");
-//		data.addColumn(ColumnType.NUMBER,"Power(watts)");
-//		data.addColumn(ColumnType.NUMBER, "Efficiency(%)");
-//		data.addColumn(ColumnType.NUMBER, "Price($)");
-//
-//		
-//		data.addRows(rows);
-//		for(int i=0 ; i<rows-1; i++){
-//			data.setValue(i, 0, pd.getProduct().getType());
-//			data.setValue(i, 1, pd.getProduct().getBrand());
-//			data.setValue(i, 2, pd.getProduct().getDescriptions());
-//			data.setValue(i, 3, pd.getProduct().getPower());
-//			data.setValue(i, 4, pd.getProduct().getEfficiency());
-//			data.setValue(i, 5, pd.getProduct().getPrice());			
-//		}
-		DataTable data = DataTable.create();	
-		data.addColumn(ColumnType.STRING, "Brand");		
-		data.addColumn(ColumnType.STRING, "Descriptions","desc");		
-		data.addColumn(ColumnType.NUMBER,"Power(watts)");		
-		data.addColumn(ColumnType.NUMBER, "Efficiency(%)");		
-		data.addColumn(ColumnType.NUMBER, "Price($)");	
-		
-		data.addRows(2);		
-		data.setValue(0, 0, "Aurora");		
-		data.setValue(0, 1, "PVI-2000-AU Outdoor 2kW Grid Connect Inverter IP65 rated");		
-		data.setValue(0, 2, 2000);		
-		data.setValue(0, 3, 96);		
-		data.setValue(0, 4, 1174);		
-		data.setValue(1, 0, "Aurora");		
-		data.setValue(1, 1, "PVI-4.2-AU Outdoor 4.2kW Grid Connect Inverter IP65 rated (transformerless)");		
-		data.setValue(1, 2, 4200);		
-		data.setValue(1, 3, 96);		
-		data.setValue(1, 4, 2376);
+		/* dataset for solar panels need to be refactored by using datastore data*/
+	 protected AbstractDataTable createTableData() {
 
-		return data;
-	}
+	 DataTable data = DataTable.create();
+
+	 data.addColumn(ColumnType.STRING, "Type");
+	 data.addColumn(ColumnType.STRING, "Brand");
+	 data.addColumn(ColumnType.STRING, "Descriptions");
+	 data.addColumn(ColumnType.NUMBER, "Power");
+	 data.addColumn(ColumnType.NUMBER, "Efficiency");
+	 data.addColumn(ColumnType.NUMBER, "Price($)");
+
+	 data.addRows(10);
+	 data.setValue(0, 0, "Inverters");
+	 data.setValue(0, 1, "Aurora");	
+	 data.setValue(0, 2, "PVI-4.2-AU Outdoor Grid Connect IP65 rated");	
+	 data.setValue(0, 3, 4200);	
+	 data.setValue(0, 4, 0.96);	
+	 data.setValue(0, 5, 2370);
+
+	 data.setValue(1, 0, "Inverters");
+	 data.setValue(1, 1, "Aurora");	
+	 data.setValue(1, 2, "PVI-3.6-AU Outdoor Grid Connect IIP65 rated");	
+	 data.setValue(1, 3, 3600);	
+	 data.setValue(1, 4, 0.97);	
+	 data.setValue(1, 5, 1980);
+
+	 data.setValue(2, 0, "Solar panels");
+	 data.setValue(2, 1, "SolarOne");	
+ 	 data.setValue(2, 2, "24V, 5 inch cell Monocrystalline Cell Solar Module");	
+ 	 data.setValue(2, 3, 195);	
+	 data.setValue(2, 4, 0.1512);
+	 data.setValue(2, 5, 418);	
+
+	 data.setValue(3, 0, "Inverters");
+	 data.setValue(3, 1, "Fronius");	
+	 data.setValue(3, 2, "IG TL 3.0 Indoor and Outdoor -");	
+	 data.setValue(3, 3, 3313);	
+	 data.setValue(3, 4, 0.98);
+	 data.setValue(3, 5, 2046);
+
+	 data.setValue(4, 0, "Inverters");
+	 data.setValue(4, 1, "Aurora");	
+	 data.setValue(4, 2, "PVI-2000-AU Outdoor Grid Connect IP65 rated");	
+	 data.setValue(4, 3, 2000);	
+	 data.setValue(4, 4, 0.96);
+	 data.setValue(4, 5, 1174);
+
+	 data.setValue(5, 0, "Solar panels");
+	 data.setValue(5, 1, "REC Solar");	
+	 data.setValue(5, 2, "Peak Energy Series, polycrystalline cell Black Frame");	
+	 data.setValue(5, 3, 250);	
+	 data.setValue(5, 4, 0.151);
+	 data.setValue(5, 5, 412); 
+
+	 data.setValue(6, 0, "Inverters");
+	 data.setValue(6, 1, "Fronius");	
+	 data.setValue(6, 2, "IG15 Outdoor - Grid Connect");	
+	 data.setValue(6, 3, 1500);	
+	 data.setValue(6, 4, 0.94);
+	 data.setValue(6, 5, 1575);
+
+	 data.setValue(7, 0, "Solar panels");
+	 data.setValue(7, 1, "Sharp");	
+	 data.setValue(7, 2, "12V Polycrystalline");	
+	 data.setValue(7, 3, 130);	
+	 data.setValue(7, 4, 0.1599);
+	 data.setValue(7, 5, 554);
+
+	 data.setValue(8, 0, "Solar panels");
+	 data.setValue(8, 1, "Panasonic");	
+	 data.setValue(8, 2, "HIT Solar Module");	
+	 data.setValue(8, 3, 235);	
+	 data.setValue(8, 4, 0.186);
+	 data.setValue(8, 5, 882);
+
+	 data.setValue(9, 0, "Solar panels");
+	 data.setValue(9, 1, "Suntech");	
+	 data.setValue(9, 2, "HIT Solar Module");		
+	 data.setValue(9, 3, 140);	
+	 data.setValue(9, 4, 0.151);
+	 data.setValue(9, 5, 421);
+
+
+	 return data;
+	 } 
 	/*create tables options for both inverter and solar panels tables*/
 	protected com.google.gwt.visualization.client.visualizations.Table.Options createTableOptions() {
 		com.google.gwt.visualization.client.visualizations.Table.Options options = Table.Options.create();
@@ -1332,24 +1397,6 @@ public class CalculationClient implements EntryPoint
 
 		return options;
 	}
-/* dataset for solar panels need to be refactored by using datastore data*/
-	protected AbstractDataTable createTableData() {
-		DataTable data = DataTable.create();
-		data.addColumn(ColumnType.STRING, "Brand");
-		data.addColumn(ColumnType.STRING, "Descriptions","desc");
-		data.addColumn(ColumnType.NUMBER,"Power(watts)");
-//		data.addColumn(, "Quantity", "quantity");
-
-		//data.addColumn(ColumnType.NUMBER, "Efficiency(%)");
-		data.addColumn(ColumnType.NUMBER, "Price($)");
-		data.addRows(1);
-		data.setValue(0, 0, "REC Solar");
-		data.setValue(0, 1, "REC Solar 250 W Peak Energy Series, polycrystalline cell Black Frame");
-		data.setValue(0, 2, 250);
-		data.setValue(0, 3, 412.50);	
-
-		return data;
-	}  
 
 	/*load the map*/
 	private void loadMap(final double latitude,final double longitude){
