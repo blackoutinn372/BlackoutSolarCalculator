@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://blackoutsolarcalculator.appspot.com/" />
+<title>TestCase09</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestCase09</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>http://127.0.0.1:8888/Com_blackout_solarpanelcalculator.html?gwt.codesvr=127.0.0.1:9997</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>css=select.gwt-ListBox</td>
+	<td>label=Gold Coast</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//td[@id='tdMainPanel']/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td[2]/select</td>
+	<td>label=South East</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[3]</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[4]</td>
+	<td>20000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[10]</td>
+	<td>50</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[9]</td>
+	<td>22</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdHouseholdSize &gt; input[type=&quot;text&quot;]</td>
+	<td>3</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=gwt-uid-3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#tdDailySolarGenerationCalculate &gt; button.gwt-Button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdDailySolarGenerationResult &gt; input.gwt-TextBox</td>
+	<td>19.18 kws</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdDailySavingsResult &gt; input.gwt-TextBox</td>
+	<td>8.3 dollars</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdPayBackYearResult &gt; input.gwt-TextBox</td>
+	<td>6y 10m</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdPowerEstimateResult &gt; input.gwt-TextBox</td>
+	<td>30.0 kws</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdSimilarSystem &gt; input.gwt-TextBox</td>
+	<td>No data in Gold Coast</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdTotalSubsidy &gt; input.gwt-TextBox</td>
+	<td>no data in Gold Coast</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdSummerAngle &gt; input.gwt-TextBox</td>
+	<td>77.0</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdWinterAngle &gt; input.gwt-TextBox</td>
+	<td>47.0</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdOptimalYearAngle &gt; input.gwt-TextBox</td>
+	<td>62.0</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdDailySaved &gt; input[type=&quot;text&quot;]</td>
+	<td>8</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdFinalPayback &gt; input[type=&quot;text&quot;]</td>
+	<td>6y 10m</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdExpectedDuration &gt; input[type=&quot;text&quot;]</td>
+	<td>25y</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdBankInterest &gt; input[type=&quot;text&quot;]</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#tdWorthInvestingCalculate &gt; button.gwt-Button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>By investing in the system, you will earn an estimate of </td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdWorthInvestingResult &gt; input[type=&quot;text&quot;]</td>
+	<td>$33093.34</td>
+</tr>
+</tbody></table>
+</body>
+</html>
