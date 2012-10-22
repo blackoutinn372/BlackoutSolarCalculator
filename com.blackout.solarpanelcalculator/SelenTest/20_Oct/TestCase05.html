@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://blackoutsolarcalculator.appspot.com/" />
+<title>TestCase05</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestCase05</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>http://127.0.0.1:8888/Com_blackout_solarpanelcalculator.html?gwt.codesvr=127.0.0.1:9997</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[2]</td>
+	<td>2569</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//td[@id='tdMainPanel']/table/tbody/tr[2]/td[2]/div/table/tbody/tr[3]/td[2]/select</td>
+	<td>label=South East</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>//td[@id='tdMainPanel']/table/tbody/tr[2]/td[2]/div/table/tbody/tr[4]/td[2]/select</td>
+	<td>label=Close to flat</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[3]</td>
+	<td>8000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[4]</td>
+	<td>25000</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=img.gwt-Image</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=input.gwt-DoubleBox-assumptions</td>
+	<td>90</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[6]</td>
+	<td>90</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[7]</td>
+	<td>90</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[8]</td>
+	<td>25</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[9]</td>
+	<td>21</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[10]</td>
+	<td>44</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[13]</td>
+	<td>4.5</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>xpath=(//input[@type='text'])[11]</td>
+	<td>24</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdHouseholdSize &gt; input[type=&quot;text&quot;]</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=gwt-uid-3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#tdDailySolarGenerationCalculate &gt; button.gwt-Button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdDailySolarGenerationResult &gt; input.gwt-TextBox</td>
+	<td>26.24 kws</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdDailySavingsResult &gt; input.gwt-TextBox</td>
+	<td>10.1 dollars</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdPayBackYearResult &gt; input.gwt-TextBox</td>
+	<td>7y 0m</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdPowerEstimateResult &gt; input.gwt-TextBox</td>
+	<td>20.0 kws</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdSimilarSystem &gt; input.gwt-TextBox</td>
+	<td>33.6 kws in Brisbane</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdTotalSubsidy &gt; input.gwt-TextBox</td>
+	<td>1243.8 dollars in Brisbane</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdOptimalYearAngle &gt; input.gwt-TextBox</td>
+	<td>58.0</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdSummerAngle &gt; input.gwt-TextBox</td>
+	<td>73.0</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdWinterAngle &gt; input.gwt-TextBox</td>
+	<td>43.0</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdDailySaved &gt; input[type=&quot;text&quot;]</td>
+	<td>10</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdFinalPayback &gt; input[type=&quot;text&quot;]</td>
+	<td>7y 4m</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdExpectedDuration &gt; input[type=&quot;text&quot;]</td>
+	<td>25y</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=#tdBankInterest &gt; input[type=&quot;text&quot;]</td>
+	<td>0</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#tdWorthInvestingCalculate &gt; button.gwt-Button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=#tdWorthInvestingResult &gt; input[type=&quot;text&quot;]</td>
+	<td>$37716.66</td>
+</tr>
+</tbody></table>
+</body>
+</html>
